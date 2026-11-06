@@ -214,7 +214,7 @@ function BookManangement(){
                         <table className="w-full min-w-160 text-sm  table-fixed">
                             <colgroup>
                                 <col className="w-[4%] min-w-[48px]" />   {/* Checkbox */}
-                                <col className="w-[9%] min-w-[130px]" />   {/* Book ID */}
+                                <col className="w-[9%] min-w-[80px]" />   {/* Book ID */}
                                 <col className="w-[8%] min-w-[96px]" />   {/* Image */}
                                 <col className="w-[22%] min-w-[262px]" />  {/* Book name */}
                                 <col className="w-[14%] min-w-[175px]" />  {/* Category */}

@@ -26,6 +26,7 @@ export function BookRow ({ book, pic, category, author, onSelect, isSelected}){
                 <div className="flex justify-center items-center">
                     <input 
                         type="checkbox" 
+                        className=" size-3"
                         checked={isSelected}
                         onChange={(e) => {onSelect(book.id, e.target.checked)}}
                     />
