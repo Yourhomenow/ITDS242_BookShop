@@ -145,7 +145,7 @@ function BookManangement(){
                     {/* Search + Filter */}
                     <section className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
                         <div className="mt-1 flex flex-wrap items-center gap-4">
-                            <div className="flex flex-col flex-8">
+                            <div className="flex flex-col flex-8 min-w-[300px]">
                                 <label htmlFor="search" className="text-[11px] font-medium text-[#737185] pb-1">คำค้นหา</label>
                                 <div className="relative min-w-55 flex-1">
                                     <svg className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500"><use href="#i-search"/></svg>
@@ -160,7 +160,7 @@ function BookManangement(){
                                 </div>
                             </div>
 
-                            <div className="flex flex-col flex-3">
+                            <div className="flex flex-col flex-3 min-w-[100px]">
                                 <label htmlFor="category" className="text-[11px] font-medium text-[#737185] pb-1">หมวดหมู่</label>
                                 <div className="relative">
                                     <select 
@@ -182,7 +182,7 @@ function BookManangement(){
                                 </div>
                             </div>
 
-                            <div className="flex flex-col flex-3">
+                            <div className="flex flex-col flex-3 min-w-[100px]">
                                 <label htmlFor="status" className="text-[11px] font-medium text-[#737185] pb-1">สถานะ</label>
                                 <div className="relative">
                                     <select 
@@ -199,6 +199,11 @@ function BookManangement(){
                                     </select>
                                 <svg className="pointer-events-none absolute right-3 size-3.5 top-1/2 -translate-y-1/2"><use href="#i-chev"/></svg>
                                 </div>
+                            </div>
+
+                            <div className="flex flex-col flex-1">
+                                <label htmlFor="status" className="text-[11px] font-medium text-[#73718500] pb-1">ค้นหา2</label>
+                                <SquareButton text="ค้นหา" icon="i-search" text_colour="946D6D" bg_colour="DBD8F7"/>
                             </div>
                         </div>
                     </section>
