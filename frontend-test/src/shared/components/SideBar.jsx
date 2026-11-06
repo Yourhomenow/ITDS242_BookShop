@@ -27,7 +27,7 @@ export function SideBar ({ activePage }){
                     <a href="#" className={book_className}>
                     <svg className="size-4"><use href="#i-grid"/></svg>จัดการสินค้า/บริการ
                     </a>
-                    <a href="#" className={admin_className}>
+                    <a href="./adminManagement" className={admin_className}>
                     <svg className="size-4"><use href="#i-users"/></svg>จัดการบัญชีผู้ใช้
                     </a>
                 </nav>

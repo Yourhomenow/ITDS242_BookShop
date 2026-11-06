@@ -1,8 +1,9 @@
 import { Route, Routes } from "react-router-dom"
 import { IconSprite } from "../shared/components/IconSprite"
-import AdminManagement from "../features/adminManagement/adminManagement"
+import AdminManagement from "../features/adminManagement/AdminManagement"
 import AdminCreate from "../features/adminManagement/AdminCreate"
 import AdminChange from "../features/adminManagement/AdminChange"
+
 
 
 function App() {
