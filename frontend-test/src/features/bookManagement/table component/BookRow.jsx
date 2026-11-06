@@ -7,7 +7,7 @@ const categoryColor =
     Magazine: {textColor: "973C8C", textBgColor: "F1C8EC", bgColor: "FFEFFD", thai:"นิตยสาร"}
 }
 
-export function BookRow ({ book, pic, category, author}){
+export function BookRow ({ book, pic, category, author, onSelect, isSelected}){
     const colors = categoryColor[category] ?? {
         textColor: "555555",
         textBgColor: "EEEEEE",
@@ -20,12 +20,15 @@ export function BookRow ({ book, pic, category, author}){
             className="h-[70px] border-b border-slate-100 font-semibold text-[#5b4650] text-center hover:brightness-102 transition-[filter] duration-130"
             style={{
                 backgroundColor: `#${colors.bgColor}`
-                ,
             }}
         >
             <td className="px-6 py-4">
                 <div className="flex justify-center items-center">
-                    <svg className="size-5 text-[#C3C1D0]"><use href="#i-square"/></svg>
+                    <input 
+                        type="checkbox" 
+                        checked={isSelected}
+                        onChange={(e) => {onSelect(book.id, e.target.checked)}}
+                    />
                 </div>
             </td>
 
@@ -69,10 +72,10 @@ export function BookRow ({ book, pic, category, author}){
 
             <td className="px-6 py-4">
                 <div className="flex justify-end gap-2">
-                    <button type="button" aria-label="แก้ไข" className="grid size-8 place-items-center rounded-lg bg-[#e3effd] text-[#3b82c4] hover:bg-[#cfe3fa]">
+                    <button type="button" aria-label="แก้ไข" className="grid size-8 place-items-center rounded-lg border border-[#D0DDF0] bg-[#e3effd] text-[#3b82c4] hover:bg-[#cfe3fa] cursor-pointer">
                         <svg className="size-4"><use href="#i-edit"/></svg>
                     </button>
-                    <button type="button" aria-label="ลบ" className="grid size-8 place-items-center rounded-lg bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf]">
+                    <button type="button" aria-label="ลบ" className="grid size-8 place-items-center rounded-lg border border-[#F0D0D0] bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf] cursor-pointer">
                         <svg className="size-4"><use href="#i-trash"/></svg>
                     </button>
                 </div>

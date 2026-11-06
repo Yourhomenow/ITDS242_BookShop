@@ -34,10 +34,6 @@ function filterBooks(booksEntry, search, categoryFilter, statusFilter) {
     });
 }
 
-function changePageValid(num, quer){
-
-}
-
 function BookManangement(){
     const navigate = useNavigate();
     const books = [
@@ -86,20 +82,40 @@ function BookManangement(){
         }
     ];
 
+    {/* Search function */}
     const [search, setSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState("all");
     const [statusFilter, setStatusFilter] = useState("all");
-    const [tablePage, setTablePage] = useState(1);
-    
-    const [selectedBooks, setSelectedBooks] = useState([]);
-
     const filteredBooks = filterBooks(bookEntries, search, categoryFilter, statusFilter);
+
+    {/* Tickbox */}
+    const [selectedBooks, setSelectedBooks] = useState([]);
+    function handleBookSelect(bookId, checked) {
+        if (checked) {
+            setSelectedBooks(prev => [...prev, bookId]);
+        } else {
+            setSelectedBooks(prev =>
+                prev.filter(id => id !== bookId)
+            );
+            
+        }
+    }
     
+    {/* Choose 6 rows to display */}
+    const [tablePage, setTablePage] = useState(1);
     const showTable = 6;
     let tableRow = [];
     for (let i = (((tablePage - 1) * showTable)); i < (((tablePage - 1) * showTable) + showTable); i++){
         if (filteredBooks[i]){
-            tableRow.push(<BookRow key={filteredBooks[i].book.id} book={filteredBooks[i].book} pic={filteredBooks[i].pic} category={filteredBooks[i].category} author={filteredBooks[i].author}/>)
+            tableRow.push(<BookRow 
+                                key={filteredBooks[i].book.id} 
+                                book={filteredBooks[i].book} 
+                                pic={filteredBooks[i].pic} 
+                                category={filteredBooks[i].category} 
+                                author={filteredBooks[i].author}
+                                onSelect={handleBookSelect}
+                                isSelected={selectedBooks.includes(filteredBooks[i].book.id)}
+                        />)
         }else {
             tableRow.push(<tr key={`empty-${i}`} className="h-[70px] border-b border-slate-100"></tr>)
         }
@@ -138,7 +154,7 @@ function BookManangement(){
                                         value={search}
                                         className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-plum focus:ring-2 focus:ring-plum/20" 
                                         onChange={
-                                            (e) => {setSearch(e.target.value); setTablePage(1);}
+                                            (e) => {setSearch(e.target.value); setTablePage(1); }
                                         }
                                     />
                                 </div>
