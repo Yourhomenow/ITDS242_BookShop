@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Sidebar } from "../../shared/components/Sidebar"
 import { TopBar } from "../../shared/components/TopBar"
+import AdminDeleteModel from "./AdminDeleteModel";
 
 function AdminManagement() {
   // Static dataset for admin accounts
+  const [openDeleteModel,setOpenDeleteModel] = useState(false);
   const adminUsers = [
     {
       id: '0001',
@@ -135,7 +138,7 @@ function AdminManagement() {
                             <button type="button" aria-label="แก้ไข" className="grid size-8 place-items-center rounded-lg bg-[#e3effd] text-[#3b82c4] hover:bg-[#cfe3fa]">
                               <svg className="size-4"><use href="#i-edit"/></svg>
                             </button>
-                            <button type="button" aria-label="ลบ" className="grid size-8 place-items-center rounded-lg bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf]">
+                            <button onClick={()=>setOpenDeleteModel(!openDeleteModel)} type="button" aria-label="ลบ" className="grid size-8 place-items-center rounded-lg bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf]">
                               <svg className="size-4"><use href="#i-trash"/></svg>
                             </button>
                           </div>
@@ -151,6 +154,11 @@ function AdminManagement() {
 
         </main>
       </div>
+
+      <AdminDeleteModel
+        isOpen={openDeleteModel}
+        onClose={()=> setOpenDeleteModel(false)}
+      />
       
     </>
   )

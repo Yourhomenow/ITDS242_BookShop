@@ -38,7 +38,7 @@ function AdminCreate() {
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex items-start gap-4">
               <span className="grid size-12 shrink-0 place-items-center rounded-xl border border-[#dcd2ee] bg-[#ece6f5] text-[#7a4f8f]">
-                <svg className="size-6"><use href="#i-edit"/></svg>
+                <svg className="size-6"><use href="#i-plus"/></svg>
               </span>
               <div>
                 <h1 className="text-2xl font-bold text-[#684D4D]">สร้างบัญชีผู้ใช้งานผู้ดูแลระบบ</h1>
@@ -48,7 +48,7 @@ function AdminCreate() {
           </div>
 
           {/* Search + filter */}
-          <div className="flex">
+          <div className="flex flex-wrap gap-5">
             <form action="">
               <section className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
                 <div className="flex">
@@ -84,7 +84,7 @@ function AdminCreate() {
               </section>
             </form>
 
-            <div className="flex flex-col gap-2 rounded-2xl border ml-6 border-slate-200/80 bg-white p-4 shadow-sm">
+            <div className="flex flex-col gap-2 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
               <p className="text-md h-min font-bold text-[#684D4D]">การตรวจสสอบความครบถ้วน</p>
               <p className="text-xs h-min font-bold text-[#938686]">ระบุข้อมูลเบื้องต้นและความปลอดภัยสำหรับการเข้าสู่ระบบในครั้งแรก</p>
               <hr className="mt-4 mb-4 border-gray-200 border "/>
