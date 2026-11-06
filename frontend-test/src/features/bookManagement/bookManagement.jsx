@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 import { TopBar } from "../../shared/components/TopBar"
 import { SideBar } from "../../shared/components/SideBar"
@@ -7,32 +8,103 @@ import { BookRow } from "./table component/bookRow";
 
 const th_className = "font-medium px-6 py-3 text-center"
 
+function filterBooks(booksEntry, search, categoryFilter, statusFilter) {
+    return booksEntry.filter((entry) => {
+    const book = entry.book;
+
+    const matchesSearch =
+        `${book.id} ${book.name}`
+            .toLowerCase()
+            .includes(search.toLowerCase().trim());
+
+    const matchesCategory =
+        categoryFilter === "all" ||
+        entry.category === categoryFilter;
+
+    let matchesStatus = true;
+
+    if (statusFilter === "available") {
+        matchesStatus = book.quantity > 0;
+    }
+    else if (statusFilter === "outOfStock") {
+        matchesStatus = book.quantity <= 0;
+    }
+
+    return matchesSearch && matchesCategory && matchesStatus;
+    });
+}
+
+function changePageValid(num, quer){
+
+}
+
 function BookManangement(){
     const navigate = useNavigate();
     const books = [
-    {
-      id: 1,
-      name: 'หนังสือ1',
-      quantity: 0,
-      isbnCode: null,
-      price: 50,
-      description: 'คำอธิบาย1',
-      publishDate: '2026-09-30',
-      size: '99x99',
-      publisherID: 1
-    },
-    {
-      id: 2,
-      name: 'หนังสือ2',
-      quantity: 9999,
-      isbnCode: null,
-      price: 555550,
-      description: 'คำอธิบาย1',
-      publishDate: '2026-09-30',
-      size: '99x99',
-      publisherID: 1
+        {
+        id: 1,
+        name: 'หนังสือ1',
+        quantity: 0,
+        isbnCode: null,
+        price: 50,
+        description: 'คำอธิบาย1',
+        publishDate: '2026-09-30',
+        size: '99x99',
+        publisherID: 1
+        },
+        {
+        id: 2,
+        name: 'หนังสือ2',
+        quantity: 9999,
+        isbnCode: null,
+        price: 555550,
+        description: 'คำอธิบาย1',
+        publishDate: '2026-09-30',
+        size: '99x99',
+        publisherID: 1
+        }
+    ]
+
+    const bookEntries = [
+        {
+            book: books[0],
+            category: "Comic&Manga",
+            author: "superCoolPenName",
+            pic: {
+                name: "cover.png",
+                url: "https://picsum.photos/seed/book1/200"
+            }
+        },
+        {
+            book: books[1],
+            category: "Magazine",
+            author: "superCoolPenName",
+            pic: {
+                name: "cover.png",
+                url: "https://picsum.photos/seed/book2/200"
+            }
+        }
+    ];
+
+    const [search, setSearch] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState("all");
+    const [statusFilter, setStatusFilter] = useState("all");
+    const [tablePage, setTablePage] = useState(1);
+    
+    const [selectedBooks, setSelectedBooks] = useState([]);
+
+    const filteredBooks = filterBooks(bookEntries, search, categoryFilter, statusFilter);
+    
+    const showTable = 6;
+    let tableRow = [];
+    for (let i = (((tablePage - 1) * showTable)); i < (((tablePage - 1) * showTable) + showTable); i++){
+        if (filteredBooks[i]){
+            tableRow.push(<BookRow key={filteredBooks[i].book.id} book={filteredBooks[i].book} pic={filteredBooks[i].pic} category={filteredBooks[i].category} author={filteredBooks[i].author}/>)
+        }else {
+            tableRow.push(<tr key={`empty-${i}`} className="h-[70px] border-b border-slate-100"></tr>)
+        }
     }
-  ]
+
     return (
         <>
             <TopBar/>
@@ -58,23 +130,37 @@ function BookManangement(){
                     <section className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
                         <div className="mt-1 flex flex-wrap items-center gap-4">
                             <div className="flex flex-col flex-8">
-                                <label htmlFor="q" className="text-[11px] font-medium text-[#737185] pb-1">คำค้นหา</label>
+                                <label htmlFor="search" className="text-[11px] font-medium text-[#737185] pb-1">คำค้นหา</label>
                                 <div className="relative min-w-55 flex-1">
                                     <svg className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500"><use href="#i-search"/></svg>
-                                    <input id="q" type="search" placeholder="ค้นหาผู้ใช้งาน..." className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-plum focus:ring-2 focus:ring-plum/20" />
+                                    <input 
+                                        id="search" type="search" placeholder="ค้นหาผู้ใช้งาน..." 
+                                        value={search}
+                                        className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-plum focus:ring-2 focus:ring-plum/20" 
+                                        onChange={
+                                            (e) => {setSearch(e.target.value); setTablePage(1);}
+                                        }
+                                    />
                                 </div>
                             </div>
 
                             <div className="flex flex-col flex-3">
                                 <label htmlFor="category" className="text-[11px] font-medium text-[#737185] pb-1">หมวดหมู่</label>
                                 <div className="relative">
-                                    <select id="category" className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 pr-10 text-sm font-semibold text-[#684D4D] outline-none focus:border-plum focus:ring-2 focus:ring-plum/20">
+                                    <select 
+                                        id="category" 
+                                        className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 pr-10 text-sm font-semibold text-[#684D4D] outline-none focus:border-plum focus:ring-2 focus:ring-plum/20"
+                                        value={categoryFilter}
+                                        onChange={(e) => {
+                                            setCategoryFilter(e.target.value); setTablePage(1);}
+                                        }
+                                    >
                                         <option value="all">ทั้งหมด</option>
-                                        <option value="general">หนังสือทั่วไป</option>
-                                        <option value="novel">นวนิยาย</option>
-                                        <option value="comic&manga">หนังสือการ์ตูน</option>
-                                        <option value="study">ตำราเรียน</option>
-                                        <option value="magazine">นิตยสาร</option>
+                                        <option value="General">หนังสือทั่วไป</option>
+                                        <option value="Novel">นวนิยาย</option>
+                                        <option value="Comic&Manga">หนังสือการ์ตูน</option>
+                                        <option value="Study">ตำราเรียน</option>
+                                        <option value="Magazine">นิตยสาร</option>
                                     </select>
                                     <svg className="pointer-events-none absolute right-3 size-3.5 top-1/2 -translate-y-1/2"><use href="#i-chev"/></svg>
                                 </div>
@@ -83,9 +169,16 @@ function BookManangement(){
                             <div className="flex flex-col flex-3">
                                 <label htmlFor="status" className="text-[11px] font-medium text-[#737185] pb-1">สถานะ</label>
                                 <div className="relative">
-                                    <select id="status" className="h-11 w-full flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 text-sm focus-within:border-plum focus-within:ring-2 focus-within:ring-plum/20 appearance-none bg-transparent pr-5 font-semibold text-[#684D4D] outline-none">
+                                    <select 
+                                        id="status" 
+                                        className="h-11 w-full flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 text-sm focus-within:border-plum focus-within:ring-2 focus-within:ring-plum/20 appearance-none bg-transparent pr-5 font-semibold text-[#684D4D] outline-none"
+                                        value={statusFilter}
+                                        onChange={
+                                            (e) => {setStatusFilter(e.target.value); setTablePage(1);}
+                                        }
+                                    >
                                         <option value="all">ทั้งหมด</option>
-                                        <option value="avalible">พร้อมจำหน่าย</option>
+                                        <option value="available">พร้อมจำหน่าย</option>
                                         <option value="outOfStock">หมดสต็อก</option>
                                     </select>
                                 <svg className="pointer-events-none absolute right-3 size-3.5 top-1/2 -translate-y-1/2"><use href="#i-chev"/></svg>
@@ -99,7 +192,7 @@ function BookManangement(){
                      <div className="overflow-x-auto">
                         <table className="w-full min-w-160 text-sm  table-fixed">
                             <colgroup>
-                                <col className="w-[4%] min-w-[48px]:" />   {/* Checkbox */}
+                                <col className="w-[4%] min-w-[48px]" />   {/* Checkbox */}
                                 <col className="w-[9%] min-w-[130px]" />   {/* Book ID */}
                                 <col className="w-[8%] min-w-[96px]" />   {/* Image */}
                                 <col className="w-[22%] min-w-[262px]" />  {/* Book name */}
@@ -123,20 +216,43 @@ function BookManangement(){
                                 </tr>
                             </thead>
                             <tbody id="rows">
-                                <BookRow book={books[0]} pic={{name: "cover.png", url:"https://picsum.photos/200"}} category={"Comic&Manga"} author={"superCoolPenName"}/>
-                                <BookRow book={books[1]} pic={{name: "cover.png", url:"https://picsum.photos/500"}} category={"Magazine"} author={"superCoolPenName"}/>
-                                <tr className="h-[70px] border-b border-slate-100"></tr>
-                                <tr className="h-[70px] border-b border-slate-100"></tr>
-                                <tr className="h-[70px] border-b border-slate-100"></tr>
-                                <tr className="h-[70px] border-b border-slate-100"></tr>
-                                {/* {books.map((book, index) => {
-
-                                })} */}
+                                {tableRow}        
                             </tbody>
                             <tfoot>
                                 <tr className="h-[41px] text-xs text-[#737185]">
-                                    <th scope="col" colSpan="7" className="font-light px-6 py-3 text-left">แสดง 1-6 จากทั้งหมด {books.length} รายการหนังสือ</th>
-                                    <th scope="col" colSpan="2" className="font-light px-6 py-3 text-right">placeholder button</th>
+                                    {
+                                        filteredBooks.length > 0 ? 
+                                            <th scope="col" colSpan="6" className="font-light px-6 py-3 text-left">แสดง {(((tablePage - 1) * showTable)) + 1}-{filteredBooks.length > (((tablePage - 1) * showTable) + showTable) ? ((((tablePage - 1) * showTable) + showTable)) : (filteredBooks.length)} จากทั้งหมด {filteredBooks.length} รายการหนังสือ</th>
+                                        :
+                                            <th scope="col" colSpan="6" className="font-light px-6 py-3 text-left">ไม่พบรายการหนังสือ</th>
+                                    }
+                                    
+                                    <th scope="col" colSpan="3" className="font-light px-6 py-3 text-right">
+                                        <div className="flex justify-end gap-2">
+                                            <button 
+                                                type="button" aria-label="หน้าที่แล้ว" 
+                                                className="grid size-8 place-items-center border border-[#E8E7ED] rounded-lg bg-[#FFFFFF] text-[#737185] hover:bg-[#f1eeee] cursor-pointer"
+                                                onClick={() => {if(tablePage > 1) {setTablePage(tablePage - 1)}}}
+                                            >
+                                                
+                                                <svg className="size-4"><use href="#i-chev-left"/></svg>
+                                            </button>
+                                            <span className="text-sm grid size-8 place-items-center rounded-lg bg-[#9A6EA5] text-[#ffffff]">
+                                                {tablePage}
+                                            </span>
+                                            <button 
+                                                type="button" aria-label="หน้าต่อไป" 
+                                                className="grid size-8 place-items-center border border-[#E8E7ED] rounded-lg bg-[#FFFFFF] text-[#737185] hover:bg-[#f1eeee] cursor-pointer"
+                                                onClick={() => {
+                                                    if(filteredBooks.length > (((tablePage - 1) * showTable) + showTable)) {
+                                                        setTablePage(tablePage + 1)
+                                                    }
+                                                }}
+                                            >
+                                                <svg className="size-4"><use href="#i-chev-right"/></svg>
+                                            </button>
+                                        </div>
+                                    </th>
                                 </tr>
                             </tfoot>
                         </table>
