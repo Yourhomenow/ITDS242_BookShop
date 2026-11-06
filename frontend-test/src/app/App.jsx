@@ -1,11 +1,14 @@
 import { Route, Routes } from "react-router-dom"
-import AdminManagement from "../features/adminManagement/AdminManagement"
+import { IconSprite } from "../shared/components/IconSprite"
+import AdminManagement from "../features/adminManagement/adminManagement"
 import AdminCreate from "../features/adminManagement/AdminCreate"
 import AdminChange from "../features/adminManagement/AdminChange"
+
 
 function App() {
   return (
     <>
+      <IconSprite/>
       <Routes>
         <Route path="/adminManagement" element={<AdminManagement />}/>
         <Route path="/adminCreate" element={<AdminCreate />}/>
