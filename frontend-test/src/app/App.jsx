@@ -1,11 +1,13 @@
-import { Link, Route, Routes } from "react-router-dom"
-import AdminManagement from "../features/adminManagement/adminManagement"
+import { Route, Routes } from "react-router-dom"
+import AdminManagement from "../features/adminManagement/AdminManagement"
+import AdminCreate from "../features/adminManagement/AdminCreate"
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/admin-management" element={<AdminManagement />} />
+        <Route path="/adminManagement" element={<AdminManagement />}/>
+        <Route path="/adminCreate" element={<AdminCreate />}/>
         <Route path="/" element={<AdminManagement />} />
       </Routes>
     </>
