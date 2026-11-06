@@ -1,0 +1,82 @@
+const categoryColor = 
+{
+    General: {textColor: "37A34E", textBgColor: "B7F7B0", bgColor: "E8F5E4", thai:"หนังสือทั่วไป"},
+    Novel: {textColor: "BF7373", textBgColor: "F1C8C8", bgColor: "F5E9E4", thai:"นวนิยาย"},
+    "Comic&Manga": {textColor: "B5AB42", textBgColor: "F7F0B0", bgColor: "FAF8E0", thai:"หนังสือการ์ตูน"},
+    Study: {textColor: "2F808B", textBgColor: "C8ECF1", bgColor: "E9FCFF", thai:"ตำราเรียน"},
+    Magazine: {textColor: "973C8C", textBgColor: "F1C8EC", bgColor: "FFEFFD", thai:"นิตยสาร"}
+}
+
+export function BookRow ({ book, pic, category, author}){
+    const colors = categoryColor[category] ?? {
+        textColor: "555555",
+        textBgColor: "EEEEEE",
+        bgColor: "FFFFFF",
+        thai: category || "ไม่ระบุหมวดหมู่"
+    };
+
+    return (
+        <tr 
+            className="h-[70px] border-b border-slate-100 font-semibold text-[#5b4650] text-center hover:brightness-102 transition-[filter] duration-130"
+            style={{
+                backgroundColor: `#${colors.bgColor}`
+                ,
+            }}
+        >
+            <td className="px-6 py-4">
+                <div className="flex justify-center items-center">
+                    <svg className="size-5 text-[#C3C1D0]"><use href="#i-square"/></svg>
+                </div>
+            </td>
+
+            <td className="px-6 py-4 text-left">{String(book.id).padStart(4, "0")}</td>
+
+            <td className="px-6 py-4">
+                <div className="flex justify-center items-center">
+                    <img src={pic.url} alt={pic.name} className="h-14 w-10 rounded object-cover"></img>
+                </div>
+            </td>
+
+            <td className="px-6 py-4 text-left">
+                <div className="flex flex-col">
+                    {book.name}
+                    <label className="font-light text-[#737185] text-sm">{author}</label>
+                </div>
+            </td>
+
+            <td className="px-6 py-4">
+                <span 
+                    className="rounded-4xl px-2.5 py-1"
+                    style={{
+                        backgroundColor: `#${colors.textBgColor}`,
+                        color: `#${colors.textColor}`
+                    }}
+                >
+                    {colors.thai}
+                </span>
+            </td>
+
+            <td className="px-6 py-4">{book.price}</td>
+            <td className="px-6 py-4">{book.quantity}</td>
+            
+            <td className="px-6 py-4">
+                <span className={`rounded-4xl px-2.5 py-1 ${
+                    book.quantity > 0 ? 'bg-[#ADDEB1] text-[#317B5B]' : 'bg-[#ffe98a] text-[#6B6122]'
+                    }`}>
+                    {book.quantity > 0 ? "พร้อมจำหน่าย" : "หมดสต็อก"}
+                </span>
+            </td>
+
+            <td className="px-6 py-4">
+                <div className="flex justify-end gap-2">
+                    <button type="button" aria-label="แก้ไข" className="grid size-8 place-items-center rounded-lg bg-[#e3effd] text-[#3b82c4] hover:bg-[#cfe3fa]">
+                        <svg className="size-4"><use href="#i-edit"/></svg>
+                    </button>
+                    <button type="button" aria-label="ลบ" className="grid size-8 place-items-center rounded-lg bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf]">
+                        <svg className="size-4"><use href="#i-trash"/></svg>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    )
+}
