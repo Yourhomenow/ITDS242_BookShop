@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 import { TopBar } from "../../shared/components/TopBar"
 import { SideBar } from "../../shared/components/SideBar"
@@ -8,12 +9,34 @@ function formSubmit(form){
 
     const formData = new FormData(form.currentTarget);
     const bookData = Object.fromEntries(formData);
-
+    const pictures = formData.getAll("picture");
+    console.log(pictures);
     console.log(bookData);
 }
 
 export function BookCreate(){
     const navigate = useNavigate();
+
+    const [pictureUpload, setPictureUpload] = useState([]);
+
+    function handleFileChange(e){
+        const files = e.target.files
+        for (const file of files) {
+            if (file.type !== "image/png" && file.type !== "image/jpeg") {
+                alert("Only PNG and JPEG images are allowed!");
+                e.target.value = "";
+                return;
+            }
+        }
+        setPictureUpload(Array.from(files));
+        console.log(Array.from(files));
+    }
+
+    let picture = [];
+    for (let i in pictureUpload){
+        const src = URL.createObjectURL(pictureUpload[i]);
+        picture.push(<img src={src} className="block max-w-[300px] max-h-[300px] rounded-xl"></img>)
+    }
 
     return (
     <>
@@ -41,7 +64,7 @@ export function BookCreate(){
                 {/* Form Body */}
                 <form onSubmit={formSubmit}>
                     <div className="flex flex-row gap-[5%] p-[2%] overflow-auto">
-                        <div className="flex flex-wrap flex-6 gap-4 bg-[#FFFFFF] border-2 p-10 w-max rounded-2xl border-[#F0E4CE] min-w-[300px]">
+                        <div className="flex flex-wrap flex-6 self-start gap-4 bg-[#FFFFFF] border-2 p-10 w-max rounded-2xl border-[#F0E4CE] min-w-[300px]">
                             {/* Name */}
                             <div className="flex flex-col w-full gap-2">
                                 <label className="font-medium text-[#402E40] pb-1">ชื่อหนังสือ</label>
@@ -167,9 +190,15 @@ export function BookCreate(){
                         </div>
 
                         {/* Picture */}
-                        <div className="flex flex-4 self-start flex-col min-w-[180px] h-auto gap-4 bg-[#FFFFFF] border-2 p-6 w-max rounded-2xl border-[#F0E4CE]">
+                        <div className="flex flex-4 self-start flex-col min-w-[305px] h-auto gap-4 bg-[#FFFFFF] border-2 p-6 w-max rounded-2xl border-[#F0E4CE]">
                             <span className="font-bold text-[#402E40]">รูปภาพประกอบปก</span>
                             <div>
+                                { picture.length > 0 ?
+                                    <div className="flex overflow-auto max-h-[500px] mb-[30px] gap-4">
+                                        {picture}
+                                    </div> 
+                                    : ''
+                                }
                                 <label
                                     htmlFor="picture"
                                     className="flex flex-col items-center justify-center
@@ -196,6 +225,7 @@ export function BookCreate(){
                                     accept="image/png, image/jpeg"
                                     multiple
                                     className="sr-only"
+                                    onChange={handleFileChange}
                                 />
                             </div>
                         </div>
