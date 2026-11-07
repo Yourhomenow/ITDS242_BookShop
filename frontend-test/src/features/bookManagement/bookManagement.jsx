@@ -150,7 +150,7 @@ function BookManangement(){
                                 <div className="relative min-w-55 flex-1">
                                     <svg className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500"><use href="#i-search"/></svg>
                                     <input 
-                                        id="search" type="search" placeholder="ค้นหาผู้ใช้งาน..." 
+                                        id="search" type="search" placeholder="ค้นหารหัสหนังสือ หรือชื่อหนังสือ..." 
                                         value={search}
                                         className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-plum focus:ring-2 focus:ring-plum/20" 
                                         onChange={
