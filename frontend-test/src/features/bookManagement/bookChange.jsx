@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { TopBar } from "../../shared/components/TopBar"
 import { SideBar } from "../../shared/components/SideBar"
@@ -6,6 +7,7 @@ import { SquareButton } from "../../shared/components/SquareButton"
 
 export function BookChange(){
     const navigate = useNavigate();
+    const { id } = useParams();
 
     return (
     <>
@@ -26,7 +28,7 @@ export function BookChange(){
 
                     <div>
                         <h1 className="text-2xl font-bold text-ink text-[#684D4D]">แก้ไขข้อมูลหนังสือ</h1>
-                        <p className="mt-0.5 text-sm text-[#9A6EA5]">แก้ไขข้อมูลหนังสือในระบบ</p>
+                        <p className="mt-0.5 text-sm text-[#9A6EA5]">แก้ไขข้อมูลหนังสือในระบบ {id}</p>
                     </div>
                 </div>
             </main>

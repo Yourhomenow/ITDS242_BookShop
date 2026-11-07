@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const categoryColor = 
 {
     General: {textColor: "37A34E", textBgColor: "B7F7B0", bgColor: "E8F5E4", thai:"หนังสือทั่วไป"},
@@ -8,6 +10,8 @@ const categoryColor =
 }
 
 export function BookRow ({ book, pic, category, author, onSelect, isSelected}){
+    const navigate = useNavigate();
+
     const colors = categoryColor[category] ?? {
         textColor: "555555",
         textBgColor: "EEEEEE",
@@ -73,7 +77,12 @@ export function BookRow ({ book, pic, category, author, onSelect, isSelected}){
 
             <td className="px-6 py-4">
                 <div className="flex justify-end gap-2">
-                    <button type="button" aria-label="แก้ไข" className="grid size-8 place-items-center rounded-lg border border-[#D0DDF0] bg-[#e3effd] text-[#3b82c4] hover:bg-[#cfe3fa] cursor-pointer">
+                    <button 
+                        type="button" aria-label="แก้ไข" 
+                        className="grid size-8 place-items-center rounded-lg 
+                            border border-[#D0DDF0] bg-[#e3effd] text-[#3b82c4] hover:bg-[#cfe3fa] cursor-pointer"
+                        onClick={() => navigate(`/book-management/change/${book.id}`)}
+                    >
                         <svg className="size-4"><use href="#i-edit"/></svg>
                     </button>
                     <button type="button" aria-label="ลบ" className="grid size-8 place-items-center rounded-lg border border-[#F0D0D0] bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf] cursor-pointer">
