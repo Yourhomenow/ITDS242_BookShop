@@ -17,6 +17,7 @@ INSERT INTO publisher (PublisherName) VALUE
 ('SE-ED'),
 ('Nanmeebooks');
 
+
 INSERT INTO category (CategoryName) VALUE
 ("General"),
 ("Novel"),
@@ -59,6 +60,11 @@ INSERT INTO booktransaction (Timestamp, TargetField, Operation, OldValue, NewVal
 ('2026-09-30 16:10:15', 'BookName', 'INSERT', NULL, 'Harry Potter', 1, 2),
 ('2026-09-30 17:25:30', 'BookName', 'DELETE', 'The Great Gatsby', NULL, 2, 3);
 
+INSERT INTO booktransaction (Timestamp, TargetField, Operation, OldValue, NewValue, AdminID, BookID) VALUE
+('2026-09-30 15:42:21', "BookName", "UPDATE", "The strang", "The Stranger", 2, 1),
+('2026-09-30 16:10:15', 'BookName', 'INSERT', NULL, 'Harry Potter', 1, 2),
+('2026-09-30 17:25:30', 'BookName', 'DELETE', 'The Great Gatsby', NULL, 2, 3);
+
 INSERT INTO `in` (BookID, CategoryID) VALUE
 (1, 2),
 (2, 2),
@@ -72,7 +78,7 @@ INSERT INTO `in` (BookID, CategoryID) VALUE
 
 
 INSERT INTO `write` (BookID, AuthorID) VALUE
-(1,1),
+(1, 1),
 (1, 2),
 (2, 2),
 (3, 3),
