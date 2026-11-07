@@ -34,7 +34,7 @@ function filterBooks(booksEntry, search, categoryFilter, statusFilter) {
     });
 }
 
-function BookManangement(){
+function BookManagement(){
     const navigate = useNavigate();
     const books = [
         {
@@ -137,7 +137,7 @@ function BookManangement(){
                             <p className="mt-0.5 text-sm text-[#9A6EA5]">เพิ่ม แก้ไช และลบข้อมูลรายการหนังสือ</p>
                         </div>
                         <div className="flex items-end gap-4 self-center ml-auto">
-                            <SquareButton text="เพิ่มหนังสือใหม่" icon="i-plus" bg_colour="9A6EA5" onClick={() => navigate("/admin-management")}/>
+                            <SquareButton text="เพิ่มหนังสือใหม่" icon="i-plus" bg_colour="9A6EA5" onClick={() => navigate("/book-management/book-create")}/>
                             <SquareButton text="ลบสินค้า" icon="i-trash" onClick={() => navigate("/admin-management")}/>
                         </div>
                     </div>
@@ -285,4 +285,4 @@ function BookManangement(){
     )
 }
 
-export default BookManangement
+export default BookManagement;

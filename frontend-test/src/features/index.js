@@ -1,2 +1,2 @@
-export { default as AdminManagement } from './adminManagement'
-export { default as BookManangement } from './bookManangement'
+export { AdminManagement } from './adminManagement'
+export { BookManagement, BookCreate } from './bookManagement'
