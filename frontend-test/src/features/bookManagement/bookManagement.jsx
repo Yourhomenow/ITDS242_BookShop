@@ -5,6 +5,7 @@ import { TopBar } from "../../shared/components/TopBar"
 import { SideBar } from "../../shared/components/SideBar"
 import { SquareButton } from "../../shared/components/SquareButton"
 import { BookRow } from "./table component/bookRow";
+import { DeletePopUp } from "./DeletePopUp";
 
 const th_className = "font-medium px-6 py-3 text-center"
 
@@ -101,6 +102,14 @@ function BookManagement(){
         }
     }
     
+    {/* Delete Pop Up */}
+    const [showPopup, setShowPopup] = useState(false);
+    const [deletePop, setDeletePop] = useState(0);
+    function onTrash(id){
+        setDeletePop(id);
+        setShowPopup(true);
+    }
+
     {/* Choose 6 rows to display */}
     const [tablePage, setTablePage] = useState(1);
     const showTable = 6;
@@ -115,6 +124,7 @@ function BookManagement(){
                                 author={filteredBooks[i].author}
                                 onSelect={handleBookSelect}
                                 isSelected={selectedBooks.includes(filteredBooks[i].book.id)}
+                                onTrash={onTrash}
                         />)
         }else {
             tableRow.push(<tr key={`empty-${i}`} className="h-[70px] border-b border-slate-100"></tr>)
@@ -281,6 +291,13 @@ function BookManagement(){
                     </section>
                 </main>
             </div>
+            {showPopup && (
+                <DeletePopUp 
+                    onClick={setShowPopup} 
+                    id={deletePop}
+                    name={books.find(book => book.id === deletePop)?.name}    
+                />
+            )}
         </>
     )
 }

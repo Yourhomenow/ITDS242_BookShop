@@ -9,7 +9,7 @@ const categoryColor =
     Magazine: {textColor: "973C8C", textBgColor: "F1C8EC", bgColor: "FFEFFD", thai:"นิตยสาร"}
 }
 
-export function BookRow ({ book, pic, category, author, onSelect, isSelected}){
+export function BookRow ({ book, pic, category, author, onSelect, isSelected, onTrash}){
     const navigate = useNavigate();
 
     const colors = categoryColor[category] ?? {
@@ -85,7 +85,7 @@ export function BookRow ({ book, pic, category, author, onSelect, isSelected}){
                     >
                         <svg className="size-4"><use href="#i-edit"/></svg>
                     </button>
-                    <button type="button" aria-label="ลบ" className="grid size-8 place-items-center rounded-lg border border-[#F0D0D0] bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf] cursor-pointer">
+                    <button type="button" onClick={() => onTrash(book.id)} aria-label="ลบ" className="grid size-8 place-items-center rounded-lg border border-[#F0D0D0] bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf] cursor-pointer">
                         <svg className="size-4"><use href="#i-trash"/></svg>
                     </button>
                 </div>
