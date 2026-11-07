@@ -14,7 +14,7 @@ function App() {
     <>
       <IconSprite/>
       <Routes>
-        <Route path="/admin-management" element={<AdminManagement />} />
+        <Route path="/adminManagement" element={<AdminManagement />} />
         <Route path="/adminCreate" element={<AdminCreate />}/>
         <Route path="/adminChange" element={<AdminChange />}/>
         <Route path="/book-management" element={<BookManagement />} />
