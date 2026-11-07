@@ -1,4 +1,26 @@
-export function DeletePopUp({ onClick, id, name="unknow"}) {
+import { Fragment } from "react";
+
+function deleteBook(id, onClick){
+    console.log(id);
+    onClick(false);
+}
+
+export function DeletePopUp({ onClick, id, books}) {
+    id.sort();
+
+    let detail = [];
+    for (let i in id){
+        detail.push(
+            <Fragment key={id[i]}>
+                <span>
+                    {String(id[i]).padStart(4, "0")}
+                </span>
+                <span>
+                    {books.find((book) => book.id === id[i])?.name}
+                </span>
+            </Fragment>
+        )
+    }
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-[#ac94949d]"
@@ -22,12 +44,7 @@ export function DeletePopUp({ onClick, id, name="unknow"}) {
 
                 <div className="flex w-full gap-6 p-2 bg-[#F8FAFC] text-[#0F172A] rounded-xl font-light">
                     <div className="flex flex-col self-center p-4 gap-2">
-                        <span>
-                            {String(id).padStart(4, "0")}
-                        </span>
-                        <span>
-                            {name}
-                        </span>
+                        {detail}
                     </div>
                 </div>
 
@@ -48,7 +65,7 @@ export function DeletePopUp({ onClick, id, name="unknow"}) {
 
                     <button
                         type="button"
-                        onClick={() => onClick(false)}
+                        onClick={() => deleteBook(id, onClick)}
                         className="rounded-xl bg-[#EF4444] px-5 py-2 text-white cursor-pointer hover:bg-[#E03B3B]"
                     >
                         ยืนยันลบถาวร

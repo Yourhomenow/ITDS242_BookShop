@@ -104,8 +104,11 @@ function BookManagement(){
     
     {/* Delete Pop Up */}
     const [showPopup, setShowPopup] = useState(false);
-    const [deletePop, setDeletePop] = useState(0);
+    const [deletePop, setDeletePop] = useState([]);
     function onTrash(id){
+        if (!(id instanceof Array)) {
+            id = [id];
+        }
         setDeletePop(id);
         setShowPopup(true);
     }
@@ -148,7 +151,7 @@ function BookManagement(){
                         </div>
                         <div className="flex items-end gap-4 self-center ml-auto">
                             <SquareButton text="เพิ่มหนังสือใหม่" icon="i-plus" bg_colour="9A6EA5" onClick={() => navigate("/book-management/create")}/>
-                            <SquareButton text="ลบสินค้า" icon="i-trash" onClick={() => navigate("/admin-management")}/>
+                            <SquareButton text="ลบสินค้า" icon="i-trash" onClick={() => { if (selectedBooks.length > 0){onTrash(selectedBooks)} }}/>
                         </div>
                     </div>
 
@@ -293,9 +296,10 @@ function BookManagement(){
             </div>
             {showPopup && (
                 <DeletePopUp 
-                    onClick={setShowPopup} 
+                    key={deletePop[0]}
+                    onClick={setShowPopup}
                     id={deletePop}
-                    name={books.find(book => book.id === deletePop)?.name}    
+                    books={books}   
                 />
             )}
         </>
