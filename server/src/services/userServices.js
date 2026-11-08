@@ -89,6 +89,12 @@ async function formatBooks(book){
    return formatBook
 }
 
+async function bookTransaction(name, operation, oldvalue, newvalue, BookID, AdminID=null){
+   await query("INSERT INTO booktransaction (Timestamp, TargetField, Operation, OldValue, NewValue, AdminID, BookID) VALUE (NOW(), ?, ?, ?, ?, ?, ?)",
+         [name, operation, oldvalue, newvalue, AdminID, BookID]
+   )
+}
+
 export const getBooks = async () => {
    const [book] = await query("SELECT * FROM book");
 
@@ -196,9 +202,7 @@ export const postBooks = async (data) => {
       }
 
       //bookTransaction
-      await query("INSERT INTO booktransaction (Timestamp, TargetField, Operation, OldValue, NewValue, AdminID, BookID) VALUE (NOW(), ?, ?, ?, ?, ?, ?)",
-         ["BookName", "INSERT", null, book.name, null, result.insertId]
-      )
+      await bookTransaction("BookName", "INSERT", null, book.name, result.insertId); 
 
       return result.affectedRows > 0
    }catch (err){
@@ -207,8 +211,137 @@ export const postBooks = async (data) => {
    }
 }
 
-export const putBooks = async (id, bookData) => {
-   return {data: "hi"}
+export const putBooks = async (id, data) => {
+   async function updateBook(col, data, old, id){
+      await query("UPDATE book SET ??=? WHERE BookID=?", [col, data, id]);
+      await bookTransaction(col, "UPDATE", old, data, id);
+   }
+   async function emptyBook(table, id) {
+      await query("DELETE FROM ?? WHERE BookID=?", [table, id]);
+   }
+   const formattedData = data;
+   const [old] = await getBooksID(id);
+
+   //book
+   const book = formattedData.book;
+   for (let i in book){
+      if (book[i] != null){
+         if (i == "name"){
+            await updateBook("BookName", book[i], old[i], id);
+         }else if(i == "quantity"){
+            await updateBook("QuantityInStock", book[i], old[i], id);
+         }else if(i == "price"){
+            await updateBook("Price", book[i], old[i], id);
+         }else if(i == "size"){
+            await updateBook("Size", book[i], old[i], id);
+         }else if(i == "isbnCode"){
+            await updateBook("ISBNCode", book[i], old[i], id);
+         }else if(i == "description"){
+            await updateBook("Description", book[i], old[i], id);
+         }else if(i == "publishDate"){
+            await updateBook("PublishDate", book[i], old[i], id);
+         }
+      }
+   }
+
+   //publisher
+   if (formattedData.publisher != null){
+      const publisher = formattedData.publisher.trim();
+      const [publisherData] = await query("SELECT * FROM publisher");
+      let publisherID = -1;
+      let oldVa = null;
+      for (let i in publisherData) {
+         if (publisherData[i].PublisherName == old.publisher){
+            oldVa = publisherData[i].PublisherID;
+         }
+         if (publisherData[i].PublisherName == publisher){
+            publisherID = publisherData[i].PublisherID;
+         }
+      }
+      if (publisherID == -1){
+         const [pubID] = await query("INSERT INTO publisher (PublisherName) VALUE (?)", [publisher]);
+         publisherID = pubID.insertId;
+      }
+      await updateBook("PublisherID", publisherID, oldVa, id);
+   }
+
+   //author
+   if (formattedData.author != null){
+      const author = [...new Set(((formattedData.author).split(",")).map((e) => (e.trim())))];
+      const [authorData] = await query("SELECT * FROM author");
+      let authorID = [];
+      for (let i in author) {
+         let flag = -1;
+         for (let j in authorData){
+            if (authorData[j].AuthorName == author[i]){
+               flag = authorData[j].AuthorID;
+               break
+            }
+         }   
+         if (flag > -1){
+            authorID.push(flag);
+         } else {
+            const [autID] = await query("INSERT INTO author (AuthorName) VALUE (?)", [author[i]]);
+            authorID.push(autID.insertId);
+         }
+      }
+
+      await emptyBook("write", id);
+      if (authorID.length > 0){
+         for (let i in authorID){
+            await query("INSERT INTO `write` (BookID, AuthorID) VALUE (?, ?)", [id, authorID[i]]);
+         }
+      }
+   }
+   
+   //category
+   if (formattedData.category != null){
+      const category = [...new Set(((formattedData.category).split(",")).map((e) => (e.trim())))];
+      const [categoryData] = await query("SELECT * FROM category");
+      let categoryID = [];
+      for (let i in category) {
+         let flag = -1;
+         for (let j in categoryData){
+            if (categoryData[j].CategoryName == category[i]){
+               flag = categoryData[j].CategoryID;
+               break
+            }
+         }   
+         if (flag > -1){
+            categoryID.push(flag);
+         } else {
+            const [catID] = await query("INSERT INTO category (CategoryName) VALUE (?)", [category[i]]);
+            categoryID.push(catID.insertId);
+         }
+      }
+
+      await emptyBook("in", id);
+      if (categoryID.length > 0){
+         for (let i in categoryID){
+            await query("INSERT INTO `in` (BookID, CategoryID) VALUE (?, ?)", [id, categoryID[i]]);
+         }
+      }
+   }
+
+   //picture
+   if (formattedData.pictures != null){
+      const pictures = formattedData.pictures;
+      for (let i in pictures){
+         await query("INSERT INTO picture (`Name`, `URL`, BookID) VALUE (?, ?, ?)",
+            [pictures[i].name, pictures[i].url, id]
+         )
+      }
+   }
+   
+   //deletePic
+   if (formattedData.deletePicID != null){
+      const deletePicID = formattedData.deletePicID;
+      for (let i in deletePicID){
+         await query("DELETE FROM picture WHERE PicID=? AND BookID=?", [deletePicID[i], id]);
+      }
+   }
+
+   return true
 }
 
 export const deleteBooks = async (id) => {
