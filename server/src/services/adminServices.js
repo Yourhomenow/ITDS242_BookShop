@@ -1,7 +1,10 @@
 import { query } from "../config/db.js";
 
-export const getUsers = async ()=> {
-   return {data: "hiiii!"}
+//Admin API
+export const getAdmins = async ()=> {
+   const result = await query("SELECT * FROM BOOK");
+   // console.log(result[0])
+   return result[0]
 }
 
 //Book API

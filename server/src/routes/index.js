@@ -1,5 +1,5 @@
 import express from 'express'
-import { userRoutes } from './userRoutes.js';
+import { routes } from './routes.js';
 
 export const router = express.Router();
 
@@ -7,4 +7,4 @@ router.get('/test', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
-router.use('/admins',userRoutes);
+router.use('/',routes);
