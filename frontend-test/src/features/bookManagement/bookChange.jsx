@@ -5,14 +5,22 @@ import { useParams } from "react-router-dom";
 import { TopBar } from "../../shared/components/TopBar"
 import { SideBar } from "../../shared/components/SideBar"
 
-function formSubmit(form){
-    form.preventDefault();
+async function uploadFile(file){
+    const formData = new FormData();
 
-    const formData = new FormData(form.currentTarget);
-    const bookData = Object.fromEntries(formData);
-    const pictures = formData.getAll("picture");
-    console.log(pictures);
-    console.log(bookData);
+    formData.append("file", file);
+    formData.append("upload_preset", "itds242-bookshop");
+
+    const response = await fetch(
+    "https://api.cloudinary.com/v1_1/itds242-bookshop/image/upload",
+    {
+        method: "POST",
+        body: formData
+    }
+    );
+
+    const result = await response.json();
+    return {status: response.status, result: result};
 }
 
 export function BookChange(){
@@ -20,6 +28,7 @@ export function BookChange(){
     const { id } = useParams();
 
     const [pictureUpload, setPictureUpload] = useState([]);
+    const [pictureDelete, setPictureDelete] = useState([]);
 
     function handleFileChange(e){
         const files = e.target.files
@@ -38,6 +47,64 @@ export function BookChange(){
     for (let i in pictureUpload){
         const src = URL.createObjectURL(pictureUpload[i]);
         picture.push(<img src={src} className="block max-w-[200px] max-h-[200px] rounded-xl"></img>)
+    }
+
+    async function formSubmit(form){
+        form.preventDefault();
+
+        const formData = new FormData(form.currentTarget);
+        const bookData = Object.fromEntries(formData);
+        try{
+            let picture = []
+            if (pictureUpload.length > 0){
+                for (let i in pictureUpload){
+                    const response = await uploadFile(pictureUpload[i]);
+                    if (response.status == 200){
+                        picture.push({
+                            name: pictureUpload[i].name,
+                            url: response.result.secure_url
+                        });
+                    }else{
+                        throw new Error(
+                            "Can't upload image"
+                        );
+                    }
+                }
+            }
+
+            const formatData = (data, picture) => ({
+                book:{
+                    name: data.name || null,
+                    quantity: null,
+                    price: data.price === "" ? null : Number(data.price),
+                    size: data.size || null,
+                    isbnCode: data.isbnCode || null,
+                    publishDate: data.publishDate || null,
+                    description: data.description || null
+                },
+                publisher: data.publisher || null,
+                author: data.author || null,
+                category: data.category || null,
+                pictures: picture.length > 0 ? picture : null,
+                deletePicID: pictureDelete.length > 0 ? pictureDelete : null
+            });
+
+            const formattedData = formatData(bookData, picture);
+            const response = await fetch(`/api/admins/books/${id}`, {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formattedData)
+            });
+            if (!response.ok) {
+                throw new Error("Can't update book");
+            }
+        }catch (err){
+            console.error(err);
+            alert(err.message);
+        }
+        
     }
 
     return (

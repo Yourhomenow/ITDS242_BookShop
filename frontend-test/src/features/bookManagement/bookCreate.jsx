@@ -93,6 +93,9 @@ export function BookCreate(){
                 },
                 body: JSON.stringify(formattedData)
             });
+            if (!response.ok) {
+                throw new Error("Can't insert book");
+            }
         }catch (err){
             console.error(err);
             alert(err.message);
