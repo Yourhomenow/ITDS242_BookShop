@@ -78,7 +78,7 @@ async function formatBooks(book){
       for(let j in formatBook){
          if (formatBook[j].id == picture[i].BookID){
             temp_j = j;
-            temp_picture = {name: picture[i].Name, url: picture[i].URL};
+            temp_picture = {id: picture[i].PicID ,name: picture[i].Name, url: picture[i].URL};
          }
       }
       if (temp_j > -1){
@@ -107,8 +107,104 @@ export const getBooksID = async (id) => {
    return formatBook
 }
 
-export const postBooks = async (bookData) => {
-   return {data: "hi"}
+export const postBooks = async (data) => {
+   const formattedData = data;
+
+   try{
+      //publisher
+      const publisher = formattedData.publisher.trim();
+      const [publisherData] = await query("SELECT * FROM publisher");
+      let publisherID = -1;
+      for (let i in publisherData) {
+         if (publisherData[i].PublisherName == publisher){
+            publisherID = publisherData[i].PublisherID;
+            break
+         }
+      }
+      if (publisherID == -1){
+         const [pubID] = await query("INSERT INTO publisher (PublisherName) VALUE (?)", [publisher]);
+         publisherID = pubID.insertId;
+      }
+
+      //author
+      const author = [...new Set(((formattedData.author).split(",")).map((e) => (e.trim())))];
+      const [authorData] = await query("SELECT * FROM author");
+      let authorID = [];
+      for (let i in author) {
+         let flag = -1;
+         for (let j in authorData){
+            if (authorData[j].AuthorName == author[i]){
+               flag = authorData[j].AuthorID;
+               break
+            }
+         }   
+         if (flag > -1){
+            authorID.push(flag);
+         } else {
+            const [autID] = await query("INSERT INTO author (AuthorName) VALUE (?)", [author[i]]);
+            authorID.push(autID.insertId);
+         }
+      }
+
+      //category
+      const category = [...new Set(((formattedData.category).split(",")).map((e) => (e.trim())))];
+      const [categoryData] = await query("SELECT * FROM category");
+      let categoryID = [];
+      for (let i in category) {
+         let flag = -1;
+         for (let j in categoryData){
+            if (categoryData[j].CategoryName == category[i]){
+               flag = categoryData[j].CategoryID;
+               break
+            }
+         }   
+         if (flag > -1){
+            categoryID.push(flag);
+         } else {
+            const [catID] = await query("INSERT INTO category (CategoryName) VALUE (?)", [category[i]]);
+            categoryID.push(catID.insertId);
+         }
+      }
+
+      //book
+      const book = formattedData.book;
+      const [result] = await query(
+         "INSERT INTO book (BookName, QuantityInStock, Price, Size, ISBNCode, Description, PublishDate, PublisherID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+         [book.name, book.quantity, book.price, book.size, book.isbnCode || null, book.description || null, book.publishDate || null, publisherID]
+      );
+
+      //picture
+      const pictures = formattedData.pictures;
+      for (let i in pictures){
+         await query("INSERT INTO picture (`Name`, `URL`, BookID) VALUE (?, ?, ?)",
+            [pictures[i].name, pictures[i].url, result.insertId]
+         )
+      }
+
+      //in
+      if (categoryID.length > 0){
+         for (let i in categoryID){
+            await query("INSERT INTO `in` (BookID, CategoryID) VALUE (?, ?)", [result.insertId, categoryID[i]]);
+         }
+      }
+
+      //write
+      if (authorID.length > 0){
+         for (let i in authorID){
+            await query("INSERT INTO `write` (BookID, AuthorID) VALUE (?, ?)", [result.insertId, authorID[i]]);
+         }
+      }
+
+      //bookTransaction
+      await query("INSERT INTO booktransaction (Timestamp, TargetField, Operation, OldValue, NewValue, AdminID, BookID) VALUE (NOW(), ?, ?, ?, ?, ?, ?)",
+         ["BookName", "INSERT", null, book.name, null, result.insertId]
+      )
+
+      return result.affectedRows > 0
+   }catch (err){
+      console.log(err);
+      throw err;
+   }
 }
 
 export const putBooks = async (id, bookData) => {
