@@ -12,7 +12,7 @@ async function deleteBook(id, onClick, onDelete){
         }
         onDelete(prev => prev + 1);
         onClick(false);
-    }catch{
+    }catch(err) {
         console.error(err);
         alert(err.message);
     }

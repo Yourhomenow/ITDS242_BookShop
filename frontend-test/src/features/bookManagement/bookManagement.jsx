@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { TopBar } from "../../shared/components/TopBar"
 import { SideBar } from "../../shared/components/SideBar"
 import { SquareButton } from "../../shared/components/SquareButton"
-import { BookRow } from "./table component/bookRow";
+import { BookRow } from "./table component/BookRow";
 import { DeletePopUp } from "./DeletePopUp";
 
 const th_className = "font-medium px-6 py-3 text-center"
