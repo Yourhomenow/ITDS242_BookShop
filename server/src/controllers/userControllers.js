@@ -54,7 +54,7 @@ export const putBooks = async (req, res) => {
 export const deleteBooks = async (req, res) => {
   try{
     const response = await userService.deleteBooks(req.params.id);
-    res.status(200).json(response)
+    res.status(200).json(response);
   }catch(err){
     console.error(`Error Fetching users`, err)
     res.status(500).json({message: "Internal server error, Can't delete this book"})
