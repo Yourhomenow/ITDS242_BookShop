@@ -1,12 +1,25 @@
 import { Fragment } from "react";
 
-function deleteBook(id, onClick){
-    console.log(id);
-    onClick(false);
+async function deleteBook(id, onClick, onDelete){
+    try{
+        for (let i in id){
+            const response = await fetch(`/api/admins/books/${id[i]}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) {
+                throw new Error("Can't insert book");
+            }
+        }
+        onDelete(prev => prev + 1);
+        onClick(false);
+    }catch{
+        console.error(err);
+        alert(err.message);
+    }
 }
 
-export function DeletePopUp({ onClick, id, books}) {
-    id.sort();
+export function DeletePopUp({ onClick, id, books, onDelete}) {
+    id.sort((a, b) => a - b);
 
     let detail = [];
     for (let i in id){
@@ -21,12 +34,13 @@ export function DeletePopUp({ onClick, id, books}) {
             </Fragment>
         )
     }
+
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-[#ac94949d]"
         >
             <div
-                className="flex flex-col w-[40%] max-w-[600px] min-w-[300px] rounded-2xl bg-white p-8 shadow-xl gap-4"
+                className="flex flex-col w-[40%] max-w-[600px] min-w-[300px] max-h-[60%] rounded-2xl bg-white p-8 shadow-xl gap-4"
             >
                 <div className="flex w-full gap-6 p-2">
                     <span className="grid size-15 shrink-0 place-items-center rounded-full bg-[#FEE2E2] text-[#EF4444]">
@@ -42,8 +56,8 @@ export function DeletePopUp({ onClick, id, books}) {
                     </div>
                 </div>
 
-                <div className="flex w-full gap-6 p-2 bg-[#F8FAFC] text-[#0F172A] rounded-xl font-light">
-                    <div className="flex flex-col self-center p-4 gap-2">
+                <div className="flex w-full max-h-[60%] gap-6 p-2 bg-[#F8FAFC] text-[#0F172A] rounded-xl font-light overflow-auto">
+                    <div className="flex flex-col p-4 gap-2">
                         {detail}
                     </div>
                 </div>
@@ -65,7 +79,7 @@ export function DeletePopUp({ onClick, id, books}) {
 
                     <button
                         type="button"
-                        onClick={() => deleteBook(id, onClick)}
+                        onClick={() => deleteBook(id, onClick, onDelete)}
                         className="rounded-xl bg-[#EF4444] px-5 py-2 text-white cursor-pointer hover:bg-[#E03B3B]"
                     >
                         ยืนยันลบถาวร

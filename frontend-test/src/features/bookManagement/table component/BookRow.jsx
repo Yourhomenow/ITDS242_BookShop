@@ -27,10 +27,17 @@ export function BookRow ({ book, onSelect, isSelected, onTrash}){
         }
     }
 
-    const picture = book.picture[0];
+    let picture = {};
+    if (book.picture.length > 0){
+        picture = book.picture[0];
+    }else {
+        picture = {name: "", url:""};
+    }
+    
+
     return (
         <tr 
-            className="h-[70px] border-b border-slate-100 font-semibold text-[#5b4650] text-center hover:brightness-102 transition-[filter] duration-130"
+            className="h-[90px] border-b border-slate-100 font-semibold text-[#5b4650] text-center hover:brightness-102 transition-[filter] duration-130"
             style={{
                 backgroundColor: `#${colors.bgColor}`
             }}

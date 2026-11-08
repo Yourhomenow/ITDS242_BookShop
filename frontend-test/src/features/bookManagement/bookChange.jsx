@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { TopBar } from "../../shared/components/TopBar"
 import { SideBar } from "../../shared/components/SideBar"
 
+import { Fragment } from "react";
+
 async function uploadFile(file){
     const formData = new FormData();
 
@@ -27,8 +29,59 @@ export function BookChange(){
     const navigate = useNavigate();
     const { id } = useParams();
 
+    {/* Lock after send reqest */}
+    const [isLoading, setIsLoading] = useState(false);
+
+    {/* Picture */}
     const [pictureUpload, setPictureUpload] = useState([]);
     const [pictureDelete, setPictureDelete] = useState([]);
+
+    {/* get books data */}
+    const [book, setBook] = useState(null);
+    useEffect(() => {
+        async function getBook() {
+            const response = await fetch(`/api/admins/books/${id}`);
+            const [data] = await response.json();
+            setBook(data);
+        }
+
+        getBook();
+    }, []);
+    if (book === null) {
+        return <p>Loading books...</p>;
+    }
+
+    {/* category */}
+    let category = [book.category];
+    for (let i in book.category){
+        if(i != 0){
+            category += `, ${book.category[i]}`;
+        }
+    }
+
+    {/* author */}
+    let author = [book.author];
+    for (let i in book.author){
+        if(i != 0){
+            author += `, ${book.author[i]}`;
+        }
+    }
+
+    let oldPicture = [];
+    for (let i in book.picture){
+        if (!(pictureDelete.includes(book.picture[i].id))){
+            oldPicture.push(
+                <Fragment key={i} >
+                    <div className="flex flex-wrap w-full bg-[#FFFDF6] rounded-xl items-center justify-center">
+                        <img src={book.picture[i].url} className="block max-w-[300px] max-h-[200px] rounded-xl m-5"></img>
+                    </div>
+                    <button type="button" onClick={() => {setPictureDelete(prev => [...prev, book.picture[i].id])}} aria-label="ลบ" className="w-full min-h-[30px] grid size-8 place-items-center rounded-lg border border-[#F0D0D0] bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf] cursor-pointer">
+                            <svg className="size-4"><use href="#i-trash"/></svg>
+                    </button>
+                </Fragment>
+            );
+        }
+    }
 
     function handleFileChange(e){
         const files = e.target.files
@@ -40,16 +93,17 @@ export function BookChange(){
             }
         }
         setPictureUpload(Array.from(files));
-        console.log(Array.from(files));
     }
 
     let picture = [];
     for (let i in pictureUpload){
         const src = URL.createObjectURL(pictureUpload[i]);
-        picture.push(<img src={src} className="block max-w-[200px] max-h-[200px] rounded-xl"></img>)
+        picture.push(<img src={src} key={i} className="block max-w-[200px] max-h-[200px] rounded-xl"></img>)
     }
 
     async function formSubmit(form){
+        setIsLoading(true);
+
         form.preventDefault();
 
         const formData = new FormData(form.currentTarget);
@@ -100,9 +154,12 @@ export function BookChange(){
             if (!response.ok) {
                 throw new Error("Can't update book");
             }
+            navigate("/book-management");
         }catch (err){
             console.error(err);
             alert(err.message);
+        }finally {
+            setIsLoading(false);
         }
         
     }
@@ -126,7 +183,7 @@ export function BookChange(){
 
                     <div>
                         <h1 className="text-2xl font-bold text-ink text-[#684D4D]">แก้ไขข้อมูลหนังสือ</h1>
-                        <p className="mt-0.5 text-sm text-[#9A6EA5]">แก้ไขข้อมูลหนังสือในระบบบ {id}</p>
+                        <p className="mt-0.5 text-sm text-[#9A6EA5]">แก้ไขข้อมูลหนังสือในระบบ</p>
                     </div>
                 </div>
 
@@ -138,7 +195,7 @@ export function BookChange(){
                             <div className="flex flex-col w-full gap-2">
                                 <label className="font-medium text-[#402E40] pb-1">ชื่อหนังสือ</label>
                                 <input 
-                                    id="name" type="text" placeholder="ชื่อหนังสือ" 
+                                    id="name" type="text" placeholder={book.name || "-"}
                                     name="name"
                                     className="h-11 w-full rounded-xl 
                                         border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
@@ -150,7 +207,7 @@ export function BookChange(){
                             <div className="flex flex-col w-full gap-2">
                                 <label className="font-medium text-[#402E40] pb-1">รหัสISBN</label>
                                 <input 
-                                    id="ISBN" type="text" placeholder="999-999-99-99999-9 (เว้นว่างหากไม่มี)"
+                                    id="ISBN" type="text" placeholder={book.isbnCode || "-"}
                                     name="isbnCode"
                                     className="h-11 w-full rounded-xl 
                                         border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
@@ -163,7 +220,7 @@ export function BookChange(){
                                 <div className="flex flex-col w-[48%] min-w-[150px] gap-2">
                                     <label className="font-medium text-[#402E40] pb-1">หมวดหมู่</label>
                                     <input 
-                                        id="category" type="text" placeholder="หมวดหมู่1, หมวดหมู่2"
+                                        id="category" type="text" placeholder={category || "-"}
                                         name="category"
                                         className="h-11 w-full rounded-xl 
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
@@ -173,7 +230,7 @@ export function BookChange(){
                                 <div className="flex flex-col w-[48%] min-w-[150px] gap-2">
                                     <label className="font-medium text-[#402E40] pb-1">ราคาขาย (บาท)</label>
                                     <input 
-                                        id="price" type="text" placeholder="0.00"
+                                        id="price" type="text" placeholder={book.price || "-"}
                                         name="price"
                                         className="h-11 w-full rounded-xl 
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
@@ -187,7 +244,7 @@ export function BookChange(){
                                 <div className="flex flex-col w-[48%] min-w-[150px] gap-2">
                                     <label className="font-medium text-[#402E40] pb-1">ผู้แต่ง</label>
                                     <input 
-                                        id="author" type="text" placeholder="ชื่อผู้แต่ง1, ชื่อผู้แต่ง2" 
+                                        id="author" type="text" placeholder={author || "-"} 
                                         name="author"
                                         className="h-11 w-full rounded-xl
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
@@ -197,7 +254,7 @@ export function BookChange(){
                                 <div className="flex flex-col w-[48%] min-w-[150px] gap-2">
                                     <label className="font-medium text-[#402E40] pb-1">สำนักพิมพ์</label>
                                     <input 
-                                        id="publisher" type="text" placeholder="ชื่อสำนักพิมพ์"
+                                        id="publisher" type="text" placeholder={book.publisher || "-"}
                                         name="publisher"
                                         className="h-11 w-full rounded-xl 
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
@@ -211,7 +268,7 @@ export function BookChange(){
                                 <div className="flex flex-col w-[48%] min-w-[150px] gap-2">
                                     <label className="font-medium text-[#402E40] pb-1">ขนาด</label>
                                     <input 
-                                        id="size" type="text" placeholder="กว้าง x ยาว" 
+                                        id="size" type="text" placeholder={book.size || null}
                                         name="size"
                                         className="h-11 w-full rounded-xl 
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
@@ -221,7 +278,7 @@ export function BookChange(){
                                 <div className="flex flex-col w-[48%] min-w-[150px] gap-2">
                                     <label className="font-medium text-[#402E40] pb-1">ปีที่ตีพิมพ์</label>
                                     <input 
-                                        id="publishDate" type="text" placeholder="ปีที่ตีพิมพ์"
+                                        id="publishDate" type="text" placeholder={book.publishDate ||"-"}
                                         name="publishDate"
                                         className="h-11 w-full rounded-xl 
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
@@ -234,7 +291,7 @@ export function BookChange(){
                             <div className="flex flex-col w-full gap-2">
                                 <label className="font-medium text-[#402E40] pb-1">คำอธิบายย่อภาษาไทย</label>
                                 <textarea 
-                                    id="description" rows="3" cols="5" placeholder="เนื้อหาและประวัติศาสตร์ของหนังสือ"
+                                    id="description" rows="3" cols="5" placeholder={book.description || "-"}
                                     name="description"
                                     className="min-h-[100px] w-full rounded-xl p-4
                                         border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
@@ -262,6 +319,13 @@ export function BookChange(){
                         <div className="flex flex-4 self-start flex-col min-w-[305px] h-auto gap-4 bg-[#FFFFFF] border-2 p-6 w-max rounded-2xl border-[#F0E4CE]">
                             <span className="font-bold text-[#402E40]">รูปภาพปัจจุบัน</span>
                             <div>
+                                {
+                                    book.picture.length > 0 ?
+                                    <div className="flex flex-col overflow-auto max-h-[300px] mb-[30px] gap-4">
+                                        {oldPicture}
+                                    </div> 
+                                    : ''
+                                }
                                 { picture.length > 0 ?
                                     <div className="flex overflow-auto max-h-[200px] mb-[30px] gap-4">
                                         {picture}
@@ -295,6 +359,9 @@ export function BookChange(){
                     </div>
                 </form>
             </main>
+            {isLoading && (
+                <div className="fixed inset-0 z-[9999] bg-black/40"></div>
+            )}
         </div>
     </>
     )

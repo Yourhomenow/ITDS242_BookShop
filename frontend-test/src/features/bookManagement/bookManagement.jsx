@@ -46,6 +46,7 @@ function BookManagement(){
     const [selectedBooks, setSelectedBooks] = useState([]);
     
     {/* Delete Pop Up */}
+    const [refresh, setRefresh] = useState(0);
     const [showPopup, setShowPopup] = useState(false);
     const [deletePop, setDeletePop] = useState([]);
 
@@ -62,36 +63,13 @@ function BookManagement(){
         }
 
         getBooks();
-    }, []);
+    }, [refresh]);
     if (books === null) {
         return <p>Loading books...</p>;
     }
 
-    console.log(books);
-    // const bookEntries = [
-    //     {
-    //         book: books[0],
-    //         category: "Comic&Manga",
-    //         author: "superCoolPenName",
-    //         pic: {
-    //             name: "cover.png",
-    //             url: "https://picsum.photos/seed/book1/200"
-    //         }
-    //     },
-    //     {
-    //         book: books[1],
-    //         category: "Magazine",
-    //         author: "superCoolPenName",
-    //         pic: {
-    //             name: "cover.png",
-    //             url: "https://picsum.photos/seed/book2/200"
-    //         }
-    //     }
-    // ];
-
     {/* Search function */}
     const filteredBooks = filterBooks(books, search, categoryFilter, statusFilter);
-    console.log(filteredBooks);
 
     function handleBookSelect(bookId, checked) {
         if (checked) {
@@ -126,7 +104,7 @@ function BookManagement(){
                                 onTrash={onTrash}
                         />)
         }else {
-            tableRow.push(<tr key={`empty-${i}`} className="h-[70px] border-b border-slate-100"></tr>)
+            tableRow.push(<tr key={`empty-${i}`} className="h-[90px] border-b border-slate-100"></tr>)
         }
     }
 
@@ -295,7 +273,8 @@ function BookManagement(){
                     key={deletePop[0]}
                     onClick={setShowPopup}
                     id={deletePop}
-                    books={books}   
+                    books={books}
+                    onDelete={setRefresh} 
                 />
             )}
         </>

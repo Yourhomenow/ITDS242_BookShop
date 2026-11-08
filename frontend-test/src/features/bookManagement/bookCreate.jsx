@@ -25,6 +25,9 @@ async function uploadFile(file){
 export function BookCreate(){
     const navigate = useNavigate();
 
+    {/* Lock after send reqest */}
+    const [isLoading, setIsLoading] = useState(false);
+
     const [pictureUpload, setPictureUpload] = useState([]);
 
     function handleFileChange(e){
@@ -47,6 +50,8 @@ export function BookCreate(){
     }
 
     async function formSubmit(form){
+        setIsLoading(true);
+
         form.preventDefault();
 
         const formData = new FormData(form.currentTarget);
@@ -96,9 +101,12 @@ export function BookCreate(){
             if (!response.ok) {
                 throw new Error("Can't insert book");
             }
+            navigate("/book-management");
         }catch (err){
             console.error(err);
             alert(err.message);
+        }finally {
+            setIsLoading(false);
         }
         
     }
@@ -169,7 +177,7 @@ export function BookCreate(){
                                 <div className="flex flex-col w-[48%] min-w-[150px] gap-2">
                                     <label className="font-medium text-[#402E40] pb-1">ราคาขาย (บาท)</label>
                                     <input 
-                                        id="price" type="number" placeholder="0.00"
+                                        id="price" type="number" step="any" placeholder="0.00"
                                         name="price" required
                                         className="h-11 w-full rounded-xl 
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
@@ -298,6 +306,9 @@ export function BookCreate(){
                     </div>
                 </form>
             </main>
+            {isLoading && (
+                <div className="fixed inset-0 z-[9999] bg-black/40"></div>
+            )}
         </div>
     </>
     )
