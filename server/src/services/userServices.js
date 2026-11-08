@@ -116,5 +116,6 @@ export const putBooks = async (id, bookData) => {
 }
 
 export const deleteBooks = async (id) => {
-   return {data: "hi"}
+   const [result] = await query("DELETE FROM book WHERE BookID=?", [id]);
+   return result.affectedRows > 0
 }
