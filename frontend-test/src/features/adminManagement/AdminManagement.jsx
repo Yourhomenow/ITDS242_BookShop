@@ -3,36 +3,65 @@ import { SideBar } from "../../shared/components/SideBar"
 import { TopBar } from "../../shared/components/TopBar"
 import AdminDeleteModel from "./AdminDeleteModel";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+
 
 function AdminManagement() {
   // Static dataset for admin accounts
   const [openDeleteModel, setOpenDeleteModel] = useState(false);
-  const adminUsers = [
-    {
-      id: '0001',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ1',
-      status: 'active',
-      statusText: 'ใช้งานอยู่',
-    },
-    {
-      id: '0002',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ2',
-      status: 'active',
-      statusText: 'ใช้งานอยู่',
-    },
-    {
-      id: '0003',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ3',
-      status: 'active',
-      statusText: 'ใช้งานอยู่',
-    },
-    {
-      id: '0004',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ4',
-      status: 'suspended',
-      statusText: 'ระงับการใช้งาน',
-    },
-  ]
+  const [adminData , setAdminData] = useState([])
+  const [selectAdmins , setSelectAdmin] = useState("")
+
+  // const adminData = async () => {
+  //   const res = await fetch('http://localhost:3005/api/admins')
+  //   console.log(res)
+  //   if (!res.ok) throw new Error('Network error');
+  //   return res;
+  // }
+  
+  
+  useEffect(() =>{
+    const fetchedAdmin = async ()=>{
+      try{
+        const res = await fetch('/api/admins')
+        if (!res.ok) throw new Error(`Network error: ${res.status}`);
+        const result = await res.json()
+        console.log(result)
+        setAdminData(result)
+      }catch(err){
+        console.error(err)
+      }
+    }
+
+    fetchedAdmin()
+},[])
+
+  // const adminData = [
+  //   {
+  //     id: '0001',
+  //     name: 'ชื่อบัญชีผู้ดูแลระบบ1',
+  //     status: 'active',
+  //     statusText: 'ใช้งานอยู่',
+  //   },
+  //   {
+  //     id: '0002',
+  //     name: 'ชื่อบัญชีผู้ดูแลระบบ2',
+  //     status: 'active',
+  //     statusText: 'ใช้งานอยู่',
+  //   },
+  //   {
+  //     id: '0003',
+  //     name: 'ชื่อบัญชีผู้ดูแลระบบ3',
+  //     status: 'active',
+  //     statusText: 'ใช้งานอยู่',
+  //   },
+  //   {
+  //     id: '0004',
+  //     name: 'ชื่อบัญชีผู้ดูแลระบบ4',
+  //     status: 'suspended',
+  //     statusText: 'ระงับการใช้งาน',
+  //   },
+  // ]
 
   return (
     <>
@@ -74,7 +103,7 @@ function AdminManagement() {
                 <p className="mt-0.5 text-sm text-[#8a7a80]">ค้นหา อัปเดต และควบคุมสิทธิ์การเข้าใช้งานของทีมงานหลังบ้าน</p>
               </div>
             </div>
-            <button type="button" className="flex items-center gap-2 rounded-xl bg-plum px-5 py-2.5 text-sm font-medium text-white shadow-md shadow-plum/30 hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum">
+            <button type="button" className="flex items-center gap-2 rounded-xl bg-plum px-5 py-2.5 text-sm font-medium bg-[#7a4f8f] text-white shadow-md shadow-plum/30 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum">
               <svg className="size-4"><use href="#i-plus" /></svg>เพิ่มบัญชีใหม่
             </button>
           </div>
@@ -89,10 +118,10 @@ function AdminManagement() {
               </div>
               <label className="relative flex h-11 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-500 focus-within:border-plum focus-within:ring-2 focus-within:ring-plum/20">
                 สถานะ:
-                <select id="status" className="appearance-none bg-transparent pr-5 font-semibold text-[#3d3a4a] outline-none">
-                  <option value="all">ทั้งหมด</option>
-                  <option value="active">ใช้งานอยู่</option>
-                  <option value="suspended">ระงับการใช้งาน</option>
+                <select value={selectAdmins} onChange={(e)=> setSelectAdmin(e.target.value)} id="status" className="appearance-none bg-transparent pr-5 font-semibold text-[#3d3a4a] outline-none">
+                  <option value="ALL">ALL</option>
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="SUSPENDED">SUSPENDED</option>
                 </select>
                 <svg className="pointer-events-none absolute right-3 size-3.5"><use href="#i-chev" /></svg>
               </label>
@@ -112,25 +141,25 @@ function AdminManagement() {
                   </tr>
                 </thead>
                 <tbody id="rows">
-                  {adminUsers.map((user, index) => {
-                    const isActive = user.status === 'active'
+                  {adminData.map((admin, index) => {
+                    const isActive = admin.Status === 'ACTIVE'
                     return (
                       <tr
-                        key={user.id}
-                        className={`hover:bg-slate-50/70 ${index !== adminUsers.length - 1 ? 'border-b border-slate-100' : ''}`}
-                        data-status={user.status}
-                        data-search={`${user.id} ${user.name}`}
+                        key={admin.AdminID}
+                        className={`hover:bg-slate-50/70 ${index !== adminData.length - 1 ? 'border-b border-slate-100' : ''}`}
+                        data-status={admin.status}
+                        data-search={`${admin.AdminID} ${admin.Username}`}
                       >
                         <td className="px-6 py-4">
                           <span className="flex items-center gap-2.5 font-semibold text-[#5b4650]">
-                            <span className="size-2 rounded-full bg-plum"></span>{user.id}
+                            <span className="size-2 rounded-full bg-plum"></span>{admin.AdminID}
                           </span>
                         </td>
-                        <td className="px-6 py-4 font-semibold">{user.name}</td>
+                        <td className="px-6 py-4 font-semibold">{admin.Username}</td>
                         <td className="px-6 py-4">
                           <span className={`rounded-md px-2.5 py-1 text-xs font-semibold ${isActive ? 'bg-[#c8f1d8] text-[#1c7a4b]' : 'bg-[#ffe98a] text-[#8a5b00]'
                             }`}>
-                            {user.statusText}
+                            {admin.Status}
                           </span>
                         </td>
                         <td className="px-6 py-4">
