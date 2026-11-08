@@ -139,7 +139,7 @@ export function BookChange(){
                                 <label className="font-medium text-[#402E40] pb-1">ชื่อหนังสือ</label>
                                 <input 
                                     id="name" type="text" placeholder="ชื่อหนังสือ" 
-                                    name="name" required
+                                    name="name"
                                     className="h-11 w-full rounded-xl 
                                         border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
                                             placeholder:text-[#8B708B] focus:border-plum focus:ring-2 focus:ring-plum/20" 
@@ -164,7 +164,7 @@ export function BookChange(){
                                     <label className="font-medium text-[#402E40] pb-1">หมวดหมู่</label>
                                     <input 
                                         id="category" type="text" placeholder="หมวดหมู่1, หมวดหมู่2"
-                                        name="category" required
+                                        name="category"
                                         className="h-11 w-full rounded-xl 
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
                                             placeholder:text-[#8B708B] focus:border-plum focus:ring-2 focus:ring-plum/20" 
@@ -174,7 +174,7 @@ export function BookChange(){
                                     <label className="font-medium text-[#402E40] pb-1">ราคาขาย (บาท)</label>
                                     <input 
                                         id="price" type="text" placeholder="0.00"
-                                        name="price" required
+                                        name="price"
                                         className="h-11 w-full rounded-xl 
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
                                             placeholder:text-[#8B708B] focus:border-plum focus:ring-2 focus:ring-plum/20" 
@@ -188,7 +188,7 @@ export function BookChange(){
                                     <label className="font-medium text-[#402E40] pb-1">ผู้แต่ง</label>
                                     <input 
                                         id="author" type="text" placeholder="ชื่อผู้แต่ง1, ชื่อผู้แต่ง2" 
-                                        name="author" required
+                                        name="author"
                                         className="h-11 w-full rounded-xl
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
                                             placeholder:text-[#8B708B] focus:border-plum focus:ring-2 focus:ring-plum/20" 
@@ -198,7 +198,7 @@ export function BookChange(){
                                     <label className="font-medium text-[#402E40] pb-1">สำนักพิมพ์</label>
                                     <input 
                                         id="publisher" type="text" placeholder="ชื่อสำนักพิมพ์"
-                                        name="publisher" required
+                                        name="publisher"
                                         className="h-11 w-full rounded-xl 
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
                                             placeholder:text-[#8B708B] focus:border-plum focus:ring-2 focus:ring-plum/20" 
@@ -212,7 +212,7 @@ export function BookChange(){
                                     <label className="font-medium text-[#402E40] pb-1">ขนาด</label>
                                     <input 
                                         id="size" type="text" placeholder="กว้าง x ยาว" 
-                                        name="size" required
+                                        name="size"
                                         className="h-11 w-full rounded-xl 
                                             border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
                                             placeholder:text-[#8B708B] focus:border-plum focus:ring-2 focus:ring-plum/20" 

@@ -9,9 +9,10 @@ const categoryColor =
     Magazine: {textColor: "973C8C", textBgColor: "F1C8EC", bgColor: "FFEFFD", thai:"นิตยสาร"}
 }
 
-export function BookRow ({ book, pic, category, author, onSelect, isSelected, onTrash}){
+export function BookRow ({ book, onSelect, isSelected, onTrash}){
     const navigate = useNavigate();
 
+    const category = book.category[0];
     const colors = categoryColor[category] ?? {
         textColor: "555555",
         textBgColor: "EEEEEE",
@@ -19,6 +20,14 @@ export function BookRow ({ book, pic, category, author, onSelect, isSelected, on
         thai: category || "ไม่ระบุหมวดหมู่"
     };
 
+    let [author] = book.author;
+    for (let i in book.author){
+        if (i != 0){
+            author += `, ${book.author[i]}`;
+        }
+    }
+
+    const picture = book.picture[0];
     return (
         <tr 
             className="h-[70px] border-b border-slate-100 font-semibold text-[#5b4650] text-center hover:brightness-102 transition-[filter] duration-130"
@@ -41,7 +50,7 @@ export function BookRow ({ book, pic, category, author, onSelect, isSelected, on
 
             <td className="px-6 py-4">
                 <div className="flex justify-center items-center">
-                    <img src={pic.url} alt={pic.name} className="h-14 w-10 rounded object-cover"></img>
+                    <img src={picture.url} alt={picture.name} className="h-14 w-10 rounded object-cover"></img>
                 </div>
             </td>
 

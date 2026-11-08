@@ -9,26 +9,25 @@ import { DeletePopUp } from "./DeletePopUp";
 
 const th_className = "font-medium px-6 py-3 text-center"
 
-function filterBooks(booksEntry, search, categoryFilter, statusFilter) {
-    return booksEntry.filter((entry) => {
-    const book = entry.book;
+function filterBooks(books, search, categoryFilter, statusFilter) {
+    return books.filter((entry) => {
 
     const matchesSearch =
-        `${book.id} ${book.name}`
+        `${entry.id} ${entry.name}`
             .toLowerCase()
             .includes(search.toLowerCase().trim());
 
     const matchesCategory =
         categoryFilter === "all" ||
-        entry.category === categoryFilter;
+        entry.category.includes(categoryFilter);
 
     let matchesStatus = true;
 
     if (statusFilter === "available") {
-        matchesStatus = book.quantity > 0;
+        matchesStatus = entry.quantity > 0;
     }
     else if (statusFilter === "outOfStock") {
-        matchesStatus = book.quantity <= 0;
+        matchesStatus = entry.quantity <= 0;
     }
 
     return matchesSearch && matchesCategory && matchesStatus;
@@ -37,60 +36,63 @@ function filterBooks(booksEntry, search, categoryFilter, statusFilter) {
 
 function BookManagement(){
     const navigate = useNavigate();
-    const books = [
-        {
-        id: 1,
-        name: 'หนังสือ1',
-        quantity: 0,
-        isbnCode: null,
-        price: 50,
-        description: 'คำอธิบาย1',
-        publishDate: '2026-09-30',
-        size: '99x99',
-        publisherID: 1
-        },
-        {
-        id: 2,
-        name: 'หนังสือ2',
-        quantity: 9999,
-        isbnCode: null,
-        price: 555550,
-        description: 'คำอธิบาย1',
-        publishDate: '2026-09-30',
-        size: '99x99',
-        publisherID: 1
-        }
-    ]
-
-    const bookEntries = [
-        {
-            book: books[0],
-            category: "Comic&Manga",
-            author: "superCoolPenName",
-            pic: {
-                name: "cover.png",
-                url: "https://picsum.photos/seed/book1/200"
-            }
-        },
-        {
-            book: books[1],
-            category: "Magazine",
-            author: "superCoolPenName",
-            pic: {
-                name: "cover.png",
-                url: "https://picsum.photos/seed/book2/200"
-            }
-        }
-    ];
-
+    
     {/* Search function */}
     const [search, setSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState("all");
     const [statusFilter, setStatusFilter] = useState("all");
-    const filteredBooks = filterBooks(bookEntries, search, categoryFilter, statusFilter);
 
     {/* Tickbox */}
     const [selectedBooks, setSelectedBooks] = useState([]);
+    
+    {/* Delete Pop Up */}
+    const [showPopup, setShowPopup] = useState(false);
+    const [deletePop, setDeletePop] = useState([]);
+
+    {/* Choose 6 rows to display */}
+    const [tablePage, setTablePage] = useState(1);
+
+    {/* get books data */}
+    const [books, setBook] = useState(null);
+    useEffect(() => {
+        async function getBooks() {
+            const response = await fetch('/api/admins/books');
+            const data = await response.json();
+            setBook(data);
+        }
+
+        getBooks();
+    }, []);
+    if (books === null) {
+        return <p>Loading books...</p>;
+    }
+
+    console.log(books);
+    // const bookEntries = [
+    //     {
+    //         book: books[0],
+    //         category: "Comic&Manga",
+    //         author: "superCoolPenName",
+    //         pic: {
+    //             name: "cover.png",
+    //             url: "https://picsum.photos/seed/book1/200"
+    //         }
+    //     },
+    //     {
+    //         book: books[1],
+    //         category: "Magazine",
+    //         author: "superCoolPenName",
+    //         pic: {
+    //             name: "cover.png",
+    //             url: "https://picsum.photos/seed/book2/200"
+    //         }
+    //     }
+    // ];
+
+    {/* Search function */}
+    const filteredBooks = filterBooks(books, search, categoryFilter, statusFilter);
+    console.log(filteredBooks);
+
     function handleBookSelect(bookId, checked) {
         if (checked) {
             setSelectedBooks(prev => [...prev, bookId]);
@@ -103,8 +105,6 @@ function BookManagement(){
     }
     
     {/* Delete Pop Up */}
-    const [showPopup, setShowPopup] = useState(false);
-    const [deletePop, setDeletePop] = useState([]);
     function onTrash(id){
         if (!(id instanceof Array)) {
             id = [id];
@@ -114,19 +114,15 @@ function BookManagement(){
     }
 
     {/* Choose 6 rows to display */}
-    const [tablePage, setTablePage] = useState(1);
     const showTable = 6;
     let tableRow = [];
     for (let i = (((tablePage - 1) * showTable)); i < (((tablePage - 1) * showTable) + showTable); i++){
         if (filteredBooks[i]){
             tableRow.push(<BookRow 
-                                key={filteredBooks[i].book.id} 
-                                book={filteredBooks[i].book} 
-                                pic={filteredBooks[i].pic} 
-                                category={filteredBooks[i].category} 
-                                author={filteredBooks[i].author}
+                                key={filteredBooks[i].id} 
+                                book={filteredBooks[i]} 
                                 onSelect={handleBookSelect}
-                                isSelected={selectedBooks.includes(filteredBooks[i].book.id)}
+                                isSelected={selectedBooks.includes(filteredBooks[i].id)}
                                 onTrash={onTrash}
                         />)
         }else {
