@@ -42,17 +42,17 @@ INSERT INTO book (BookName, QuantityInStock, Price, Size, PublisherID) VALUES
 ("Travel Magazine", 5, 160.00, "21x28 cm", 3);
 
 INSERT INTO picture (`Name`, `URL`, BookID) VALUE
-("cover.png", "https://www.xxx", 1),
-("blue_ocean_cover.png", "https://example.com/blue_ocean_cover.png", 1),
-("blue_ocean_back.png", "https://example.com/blue_ocean_back.png", 1),
-("dream_stars_cover.png", "https://example.com/dream_stars_cover.png", 2),
-("princess_cover.png", "https://example.com/princess_cover.png", 3),
-("computer_cover.png", "https://example.com/computer_cover.png", 4),
-("magic_world_cover.png", "https://example.com/magic_world_cover.png", 5),
-("animals_cover.png", "https://example.com/animals_cover.png", 6),
-("english_cover.png", "https://example.com/english_cover.png", 7),
-("mystery_cover.png", "https://example.com/mystery_cover.png", 8),
-("travel_cover.png", "https://example.com/travel_cover.png", 9);
+("cover.png", "https://res.cloudinary.com/itds242-bookshop/image/upload/v1794099239/cover_svy5yg.png", 1),
+("blue_ocean_cover.png", "https://res.cloudinary.com/itds242-bookshop/image/upload/v1794099239/blue_ocean_cover_jbxukj.png", 1),
+("blue_ocean_back.png", "https://res.cloudinary.com/itds242-bookshop/image/upload/v1794099239/blue_ocean_back_uedgns.png", 1),
+("dream_stars_cover.png", "https://res.cloudinary.com/itds242-bookshop/image/upload/v1794099240/dream_star_cover_zldigc.png", 2),
+("princess_cover.png", "https://res.cloudinary.com/itds242-bookshop/image/upload/v1794099242/princess_cover_eo2xrl.png", 3),
+("computer_cover.png", "https://res.cloudinary.com/itds242-bookshop/image/upload/v1794099240/computer_cover_ppspkg.png", 4),
+("magic_world_cover.png", "https://res.cloudinary.com/itds242-bookshop/image/upload/v1794099241/magic_world_cover_bvpz1m.png", 5),
+("animals_cover.png", "https://res.cloudinary.com/itds242-bookshop/image/upload/v1794099238/animals_cover_ybfumx.png", 6),
+("english_cover.png", "https://res.cloudinary.com/itds242-bookshop/image/upload/v1794099240/english_cover_wed6t8.png", 7),
+("mystery_cover.png", "https://res.cloudinary.com/itds242-bookshop/image/upload/v1794099242/mystery_cover_zhaejn.png", 8),
+("travel_cover.png", "https://res.cloudinary.com/itds242-bookshop/image/upload/v1794099243/travel_cover_ce6od3.png", 9);
 
 
 INSERT INTO booktransaction (Timestamp, TargetField, Operation, OldValue, NewValue, AdminID, BookID) VALUE
@@ -68,6 +68,7 @@ INSERT INTO booktransaction (Timestamp, TargetField, Operation, OldValue, NewVal
 INSERT INTO `in` (BookID, CategoryID) VALUE
 (1, 2),
 (2, 2),
+(2, 4),
 (3, 1),
 (4, 4),
 (5, 2),
