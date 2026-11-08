@@ -10,7 +10,7 @@ export const config ={
 //Database
   database:{
     host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT,10) || 5432,
+    port: parseInt(process.env.DB_PORT,10) || 3306,
     name: process.env.DB_NAME || 'myapp',
     user: process.env.DB_USER || 'mysql',
     password: process.env.DB_PASSWORD,
