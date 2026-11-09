@@ -10,7 +10,8 @@ function AdminManagement() {
   // Static dataset for admin accounts
   const [openDeleteModel, setOpenDeleteModel] = useState(false);
   const [adminsData , setAdminsData] = useState([])
-  const [selectAdminsStatus , setSelectAdminStatus] = useState("")
+  const [selectAdminsStatus , setSelectAdminStatus] = useState("ALL")
+  const [searchInput, setSearchInput] = useState("")
   
   useEffect(() =>{
     const fetchedAdmin = async ()=>{
@@ -28,7 +29,30 @@ function AdminManagement() {
     fetchedAdmin()
 },[])
 
-  const filteredData = selectAdminsStatus === "ALL" ? adminsData : adminsData.filter((admin)=> admin.Status.toLowerCase().includes(selectAdminsStatus.toLowerCase()));
+
+  // const term = searchInput.trim().toLowerCase()
+  // const filteredData = adminsData.filter((admin) =>{
+  //   const matchesStatus = 
+  //     selectAdminsStatus === "ALL" || admin.Status === selectAdminsStatus;
+    
+  //   const matchesSearch = 
+  //     term === "" ||
+  //     admin.Username.toLowerCase().includes(searchInput)
+  //   return matchesStatus && matchesSearch
+  // });
+
+  // if (selectAdminsStatus === "ALL" && searchInput === "") return true;
+  const filteredData = adminsData.filter((admin)=>{
+    const matchesSearch = admin.Username
+      .toLowerCase()
+      .includes(searchInput.toLowerCase())
+
+    const matchesStatus = 
+      selectAdminsStatus === "ALL" ||
+      admin.Status === selectAdminsStatus
+
+    return matchesSearch && matchesStatus
+  })
 
 
 
@@ -83,7 +107,11 @@ function AdminManagement() {
             <div className="mt-1 flex flex-wrap items-center gap-4">
               <div className="relative min-w-55 flex-1 sm:max-w-3xl">
                 <svg className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500"><use href="#i-search" /></svg>
-                <input id="q" type="search" placeholder="ค้นหาผู้ใช้งาน..." className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-plum focus:ring-2 focus:ring-plum/20" />
+                <input onChange={(e)=> {
+                  console.log(e.target.value)
+                  setSearchInput(e.target.value)
+                  return 
+                  }} id="q" type="search" placeholder="ค้นหาผู้ใช้งาน..." className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-plum focus:ring-2 focus:ring-plum/20" />
               </div>
               <label className="relative flex h-11 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-500 focus-within:border-plum focus-within:ring-2 focus-within:ring-plum/20">
                 สถานะ:
@@ -116,7 +144,7 @@ function AdminManagement() {
                         <tr
                         key={admin.AdminID}
                         className={`hover:bg-slate-50/70 ${index !== adminsData.length - 1 ? 'border-b border-slate-100' : ''}`}
-                        data-status={admin.status}
+                        data-status={admin.Status}
                         data-search={`${admin.AdminID} ${admin.Username}`}
                       >
                         <td className="px-6 py-4">
