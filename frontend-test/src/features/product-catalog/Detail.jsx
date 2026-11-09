@@ -91,23 +91,23 @@ useEffect(() => {
 
         {/* ข้อมูลหนังสือ */}
         <div className="flex-1 py-1">
-          <span className="rounded-full bg-bookLavender px-3 py-1 text-[11px] text-[#8c70a0]">{book.category}</span>
+          <span className="rounded-full bg-[#DAD8F7] px-3 py-1 text-[11px] text-[#8c70a0]">{book.category}</span>
 
           <h1 className="mb-4 mt-2 text-xl font-bold md:mb-6 md:text-2xl text-[#684D4D]">{book.title}</h1>
           <p className="text-xs leading-7 text-[#9a8589]">ผู้แต่ง: {book.author || "-"}
             <br />สำนักพิมพ์: {book.publisher || "-"}</p>
-          <div className="mt-4 border-t border-stone-100 pt-4 text-xl font-bold text-[#9A6EA5] text-bookPurple">{Number(book.price).toLocaleString("th-TH")} ฿</div></div>
+          <div className="mt-4 border-t border-stone-100 pt-4 text-xl font-bold text-[#9A6EA5]">{Number(book.price).toLocaleString("th-TH")} ฿</div></div>
       </section>
 
       {/* รายละเอียดเพิ่มเติมของหนังสือ */}
       <section className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-[2fr_1.35fr]">
 
-        <div className="min-h-28 rounded-xl bg-bookCream p-4">
-          <h2 className="mb-3 text-sm font-bold text-bookPurple">รายละเอียดหนังสือ</h2>
+        <div className="min-h-28 rounded-xl bg-[#FCF3D2] p-4">
+          <h2 className="mb-3 text-sm font-bold text-[#9A6EA5]">รายละเอียดหนังสือ</h2>
           <p className="text-xs text-[#8f7a7d]">{book.description || "ไม่มีรายละเอียดหนังสือ"}</p>
         </div>
-        <div className="rounded-xl bg-bookCream p-4">
-          <h2 className="mb-2 text-sm font-bold text-bookPurple">ข้อมูลหนังสือ</h2>
+        <div className="rounded-xl bg-[#FCF3D2] p-4">
+          <h2 className="mb-2 text-sm font-bold text-[#9A6EA5]">ข้อมูลหนังสือ</h2>
 
           <div className="space-y-1 text-xs text-[#8f7a7d]">
             <p>ISBN<span className="float-right">{book.isbn || "-"}</span></p>
@@ -122,7 +122,7 @@ useEffect(() => {
       <section className="mt-4 rounded-sm bg-gradient-to-r from-[#d6e8ed] to-[#a6cee0] p-4">
 
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="font-bold text-bookPurple">
+          <h2 className="font-bold text-[#9A6EA5]">
             หนังสือที่คุณอาจสนใจ
           </h2>
           <Link to="/search" className="text-[11px]">
