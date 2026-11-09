@@ -124,7 +124,7 @@ function BookManagement(){
                             <p className="mt-0.5 text-sm text-[#9A6EA5]">เพิ่ม แก้ไช และลบข้อมูลรายการหนังสือ</p>
                         </div>
                         <div className="flex items-end gap-4 self-center ml-auto">
-                            <SquareButton text="เพิ่มหนังสือใหม่" icon="i-plus" bg_colour="9A6EA5" onClick={() => navigate("/book-management/create")}/>
+                            <SquareButton text="เพิ่มหนังสือใหม่" icon="i-plus" bg_colour="9A6EA5" onClick={() => navigate("/bookCreate")}/>
                             <SquareButton text="ลบสินค้า" icon="i-trash" onClick={() => { if (selectedBooks.length > 0){onTrash(selectedBooks)} }}/>
                         </div>
                     </div>

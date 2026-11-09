@@ -97,7 +97,7 @@ export function BookRow ({ book, onSelect, isSelected, onTrash}){
                         type="button" aria-label="แก้ไข" 
                         className="grid size-8 place-items-center rounded-lg 
                             border border-[#D0DDF0] bg-[#e3effd] text-[#3b82c4] hover:bg-[#cfe3fa] cursor-pointer"
-                        onClick={() => navigate(`/book-management/change/${book.id}`)}
+                        onClick={() => navigate(`/bookChange/${book.id}`)}
                     >
                         <svg className="size-4"><use href="#i-edit"/></svg>
                     </button>

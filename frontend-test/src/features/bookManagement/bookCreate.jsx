@@ -101,7 +101,7 @@ export function BookCreate(){
             if (!response.ok) {
                 throw new Error("Can't insert book");
             }
-            navigate("/book-management");
+            navigate("/bookManagement");
         }catch (err){
             console.error(err);
             alert(err.message);
@@ -123,7 +123,7 @@ export function BookCreate(){
                         type="button" aria-label="สร้าง" 
                         className="grid size-12 shrink-0 place-items-center rounded-xl border border-[#dcd2ee] bg-[#ece6f5] text-[#7a4f8f]
                                     hover:bg-[#e2dcea] cursor-pointer"
-                        onClick={() => navigate('/book-management')}
+                        onClick={() => navigate('/bookManagement')}
                     >
                         <svg className="size-6"><use href="#i-corner-up-left"/></svg>
                     </button>
@@ -250,7 +250,7 @@ export function BookCreate(){
                                 <button type="button" 
                                     className="text-[#8B708B] bg-[#FFFFFF] p-3 pl-5 pr-5 rounded-2xl 
                                         border border-[#F0E4CE] cursor-pointer hover:brightness-105"
-                                    onClick={() => navigate("/book-management")}
+                                    onClick={() => navigate("/bookManagement")}
                                 >
                                     ยกเลิก
                                 </button>

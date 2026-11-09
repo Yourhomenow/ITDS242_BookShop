@@ -25,9 +25,9 @@ function App() {
         <Route path="/adminManagement" element={<AdminManagement />}/>
         <Route path="/adminCreate" element={<AdminCreate />}/>
         <Route path="/adminChange" element={<AdminChange />}/>
-        <Route path="/book-management" element={<BookManagement />} />
-        <Route path="/book-management/create" element={<BookCreate />} />
-        <Route path="/book-management/change/:id" element={<BookChange />} />
+        <Route path="/bookManagement" element={<BookManagement />} />
+        <Route path="/bookCreate" element={<BookCreate />} />
+        <Route path="/bookChange/:id" element={<BookChange />} />
         <Route path="/" element={<AdminManagement />} />
       </Routes>
     </>
