@@ -19,7 +19,7 @@ function App() {
     <>
       <IconSprite/>
       <Routes>
-        <Route path="/search"element={<><HeaderShop /><NavbarShop /><Search /></>}/>
+        <Route path="/search/:keyword?"element={<><HeaderShop /><NavbarShop /><Search /></>}/>
         <Route path="/detail/:id" element={<><HeaderShop /><NavbarShop /><Detail /></>}/>
       
         <Route path="/adminManagement" element={<AdminManagement />}/>

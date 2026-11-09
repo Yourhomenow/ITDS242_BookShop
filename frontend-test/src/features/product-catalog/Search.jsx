@@ -1,9 +1,14 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
+import { useParams, useSearchParams  } from "react-router-dom";
 
 import BookCard from "../../shared/components/BookCard";
 import banner from "../../assets/banner_shop.png";
 
 export default function Search() {
+  const {keyword = ""} = useParams();
+  const [searchParams] = useSearchParams();
+  const categoryKeyword = searchParams.get("category") || "";
+  
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,7 +18,7 @@ export default function Search() {
   const [author, setAuthor] = useState("");
   const [publisher, setPublisher] = useState("");
   const [price, setPrice] = useState(3000);
-
+  
   // ดึงข้อมูลหนังสือจาก ITDS242_BookShop sql 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -40,6 +45,15 @@ export default function Search() {
 
     fetchBooks();
   }, []);
+
+  useEffect(() => {
+    function checkSearch() {
+      setSearch(keyword);
+      setCategory(categoryKeyword);
+    }
+
+    checkSearch();
+  }, [keyword, categoryKeyword]);
 
   // ค้นหาหนังสือตามข้อมูลที่ใส้
   const filteredBooks = useMemo(() => {
@@ -71,13 +85,13 @@ export default function Search() {
 
   return (
     <div className="bg-[#FAF9F6]">
-    <main className="mx-auto max-w-[1180px] px-3 py-4 md:px-[18px] md:py-5 bg-white border-r border-l border-gray-200">
+    <main className="mx-auto min-h-screen max-w-[1180px] px-3 py-4 md:px-[18px] md:py-5 bg-white border-r border-l border-gray-200">
 
       <section className="relative flex h-[230px] items-center justify-center overflow-hidden bg-gradient-to-b from-bookCream via-[#fff1ce] via-70% to-bookBlue text-center md:h-[250px]">
         <div>
           <img src={banner} alt="Mahasamut Banner" className="w-full h-64 object-cover"/></div>
       </section>
-      <section className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-[220px_1fr]">
+      <section className="min-h-screen mt-5 grid grid-cols-1 gap-5 md:grid-cols-[220px_1fr]">
         <aside className="rounded-xl bg-[#d9e8ed] p-4 text-xs text-[#684D4D] font-medium">
           <div className="bg-[#DBD8F7] rounded-xl shadow-md mb-5 p-3">
             <select
@@ -120,7 +134,6 @@ export default function Search() {
             className="mt-3 text-blue-700">ล้างตัวกรอง</button>
         </aside>
         <div>
-          <input placeholder="ค้นหาหนังสือ..." value={search} onChange={(e) => setSearch(e.target.value)} className="mb-4 w-full rounded-lg border p-3"/>
           {loading ? (
             <p className="text-center">กำลังโหลด...</p>
           ) : error ? (
