@@ -3,7 +3,7 @@ import { query } from "../config/db.js";
 //Book API
 async function formatBooks(book){
    //publisher
-   const [publisher] = await query("SELECT * FROM publisher");
+   const [publisher] = await query("SELECT * FROM `PUBLISHER`");
    const publisher_lookUp = Object.fromEntries(
       publisher.map(pub => [pub.PublisherID, pub.PublisherName])
    );
@@ -27,11 +27,11 @@ async function formatBooks(book){
    }));
 
    //author
-   const [author] = await query("SELECT * FROM author");
+   const [author] = await query("SELECT * FROM `AUTHOR`");
    const author_lookUp = Object.fromEntries(
       author.map(aut => [aut.AuthorID, aut.AuthorName])
    );
-   const [write] = await query("SELECT * FROM `write`");
+   const [write] = await query("SELECT * FROM `WRITE`");
    for (let i in write){
       let temp_author = "";
       let temp_j = -1;
@@ -47,11 +47,11 @@ async function formatBooks(book){
    }
 
    //category
-   const [category] = await query("SELECT * FROM category");
+   const [category] = await query("SELECT * FROM `CATEGORY`");
    const category_lookUp = Object.fromEntries(
       category.map(cat => [cat.CategoryID, cat.CategoryName])
    );
-   const [_in] = await query("SELECT * FROM `in`");
+   const [_in] = await query("SELECT * FROM `IN`");
    for (let i in _in){
       let temp_category = "";
       let temp_j = -1;
@@ -67,7 +67,7 @@ async function formatBooks(book){
    }
 
    //picture
-   const [picture] = await query("SELECT * FROM picture");
+   const [picture] = await query("SELECT * FROM `PICTURE`");
    for (let i in picture){
       let temp_picture = [];
       let temp_j = -1;
@@ -86,13 +86,13 @@ async function formatBooks(book){
 }
 
 async function bookTransaction(name, operation, oldvalue, newvalue, BookID, AdminID=null){
-   await query("INSERT INTO booktransaction (Timestamp, TargetField, Operation, OldValue, NewValue, AdminID, BookID) VALUE (NOW(), ?, ?, ?, ?, ?, ?)",
+   await query("INSERT INTO `BOOKTRANSACTION` (Timestamp, TargetField, Operation, OldValue, NewValue, AdminID, BookID) VALUE (NOW(), ?, ?, ?, ?, ?, ?)",
          [name, operation, oldvalue, newvalue, AdminID, BookID]
    )
 }
 
 export const getBooks = async () => {
-   const [book] = await query("SELECT * FROM book");
+   const [book] = await query("SELECT * FROM `BOOK`");
 
    const formatBook = await formatBooks(book);
    console.log(formatBook);
@@ -101,7 +101,7 @@ export const getBooks = async () => {
 }
 
 export const getBooksID = async (id) => {
-   const [book] = await query("SELECT * FROM book WHERE BookID=?", [id]);
+   const [book] = await query("SELECT * FROM `BOOK` WHERE BookID=?", [id]);
 
    const formatBook = await formatBooks(book);
    console.log(formatBook);
@@ -115,7 +115,7 @@ export const postBooks = async (data) => {
    try{
       //publisher
       const publisher = formattedData.publisher.trim();
-      const [publisherData] = await query("SELECT * FROM publisher");
+      const [publisherData] = await query("SELECT * FROM `PUBLISHER`");
       let publisherID = -1;
       for (let i in publisherData) {
          if (publisherData[i].PublisherName == publisher){
@@ -130,7 +130,7 @@ export const postBooks = async (data) => {
 
       //author
       const author = [...new Set(((formattedData.author).split(",")).map((e) => (e.trim())))];
-      const [authorData] = await query("SELECT * FROM author");
+      const [authorData] = await query("SELECT * FROM `AUTHOR`");
       let authorID = [];
       for (let i in author) {
          let flag = -1;
@@ -150,7 +150,7 @@ export const postBooks = async (data) => {
 
       //category
       const category = [...new Set(((formattedData.category).split(",")).map((e) => (e.trim())))];
-      const [categoryData] = await query("SELECT * FROM category");
+      const [categoryData] = await query("SELECT * FROM `CATEGORY`");
       let categoryID = [];
       for (let i in category) {
          let flag = -1;
@@ -243,7 +243,7 @@ export const putBooks = async (id, data) => {
    //publisher
    if (formattedData.publisher != null){
       const publisher = formattedData.publisher.trim();
-      const [publisherData] = await query("SELECT * FROM publisher");
+      const [publisherData] = await query("SELECT * FROM `PUBLISHER`");
       let publisherID = -1;
       let oldVa = null;
       for (let i in publisherData) {
@@ -264,7 +264,7 @@ export const putBooks = async (id, data) => {
    //author
    if (formattedData.author != null){
       const author = [...new Set(((formattedData.author).split(",")).map((e) => (e.trim())))];
-      const [authorData] = await query("SELECT * FROM author");
+      const [authorData] = await query("SELECT * FROM `AUTHOR`");
       let authorID = [];
       for (let i in author) {
          let flag = -1;
@@ -293,7 +293,7 @@ export const putBooks = async (id, data) => {
    //category
    if (formattedData.category != null){
       const category = [...new Set(((formattedData.category).split(",")).map((e) => (e.trim())))];
-      const [categoryData] = await query("SELECT * FROM category");
+      const [categoryData] = await query("SELECT * FROM `CATEGORY`");
       let categoryID = [];
       for (let i in category) {
          let flag = -1;
