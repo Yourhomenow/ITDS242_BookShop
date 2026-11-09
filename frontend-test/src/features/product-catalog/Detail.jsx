@@ -69,7 +69,8 @@ useEffect(() => {
   if (!book) return null;
 
   return (
-    <main className="mx-auto max-w-[1180px] px-3 py-5 md:px-[18px] md:py-7">
+    <div className="bg-[#FAF9F6]">
+    <main className="mx-auto max-w-[1180px] px-3 py-5 md:px-[18px] md:py-7 bg-white border-r border-l border-gray-200">
 
       <p className="mb-3 text-xs text-[#9a8589]">
         <Link to="/home">หน้าหลัก</Link>　›　
@@ -92,10 +93,10 @@ useEffect(() => {
         <div className="flex-1 py-1">
           <span className="rounded-full bg-bookLavender px-3 py-1 text-[11px] text-[#8c70a0]">{book.category}</span>
 
-          <h1 className="mb-4 mt-2 text-xl font-bold md:mb-6 md:text-2xl">{book.title}</h1>
+          <h1 className="mb-4 mt-2 text-xl font-bold md:mb-6 md:text-2xl text-[#684D4D]">{book.title}</h1>
           <p className="text-xs leading-7 text-[#9a8589]">ผู้แต่ง: {book.author || "-"}
             <br />สำนักพิมพ์: {book.publisher || "-"}</p>
-          <div className="mt-4 border-t border-stone-100 pt-4 text-xl font-bold text-bookPurple">{Number(book.price).toLocaleString("th-TH")} ฿</div></div>
+          <div className="mt-4 border-t border-stone-100 pt-4 text-xl font-bold text-[#9A6EA5] text-bookPurple">{Number(book.price).toLocaleString("th-TH")} ฿</div></div>
       </section>
 
       {/* รายละเอียดเพิ่มเติมของหนังสือ */}
@@ -143,5 +144,6 @@ useEffect(() => {
         </div>
       </section>
     </main>
+    </div>
   );
 }
