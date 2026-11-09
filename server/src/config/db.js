@@ -9,15 +9,16 @@ const db = mysql.createPool({
     port: config.database.port
 })
 
-const checkConnection = async () => {
+export const checkConnection = async () => {
     try {  
         const [rows] = await db.query('SELECT * FROM BOOK')
-        return rows
+        return rows.length 
     } catch (err){
         console.error(`Initiate Connection Fail: `, err)
     }
 }
 
-checkConnection()
+
 
 export const query = (text, param) => db.query(text, param);
+export default db;

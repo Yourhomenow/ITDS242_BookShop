@@ -1,10 +1,15 @@
 import { app } from "./app.js";
+import { checkConnection } from "./config/db.js";
 import { config } from "./config/index.js";
 
 
 async function start() {
   try{
-    console.log("DB status: not set")
+    if(await checkConnection()){
+      console.log("DB status: Ready!!!")
+    }else{
+      console.log("DB status: not set!!!!!!!")
+    }
     
     app.listen(config.port, ()=>{
       console.log(`Listening on port ${config.port}`)

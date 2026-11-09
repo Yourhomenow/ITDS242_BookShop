@@ -4,11 +4,14 @@ const select_className = "flex items-center gap-3 rounded-xl bg-white/80 px-4 py
 export function SideBar ({ activePage }){
     let admin_className = based_className;
     let book_className = based_className ;
+    let home_className = based_className;
     
     if (activePage == "admin"){
         admin_className = select_className
     }else if (activePage == "book"){
         book_className = select_className
+    }else if (activePage == "home"){
+        home_className = select_className
     }
     return (
         <>
@@ -21,7 +24,7 @@ export function SideBar ({ activePage }){
             </svg>
             <aside className="hidden w-60 shrink-0 bg-linear-to-b from-[#9cc8e8] via-[#dcd3f7] to-[#fdf3c8] p-3 md:block">
                 <nav className="space-y-1 pt-3 text-sm font-medium text-[#4b4660]">
-                    <a href="#" className={based_className}>
+                    <a href="./home" className={home_className}>
                     <svg className="size-4"><use href="#i-home"/></svg>หน้าหลัก
                     </a>
                     <a href="/book-management" className={book_className}>
