@@ -3,36 +3,58 @@ import { SideBar } from "../../shared/components/SideBar"
 import { TopBar } from "../../shared/components/TopBar"
 import AdminDeleteModel from "./AdminDeleteModel";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+
 
 function AdminManagement() {
   // Static dataset for admin accounts
   const [openDeleteModel, setOpenDeleteModel] = useState(false);
-  const adminUsers = [
-    {
-      id: '0001',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ1',
-      status: 'active',
-      statusText: 'ใช้งานอยู่',
-    },
-    {
-      id: '0002',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ2',
-      status: 'active',
-      statusText: 'ใช้งานอยู่',
-    },
-    {
-      id: '0003',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ3',
-      status: 'active',
-      statusText: 'ใช้งานอยู่',
-    },
-    {
-      id: '0004',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ4',
-      status: 'suspended',
-      statusText: 'ระงับการใช้งาน',
-    },
-  ]
+  const [adminsData , setAdminsData] = useState([])
+  const [selectAdminsStatus , setSelectAdminStatus] = useState("ALL")
+  const [searchInput, setSearchInput] = useState("")
+  
+  useEffect(() =>{
+    const fetchedAdmin = async ()=>{
+      try{
+        const res = await fetch('/api/admins')
+        if (!res.ok) throw new Error(`Network error: ${res.status}`);
+        const result = await res.json()
+        console.log(result)
+        setAdminsData(result)
+      }catch(err){
+        console.error(err)
+      }
+    }
+
+    fetchedAdmin()
+},[])
+
+
+  // const term = searchInput.trim().toLowerCase()
+  // const filteredData = adminsData.filter((admin) =>{
+  //   const matchesStatus = 
+  //     selectAdminsStatus === "ALL" || admin.Status === selectAdminsStatus;
+    
+  //   const matchesSearch = 
+  //     term === "" ||
+  //     admin.Username.toLowerCase().includes(searchInput)
+  //   return matchesStatus && matchesSearch
+  // });
+
+  // if (selectAdminsStatus === "ALL" && searchInput === "") return true;
+  const filteredData = adminsData.filter((admin)=>{
+    const matchesSearch = admin.Username
+      .toLowerCase()
+      .includes(searchInput.toLowerCase())
+
+    const matchesStatus = 
+      selectAdminsStatus === "ALL" ||
+      admin.Status === selectAdminsStatus
+
+    return matchesSearch && matchesStatus
+  })
+
+
 
   return (
     <>
@@ -74,7 +96,7 @@ function AdminManagement() {
                 <p className="mt-0.5 text-sm text-[#8a7a80]">ค้นหา อัปเดต และควบคุมสิทธิ์การเข้าใช้งานของทีมงานหลังบ้าน</p>
               </div>
             </div>
-            <button type="button" className="flex items-center gap-2 rounded-xl bg-plum px-5 py-2.5 text-sm font-medium text-white shadow-md shadow-plum/30 hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum">
+            <button type="button" className="flex items-center gap-2 rounded-xl bg-plum px-5 py-2.5 text-sm font-medium bg-[#7a4f8f] text-white shadow-md shadow-plum/30 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum">
               <svg className="size-4"><use href="#i-plus" /></svg>เพิ่มบัญชีใหม่
             </button>
           </div>
@@ -85,14 +107,18 @@ function AdminManagement() {
             <div className="mt-1 flex flex-wrap items-center gap-4">
               <div className="relative min-w-55 flex-1 sm:max-w-3xl">
                 <svg className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500"><use href="#i-search" /></svg>
-                <input id="q" type="search" placeholder="ค้นหาผู้ใช้งาน..." className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-plum focus:ring-2 focus:ring-plum/20" />
+                <input onChange={(e)=> {
+                  console.log(e.target.value)
+                  setSearchInput(e.target.value)
+                  return 
+                  }} id="q" type="search" placeholder="ค้นหาผู้ใช้งาน..." className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-plum focus:ring-2 focus:ring-plum/20" />
               </div>
               <label className="relative flex h-11 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-500 focus-within:border-plum focus-within:ring-2 focus-within:ring-plum/20">
                 สถานะ:
-                <select id="status" className="appearance-none bg-transparent pr-5 font-semibold text-[#3d3a4a] outline-none">
-                  <option value="all">ทั้งหมด</option>
-                  <option value="active">ใช้งานอยู่</option>
-                  <option value="suspended">ระงับการใช้งาน</option>
+                <select value={selectAdminsStatus} onChange={(e)=> setSelectAdminStatus(e.target.value)} id="status" className="appearance-none bg-transparent pr-5 font-semibold text-[#3d3a4a] outline-none">
+                  <option value="ALL">ALL</option>
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="SUSPENDED">SUSPENDED</option>
                 </select>
                 <svg className="pointer-events-none absolute right-3 size-3.5"><use href="#i-chev" /></svg>
               </label>
@@ -112,25 +138,25 @@ function AdminManagement() {
                   </tr>
                 </thead>
                 <tbody id="rows">
-                  {adminUsers.map((user, index) => {
-                    const isActive = user.status === 'active'
+                  {filteredData.map((admin, index) => {
+                    const isActive = admin.Status === 'ACTIVE'
                     return (
-                      <tr
-                        key={user.id}
-                        className={`hover:bg-slate-50/70 ${index !== adminUsers.length - 1 ? 'border-b border-slate-100' : ''}`}
-                        data-status={user.status}
-                        data-search={`${user.id} ${user.name}`}
+                        <tr
+                        key={admin.AdminID}
+                        className={`hover:bg-slate-50/70 ${index !== adminsData.length - 1 ? 'border-b border-slate-100' : ''}`}
+                        data-status={admin.Status}
+                        data-search={`${admin.AdminID} ${admin.Username}`}
                       >
                         <td className="px-6 py-4">
                           <span className="flex items-center gap-2.5 font-semibold text-[#5b4650]">
-                            <span className="size-2 rounded-full bg-plum"></span>{user.id}
+                            <span className="size-2 rounded-full bg-plum"></span>{admin.AdminID}
                           </span>
                         </td>
-                        <td className="px-6 py-4 font-semibold">{user.name}</td>
+                        <td className="px-6 py-4 font-semibold">{admin.Username}</td>
                         <td className="px-6 py-4">
                           <span className={`rounded-md px-2.5 py-1 text-xs font-semibold ${isActive ? 'bg-[#c8f1d8] text-[#1c7a4b]' : 'bg-[#ffe98a] text-[#8a5b00]'
                             }`}>
-                            {user.statusText}
+                            {admin.Status}
                           </span>
                         </td>
                         <td className="px-6 py-4">
