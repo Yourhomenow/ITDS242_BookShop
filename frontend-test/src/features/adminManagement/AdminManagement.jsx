@@ -9,16 +9,8 @@ import { useEffect } from "react";
 function AdminManagement() {
   // Static dataset for admin accounts
   const [openDeleteModel, setOpenDeleteModel] = useState(false);
-  const [adminData , setAdminData] = useState([])
-  const [selectAdmins , setSelectAdmin] = useState("")
-
-  // const adminData = async () => {
-  //   const res = await fetch('http://localhost:3005/api/admins')
-  //   console.log(res)
-  //   if (!res.ok) throw new Error('Network error');
-  //   return res;
-  // }
-  
+  const [adminsData , setAdminsData] = useState([])
+  const [selectAdminsStatus , setSelectAdminStatus] = useState("")
   
   useEffect(() =>{
     const fetchedAdmin = async ()=>{
@@ -27,7 +19,7 @@ function AdminManagement() {
         if (!res.ok) throw new Error(`Network error: ${res.status}`);
         const result = await res.json()
         console.log(result)
-        setAdminData(result)
+        setAdminsData(result)
       }catch(err){
         console.error(err)
       }
@@ -36,32 +28,9 @@ function AdminManagement() {
     fetchedAdmin()
 },[])
 
-  // const adminData = [
-  //   {
-  //     id: '0001',
-  //     name: 'ชื่อบัญชีผู้ดูแลระบบ1',
-  //     status: 'active',
-  //     statusText: 'ใช้งานอยู่',
-  //   },
-  //   {
-  //     id: '0002',
-  //     name: 'ชื่อบัญชีผู้ดูแลระบบ2',
-  //     status: 'active',
-  //     statusText: 'ใช้งานอยู่',
-  //   },
-  //   {
-  //     id: '0003',
-  //     name: 'ชื่อบัญชีผู้ดูแลระบบ3',
-  //     status: 'active',
-  //     statusText: 'ใช้งานอยู่',
-  //   },
-  //   {
-  //     id: '0004',
-  //     name: 'ชื่อบัญชีผู้ดูแลระบบ4',
-  //     status: 'suspended',
-  //     statusText: 'ระงับการใช้งาน',
-  //   },
-  // ]
+  const filteredData = selectAdminsStatus === "ALL" ? adminsData : adminsData.filter((admin)=> admin.Status.toLowerCase().includes(selectAdminsStatus.toLowerCase()));
+
+
 
   return (
     <>
@@ -118,7 +87,7 @@ function AdminManagement() {
               </div>
               <label className="relative flex h-11 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-500 focus-within:border-plum focus-within:ring-2 focus-within:ring-plum/20">
                 สถานะ:
-                <select value={selectAdmins} onChange={(e)=> setSelectAdmin(e.target.value)} id="status" className="appearance-none bg-transparent pr-5 font-semibold text-[#3d3a4a] outline-none">
+                <select value={selectAdminsStatus} onChange={(e)=> setSelectAdminStatus(e.target.value)} id="status" className="appearance-none bg-transparent pr-5 font-semibold text-[#3d3a4a] outline-none">
                   <option value="ALL">ALL</option>
                   <option value="ACTIVE">ACTIVE</option>
                   <option value="SUSPENDED">SUSPENDED</option>
@@ -141,12 +110,12 @@ function AdminManagement() {
                   </tr>
                 </thead>
                 <tbody id="rows">
-                  {adminData.map((admin, index) => {
+                  {filteredData.map((admin, index) => {
                     const isActive = admin.Status === 'ACTIVE'
                     return (
-                      <tr
+                        <tr
                         key={admin.AdminID}
-                        className={`hover:bg-slate-50/70 ${index !== adminData.length - 1 ? 'border-b border-slate-100' : ''}`}
+                        className={`hover:bg-slate-50/70 ${index !== adminsData.length - 1 ? 'border-b border-slate-100' : ''}`}
                         data-status={admin.status}
                         data-search={`${admin.AdminID} ${admin.Username}`}
                       >
