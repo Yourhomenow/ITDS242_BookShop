@@ -40,7 +40,7 @@ export function DeletePopUp({ onClick, id, books, onDelete}) {
             className="fixed inset-0 z-50 flex items-center justify-center bg-[#ac94949d]"
         >
             <div
-                className="flex flex-col w-[40%] max-w-[600px] min-w-[300px] max-h-[60%] rounded-2xl bg-white p-8 shadow-xl gap-4"
+                className="flex flex-col w-[40%] max-w-[600px] min-w-[300px]  min-h-[400px] max-h-[800px] rounded-2xl bg-white p-8 shadow-xl gap-4"
             >
                 <div className="flex w-full gap-6 p-2">
                     <span className="grid size-15 shrink-0 place-items-center rounded-full bg-[#FEE2E2] text-[#EF4444]">
@@ -56,7 +56,7 @@ export function DeletePopUp({ onClick, id, books, onDelete}) {
                     </div>
                 </div>
 
-                <div className="flex w-full max-h-[60%] gap-6 p-2 bg-[#F8FAFC] text-[#0F172A] rounded-xl font-light overflow-auto">
+                <div className="flex w-full min-h-[80px] max-h-[120px] gap-6 p-2 bg-[#F8FAFC] text-[#0F172A] rounded-xl font-light overflow-auto">
                     <div className="flex flex-col p-4 gap-2">
                         {detail}
                     </div>
