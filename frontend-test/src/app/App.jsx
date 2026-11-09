@@ -8,6 +8,11 @@ import HeaderShop from "../shared/components/header_shop";
 import NavbarShop from "../shared/components//navbar_shop";
 import Search from "../features/product-catalog/Search";
 import Detail from "../features/product-catalog/Detail";
+import {
+  BookManagement,
+  BookCreate,
+  BookChange,
+} from "../features"
 
 function App() {
   return (
@@ -20,6 +25,9 @@ function App() {
         <Route path="/adminManagement" element={<AdminManagement />}/>
         <Route path="/adminCreate" element={<AdminCreate />}/>
         <Route path="/adminChange" element={<AdminChange />}/>
+        <Route path="/bookManagement" element={<BookManagement />} />
+        <Route path="/bookCreate" element={<BookCreate />} />
+        <Route path="/bookChange/:id" element={<BookChange />} />
         <Route path="/" element={<AdminManagement />} />
       </Routes>
     </>

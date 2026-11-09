@@ -27,10 +27,10 @@ export function SideBar ({ activePage }){
                     <a href="./home" className={home_className}>
                     <svg className="size-4"><use href="#i-home"/></svg>หน้าหลัก
                     </a>
-                    <a href="#" className={book_className}>
+                    <a href="/bookManagement" className={book_className}>
                     <svg className="size-4"><use href="#i-grid"/></svg>จัดการสินค้า/บริการ
                     </a>
-                    <a href="./adminManagement" className={admin_className}>
+                    <a href="/adminManagement" className={admin_className}>
                     <svg className="size-4"><use href="#i-users"/></svg>จัดการบัญชีผู้ใช้
                     </a>
                 </nav>
