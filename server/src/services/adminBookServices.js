@@ -118,13 +118,13 @@ export const postBooks = async (data) => {
       const [publisherData] = await query("SELECT * FROM `PUBLISHER`");
       let publisherID = -1;
       for (let i in publisherData) {
-         if (publisherData[i].PublisherName == publisher){
+         if (publisherData[i].PublisherName.toLowerCase() == publisher.toLowerCase()){
             publisherID = publisherData[i].PublisherID;
             break
          }
       }
       if (publisherID == -1){
-         const [pubID] = await query("INSERT INTO publisher (PublisherName) VALUE (?)", [publisher]);
+         const [pubID] = await query("INSERT INTO `PUBLISHER` (PublisherName) VALUE (?)", [publisher]);
          publisherID = pubID.insertId;
       }
 
@@ -135,7 +135,7 @@ export const postBooks = async (data) => {
       for (let i in author) {
          let flag = -1;
          for (let j in authorData){
-            if (authorData[j].AuthorName == author[i]){
+            if (authorData[j].AuthorName.toLowerCase() == author[i].toLowerCase()){
                flag = authorData[j].AuthorID;
                break
             }
@@ -143,7 +143,7 @@ export const postBooks = async (data) => {
          if (flag > -1){
             authorID.push(flag);
          } else {
-            const [autID] = await query("INSERT INTO author (AuthorName) VALUE (?)", [author[i]]);
+            const [autID] = await query("INSERT INTO `AUTHOR` (AuthorName) VALUE (?)", [author[i]]);
             authorID.push(autID.insertId);
          }
       }
@@ -155,7 +155,7 @@ export const postBooks = async (data) => {
       for (let i in category) {
          let flag = -1;
          for (let j in categoryData){
-            if (categoryData[j].CategoryName == category[i]){
+            if (categoryData[j].CategoryName.toLowerCase() == category[i].toLowerCase()){
                flag = categoryData[j].CategoryID;
                break
             }
@@ -163,7 +163,7 @@ export const postBooks = async (data) => {
          if (flag > -1){
             categoryID.push(flag);
          } else {
-            const [catID] = await query("INSERT INTO category (CategoryName) VALUE (?)", [category[i]]);
+            const [catID] = await query("INSERT INTO `CATEGORY` (CategoryName) VALUE (?)", [category[i]]);
             categoryID.push(catID.insertId);
          }
       }
@@ -171,14 +171,14 @@ export const postBooks = async (data) => {
       //book
       const book = formattedData.book;
       const [result] = await query(
-         "INSERT INTO book (BookName, QuantityInStock, Price, Size, ISBNCode, Description, PublishDate, PublisherID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+         "INSERT INTO `BOOK` (BookName, QuantityInStock, Price, Size, ISBNCode, Description, PublishDate, PublisherID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
          [book.name, book.quantity, book.price, book.size, book.isbnCode || null, book.description || null, book.publishDate || null, publisherID]
       );
 
       //picture
       const pictures = formattedData.pictures;
       for (let i in pictures){
-         await query("INSERT INTO picture (`Name`, `URL`, BookID) VALUE (?, ?, ?)",
+         await query("INSERT INTO `PICTURE` (`Name`, `URL`, BookID) VALUE (?, ?, ?)",
             [pictures[i].name, pictures[i].url, result.insertId]
          )
       }
@@ -186,14 +186,14 @@ export const postBooks = async (data) => {
       //in
       if (categoryID.length > 0){
          for (let i in categoryID){
-            await query("INSERT INTO `in` (BookID, CategoryID) VALUE (?, ?)", [result.insertId, categoryID[i]]);
+            await query("INSERT INTO `IN` (BookID, CategoryID) VALUE (?, ?)", [result.insertId, categoryID[i]]);
          }
       }
 
       //write
       if (authorID.length > 0){
          for (let i in authorID){
-            await query("INSERT INTO `write` (BookID, AuthorID) VALUE (?, ?)", [result.insertId, authorID[i]]);
+            await query("INSERT INTO `WRITE` (BookID, AuthorID) VALUE (?, ?)", [result.insertId, authorID[i]]);
          }
       }
 
@@ -209,7 +209,7 @@ export const postBooks = async (data) => {
 
 export const putBooks = async (id, data) => {
    async function updateBook(col, data, old, id){
-      await query("UPDATE book SET ??=? WHERE BookID=?", [col, data, id]);
+      await query("UPDATE `BOOK` SET ??=? WHERE BookID=?", [col, data, id]);
       await bookTransaction(col, "UPDATE", old, data, id);
    }
    async function emptyBook(table, id) {
@@ -247,15 +247,15 @@ export const putBooks = async (id, data) => {
       let publisherID = -1;
       let oldVa = null;
       for (let i in publisherData) {
-         if (publisherData[i].PublisherName == old.publisher){
+         if (publisherData[i].PublisherName.toLowerCase() == old.publisher.toLowerCase()){
             oldVa = publisherData[i].PublisherID;
          }
-         if (publisherData[i].PublisherName == publisher){
+         if (publisherData[i].PublisherName.toLowerCase() == publisher.toLowerCase()){
             publisherID = publisherData[i].PublisherID;
          }
       }
       if (publisherID == -1){
-         const [pubID] = await query("INSERT INTO publisher (PublisherName) VALUE (?)", [publisher]);
+         const [pubID] = await query("INSERT INTO `PUBLISHER` (PublisherName) VALUE (?)", [publisher]);
          publisherID = pubID.insertId;
       }
       await updateBook("PublisherID", publisherID, oldVa, id);
@@ -269,7 +269,7 @@ export const putBooks = async (id, data) => {
       for (let i in author) {
          let flag = -1;
          for (let j in authorData){
-            if (authorData[j].AuthorName == author[i]){
+            if (authorData[j].AuthorName.toLowerCase() == author[i].toLowerCase()){
                flag = authorData[j].AuthorID;
                break
             }
@@ -277,15 +277,15 @@ export const putBooks = async (id, data) => {
          if (flag > -1){
             authorID.push(flag);
          } else {
-            const [autID] = await query("INSERT INTO author (AuthorName) VALUE (?)", [author[i]]);
+            const [autID] = await query("INSERT INTO `AUTHOR` (AuthorName) VALUE (?)", [author[i]]);
             authorID.push(autID.insertId);
          }
       }
 
-      await emptyBook("write", id);
+      await emptyBook("WRITE", id);
       if (authorID.length > 0){
          for (let i in authorID){
-            await query("INSERT INTO `write` (BookID, AuthorID) VALUE (?, ?)", [id, authorID[i]]);
+            await query("INSERT INTO `WRITE` (BookID, AuthorID) VALUE (?, ?)", [id, authorID[i]]);
          }
       }
    }
@@ -298,7 +298,7 @@ export const putBooks = async (id, data) => {
       for (let i in category) {
          let flag = -1;
          for (let j in categoryData){
-            if (categoryData[j].CategoryName == category[i]){
+            if (categoryData[j].CategoryName.toLowerCase() == category[i].toLowerCase()){
                flag = categoryData[j].CategoryID;
                break
             }
@@ -306,15 +306,15 @@ export const putBooks = async (id, data) => {
          if (flag > -1){
             categoryID.push(flag);
          } else {
-            const [catID] = await query("INSERT INTO category (CategoryName) VALUE (?)", [category[i]]);
+            const [catID] = await query("INSERT INTO `CATEGORY` (CategoryName) VALUE (?)", [category[i]]);
             categoryID.push(catID.insertId);
          }
       }
 
-      await emptyBook("in", id);
+      await emptyBook("IN", id);
       if (categoryID.length > 0){
          for (let i in categoryID){
-            await query("INSERT INTO `in` (BookID, CategoryID) VALUE (?, ?)", [id, categoryID[i]]);
+            await query("INSERT INTO `IN` (BookID, CategoryID) VALUE (?, ?)", [id, categoryID[i]]);
          }
       }
    }
@@ -323,7 +323,7 @@ export const putBooks = async (id, data) => {
    if (formattedData.pictures != null){
       const pictures = formattedData.pictures;
       for (let i in pictures){
-         await query("INSERT INTO picture (`Name`, `URL`, BookID) VALUE (?, ?, ?)",
+         await query("INSERT INTO `PICTURE` (`Name`, `URL`, BookID) VALUE (?, ?, ?)",
             [pictures[i].name, pictures[i].url, id]
          )
       }
@@ -333,7 +333,7 @@ export const putBooks = async (id, data) => {
    if (formattedData.deletePicID != null){
       const deletePicID = formattedData.deletePicID;
       for (let i in deletePicID){
-         await query("DELETE FROM picture WHERE PicID=? AND BookID=?", [deletePicID[i], id]);
+         await query("DELETE FROM `PICTURE` WHERE PicID=? AND BookID=?", [deletePicID[i], id]);
       }
    }
 
@@ -341,6 +341,6 @@ export const putBooks = async (id, data) => {
 }
 
 export const deleteBooks = async (id) => {
-   const [result] = await query("DELETE FROM book WHERE BookID=?", [id]);
+   const [result] = await query("DELETE FROM `BOOK` WHERE BookID=?", [id]);
    return result.affectedRows > 0
 }
