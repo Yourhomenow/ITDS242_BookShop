@@ -7,32 +7,51 @@ import { Link } from "react-router-dom";
 function AdminManagement() {
   // Static dataset for admin accounts
   const [openDeleteModel, setOpenDeleteModel] = useState(false);
-  const adminUsers = [
-    {
-      id: '0001',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ1',
-      status: 'active',
-      statusText: 'ใช้งานอยู่',
-    },
-    {
-      id: '0002',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ2',
-      status: 'active',
-      statusText: 'ใช้งานอยู่',
-    },
-    {
-      id: '0003',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ3',
-      status: 'active',
-      statusText: 'ใช้งานอยู่',
-    },
-    {
-      id: '0004',
-      name: 'ชื่อบัญชีผู้ดูแลระบบ4',
-      status: 'suspended',
-      statusText: 'ระงับการใช้งาน',
-    },
-  ]
+  const [adminsData , setAdminsData] = useState([])
+  const [selectAdminsStatus , setSelectAdminStatus] = useState("")
+  
+  useEffect(() =>{
+    const fetchedAdmin = async ()=>{
+      try{
+        const res = await fetch('/api/admins')
+        if (!res.ok) throw new Error(`Network error: ${res.status}`);
+        const result = await res.json()
+        console.log(result)
+        setAdminsData(result)
+      }catch(err){
+        console.error(err)
+      }
+    }
+
+    fetchedAdmin()
+},[])
+
+
+  // const term = searchInput.trim().toLowerCase()
+  // const filteredData = adminsData.filter((admin) =>{
+  //   const matchesStatus = 
+  //     selectAdminsStatus === "ALL" || admin.Status === selectAdminsStatus;
+    
+  //   const matchesSearch = 
+  //     term === "" ||
+  //     admin.Username.toLowerCase().includes(searchInput)
+  //   return matchesStatus && matchesSearch
+  // });
+
+  // if (selectAdminsStatus === "ALL" && searchInput === "") return true;
+  const filteredData = adminsData.filter((admin)=>{
+    const matchesSearch = admin.Username
+      .toLowerCase()
+      .includes(searchInput.toLowerCase())
+
+    const matchesStatus = 
+      selectAdminsStatus === "ALL" ||
+      admin.Status === selectAdminsStatus
+
+    return matchesSearch && matchesStatus
+  })
+
+
 
   return (
     <>
@@ -115,11 +134,11 @@ function AdminManagement() {
                   {adminUsers.map((user, index) => {
                     const isActive = user.status === 'active'
                     return (
-                      <tr
-                        key={user.id}
-                        className={`hover:bg-slate-50/70 ${index !== adminUsers.length - 1 ? 'border-b border-slate-100' : ''}`}
-                        data-status={user.status}
-                        data-search={`${user.id} ${user.name}`}
+                        <tr
+                        key={admin.AdminID}
+                        className={`hover:bg-slate-50/70 ${index !== adminsData.length - 1 ? 'border-b border-slate-100' : ''}`}
+                        data-status={admin.Status}
+                        data-search={`${admin.AdminID} ${admin.Username}`}
                       >
                         <td className="px-6 py-4">
                           <span className="flex items-center gap-2.5 font-semibold text-[#5b4650]">
