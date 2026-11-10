@@ -17,8 +17,7 @@ INSERT INTO publisher (PublisherName) VALUE
 ('SE-ED'),
 ('Nanmeebooks');
 
-
-INSERT INTO category (CategoryName) VALUE
+INSERT INTO `CATEGORY` (`CategoryName`) VALUES
 ("General"),
 ("Novel"),
 ("Comic&Manga"),
