@@ -21,3 +21,4 @@ export const checkConnection = async () => {
 
 
 export const query = (text, param) => db.query(text, param);
+export default db;

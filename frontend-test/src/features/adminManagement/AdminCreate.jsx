@@ -1,9 +1,15 @@
+import { Link } from "react-router-dom"
 import { SideBar } from "../../shared/components/SideBar"
 import { TopBar } from "../../shared/components/TopBar"
+import { useState } from "react"
 
 function AdminCreate() {
   // Static dataset for admin accounts
+  const [password, setPassword] = useState("")
 
+  function verifyPassword(passwordInTxt){
+    return /[A-Z]/.test(passwordInTxt) && /[a-z]/.test(passwordInTxt) && /[0-9]/.test(passwordInTxt) && /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(passwordInTxt)
+  }
 
   return (
     <>
@@ -64,22 +70,22 @@ function AdminCreate() {
                 <div className="flex flex-row">
                   <div className="flex grow flex-col mr-5">
                     <label htmlFor="adminName" className="text-md h-min font-bold text-[#684D4D]">ชื่อผู้ใช้งาน (Username)</label>
-                    <input id="adminName" type="text" placeholder="somsak_admin" className="p-2 mt-1 border border-gray-300 rounded-lg " />
-                    <p className="text-sm pl-2 h-min font-bold text-[#938686]">เฉพาะภาษาอังกฤษและตัวเอง ความยาว 8 ตัวอักษร</p>
+                    <input id="adminName" type="text" placeholder="somsakAdmin" className="p-2 mt-1 border border-gray-300 rounded-lg " pattern="[A-Za-z0-9]{6,}" required/>
+                    <p className="text-sm pl-2 h-min font-bold text-[#938686]">ความยาวอย่างน้อย 6 ตัวอักษร เฉพาะภาษาอังกฤษและตัวเลข</p>
                   </div>
                   <div className="flex grow flex-col">
-                    <label htmlFor="adminName" className="text-md h-min font-bold text-[#684D4D]">รหัสผ่าน (Password)</label>
-                    <input id="adminName" type="password" placeholder="Admin@2024Secure!" className="p-2 mt-1 border border-gray-300 rounded-lg " />
-                    <p className="text-sm pl-2 h-min font-bold text-[#938686]">รหัสผ่านต้องมีตัวพิมพ์ใหญ่ พิมพ์เล็ก ตัวเลขและ สัญลักษณ์</p>
+                    <label htmlFor="adminPassword" className="text-md h-min font-bold text-[#684D4D]">รหัสผ่าน (Password)</label>
+                    <input onChange={(e)=> setPassword(e.target.value)} id="adminPassword" type="password" placeholder="Admin@2024Secure!" className="p-2 mt-1 border border-gray-300 rounded-lg " required/>
+                    <p className="text-sm pl-2 h-min font-bold text-[#938686]">รหัสผ่านต้องมีตัวพิมพ์ใหญ่ พิมพ์เล็ก ตัวเลขและ สัญลักษณ์ เช่น @, #, %</p>
                   </div>
                 </div>
                 <div className="mt-3 flex justify-end gap-2">
-                  <button className="bg-[#9A6EA5] p-2 rounded-xl text-white">
+                  <button type="submit" className="bg-[#9A6EA5] p-2 rounded-xl text-white">
                     บันทึกบัญชีผู้ใช้
                   </button>
-                  <button className="bg-white shadow-2xs border-2 border-gray-200 p-2 rounded-xl text-[#684D4D]">
+                  <Link to="/adminManagement" className="bg-white shadow-2xs border-2 border-gray-200 p-2 rounded-xl text-[#684D4D]">
                     ยกเลิกขั้นตอน
-                  </button>
+                  </Link>
                 </div>
               </section>
             </form>
@@ -88,32 +94,25 @@ function AdminCreate() {
               <p className="text-md h-min font-bold text-[#684D4D]">การตรวจสสอบความครบถ้วน</p>
               <p className="text-xs h-min font-bold text-[#938686]">ระบุข้อมูลเบื้องต้นและความปลอดภัยสำหรับการเข้าสู่ระบบในครั้งแรก</p>
               <hr className="mt-4 mb-4 border-gray-200 border " />
-              <div className="flex">
+              <div className="flex items-center">
                 <span className="grid size-8 shrink-0 place-items-center rounded-xl border border-[#dcd2ee] bg-[#e2f5cf] text-[#16ba21]">
                   <svg className="size-5"><use href="#i-shield" /></svg>
                 </span>
                 <p className="text-xs h-min ml-2 font-bold text-[#938686]">ระบุข้อมูลเบื้องต้นและความปลอดภัยสำหรับการเข้าสู่ระบบในครั้งแรก</p>
               </div>
-              <div className="flex">
+              <div className="flex items-center">
                 <span className="grid size-8 shrink-0 place-items-center rounded-xl border border-[#dcd2ee] bg-[#e2f5cf] text-[#16ba21]">
                   <svg className="size-5"><use href="#i-shield" /></svg>
                 </span>
-                <p className="text-xs h-min ml-2 font-bold text-[#938686]">ระบุข้อมูลเบื้องต้นและความปลอดภัยสำหรับการเข้าสู่ระบบในครั้งแรก</p>
+                <p className="text-xs h-min ml-2 font-bold text-[#938686]">ตรวจสอบชื่อผู้ใช้งานว่างพร้อมใช้งาน</p>
               </div>
 
               <div className="grid grid-cols-2">
-                <div>
-                  <p className="text-xs h-min font-bold text-[#938686]">ระดับความปลอดภัยของรหัสผ่าน</p>
-                </div>
-                <div>
-                  <p className="text-xs text-right h-min font-bold text-[#10B981]">
-                    ความปลอดภัยระดับสูง
-                  </p>
-                </div>
+                
                 <div className="col-span-2 mt-2">
-                  <div className="mb-1 text-sm font-medium text-fg-success text-[#10B981]">Success</div>
+                  <div className={`${verifyPassword(password) ? "text-[#10B981]" : "text-[#b91026]"} mb-1 text-sm font-medium text-fg-success`}>{verifyPassword(password) ? 'Strong' : 'Weak'}</div>
                   <div className="w-full bg-gray-300 rounded-full h-2">
-                    <div className="bg-[#10B981] h-2 rounded-full w-[75%]" ></div>
+                    <div className={`${verifyPassword(password) ? 'bg-[#10B981] w-full' :'bg-[#b91026] w-[10%]'} h-2 rounded-full transition`}></div>
                   </div>
                 </div>
 

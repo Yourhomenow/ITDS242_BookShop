@@ -1,4 +1,5 @@
 import * as adminService from "../services/adminServices.js"
+import * as adminBookService from "../services/adminBookServices.js"
 
 //Admin Management
 export const getAdmins = async (req, res)=>{
@@ -14,7 +15,7 @@ export const getAdmins = async (req, res)=>{
 //Book API
 export const getBooks = async (req, res) => {
   try{
-    const books = await adminService.getBooks();
+    const books = await adminBookService.getBooks();
     res.status(200).json(books)
   }catch(err){
     console.error(`Error Fetching users`, err)
@@ -24,7 +25,7 @@ export const getBooks = async (req, res) => {
 
 export const getBooksID = async (req, res) => {
   try{
-    const book = await adminService.getBooksID(req.params.id);
+    const book = await adminBookService.getBooksID(req.params.id);
     res.status(200).json(book)
   }catch(err){
     console.error(`Error Fetching users`, err)
@@ -34,7 +35,7 @@ export const getBooksID = async (req, res) => {
 
 export const postBooks = async (req, res) => {
   try{
-    const response = await adminService.postBooks(req.body);
+    const response = await adminBookService.postBooks(req.body);
     res.status(200).json(response)
   }catch(err){
     console.error(`Error Fetching users`, err)
@@ -44,7 +45,7 @@ export const postBooks = async (req, res) => {
 
 export const putBooks = async (req, res) => {
   try{
-    const response = await adminService.putBooks(req.params.id, req.body);
+    const response = await adminBookService.putBooks(req.params.id, req.body);
     res.status(200).json(response)
   }catch(err){
     console.error(`Error Fetching users`, err)
@@ -54,7 +55,7 @@ export const putBooks = async (req, res) => {
 
 export const deleteBooks = async (req, res) => {
   try{
-    const response = await adminService.deleteBooks(req.params.id);
+    const response = await adminBookService.deleteBooks(req.params.id);
     res.status(200).json(response);
   }catch(err){
     console.error(`Error Fetching users`, err)
