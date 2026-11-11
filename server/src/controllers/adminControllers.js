@@ -12,6 +12,18 @@ export const getAdmins = async (req, res)=>{
   }
 }
 
+export const createAdmin = async (req, res)=>{
+  try{
+    const adminData = req.body;
+    console.log(adminData)
+    const newAdmin = await adminService.addAdmin(adminData)
+    res.status(200).json(newAdmin)
+  }catch(err){
+    console.error(`Error Adding client:`,err)
+    res.status(500).json({message : "Internal Error, can't create admin"})
+  }
+}
+
 //Book API
 export const getBooks = async (req, res) => {
   try{

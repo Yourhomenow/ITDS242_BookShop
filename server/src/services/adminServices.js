@@ -1,10 +1,29 @@
 import { query } from "../config/db.js";
+import { hashPassword } from "../utils/hash/hashed.js";
 
 //Admin API
 export const getAdmins = async ()=> {
-   const result = await query("SELECT * FROM ADMIN");
+   const result = await query("SELECT AdminID,Username,Status FROM ADMIN;");
    // console.log(result[0])
    return result[0]
+}
+
+export const addAdmin = async (data)=>{
+   try{
+      const q = 'INSERT INTO `ADMIN` (`Username`, `Password`, `Status`) VALUES (?)'
+      const values = [
+         data.Username,
+         hashPassword(data.Password),
+         "ACTIVE"
+      ]
+
+      await query(q,[values])
+   }catch(err){
+      if(err.code === "ER_DUP_ENTRY"){
+         console.error(`DB error: ${err}`)
+         throw err
+      }
+   }
 }
 
 //Book API
