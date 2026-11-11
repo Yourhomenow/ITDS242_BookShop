@@ -1,14 +1,57 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { SideBar } from "../../shared/components/SideBar"
 import { TopBar } from "../../shared/components/TopBar"
 import { useState } from "react"
 
 function AdminCreate() {
-  // Static dataset for admin accounts
+  const navigate = useNavigate();
+  const [name, setName] = useState("")
   const [password, setPassword] = useState("")
-
+  const [haveSameName, setHaveSameName] = useState(false) 
   function verifyPassword(passwordInTxt){
     return /[A-Z]/.test(passwordInTxt) && /[a-z]/.test(passwordInTxt) && /[0-9]/.test(passwordInTxt) && /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(passwordInTxt)
+  }
+
+  const handleSubmit = async (e)=>{
+    e.preventDefault()
+    try{
+      const response = await fetch('http://localhost:3005/api/admins',{
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          Username: name,
+          Password: password
+        })
+      })
+      navigate('/adminManagement')
+      console.log('Created Admin: ',response)
+    }catch(err){
+      console.error('HTTP error! Status: ',err)
+    }
+  }
+
+  const checkSameName = async (input)=>{
+    try{
+      // console.log(input)
+      const res = await fetch('/api/admins')
+      if (!res.ok) throw new Error(`Network error: ${res.status}`);
+      const result = await res.json()
+      // console.log(result)
+      const sameName = result.filter((admin)=> admin.Username === input)
+      // console.log(sameName)
+      if(sameName.length === 0) {
+        setHaveSameName(false)
+        // console.log(haveSameName)
+        console.log('This name have been taken')
+      }else{
+        setHaveSameName(true)
+      }
+
+    }catch(err){
+      console.error(err)
+    }
   }
 
   return (
@@ -55,7 +98,7 @@ function AdminCreate() {
 
           {/* Search + filter */}
           <div className="flex flex-wrap gap-5">
-            <form action="">
+            <form action="POST" onSubmit={handleSubmit}>
               <section className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
                 <div className="flex">
                   <span className="grid size-12 shrink-0 place-items-center rounded-xl border border-[#e0e3e4] bg-[#e1f1f3] text-[#5d75f0]">
@@ -69,20 +112,28 @@ function AdminCreate() {
                 <hr className="mt-4 mb-4 border-gray-300 border " />
                 <div className="flex flex-row">
                   <div className="flex grow flex-col mr-5">
-                    <label htmlFor="adminName" className="text-md h-min font-bold text-[#684D4D]">ชื่อผู้ใช้งาน (Username)</label>
-                    <input id="adminName" type="text" placeholder="somsakAdmin" className="p-2 mt-1 border border-gray-300 rounded-lg " pattern="[A-Za-z0-9]{6,}" required/>
+                    <label htmlFor="Username" className="text-md h-min font-bold text-[#684D4D]">ชื่อผู้ใช้งาน (Username)</label>
+                    <input onChange={(e)=> {
+                      if(e.target.value.length >= 6) checkSameName(e.target.value);
+                      setName(e.target.value)
+                      }} id="Username" name="Username" type="text" placeholder="somsakAdmin" className="p-2 mt-1 border border-gray-300 rounded-lg " pattern="[A-Za-z0-9]{6,}" required/>
+                    {haveSameName && 
+                      <p className="ml-2 text-red-500 text-md">
+                        This name already taken.
+                      </p>
+                    }
                     <p className="text-sm pl-2 h-min font-bold text-[#938686]">ความยาวอย่างน้อย 6 ตัวอักษร เฉพาะภาษาอังกฤษและตัวเลข</p>
                   </div>
                   <div className="flex grow flex-col">
                     <label htmlFor="adminPassword" className="text-md h-min font-bold text-[#684D4D]">รหัสผ่าน (Password)</label>
-                    <input onChange={(e)=> setPassword(e.target.value)} id="adminPassword" type="password" placeholder="Admin@2024Secure!" className="p-2 mt-1 border border-gray-300 rounded-lg " required/>
+                    <input onChange={(e)=> setPassword(e.target.value)} id="Password" name="Password" type="password" placeholder="Admin@2024Secure!" className="p-2 mt-1 border border-gray-300 rounded-lg " required/>
                     <p className="text-sm pl-2 h-min font-bold text-[#938686]">รหัสผ่านต้องมีตัวพิมพ์ใหญ่ พิมพ์เล็ก ตัวเลขและ สัญลักษณ์ เช่น @, #, %</p>
                   </div>
                 </div>
                 <div className="mt-3 flex justify-end gap-2">
-                  <button type="submit" className="bg-[#9A6EA5] p-2 rounded-xl text-white">
+                  {!haveSameName && <button type="submit" className="bg-[#9A6EA5] p-2 rounded-xl text-white">
                     บันทึกบัญชีผู้ใช้
-                  </button>
+                  </button>}
                   <Link to="/adminManagement" className="bg-white shadow-2xs border-2 border-gray-200 p-2 rounded-xl text-[#684D4D]">
                     ยกเลิกขั้นตอน
                   </Link>
