@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom"
 import { IconSprite } from "../shared/components/IconSprite"
-import AdminManagement from "../features/adminManagement/AdminManagement"
+// import AdminManagement from "../features/adminManagement/AdminManagement"
 import AdminCreate from "../features/adminManagement/AdminCreate"
 import AdminChange from "../features/adminManagement/AdminChange"
 
@@ -13,6 +13,7 @@ import {
   BookCreate,
   BookChange,
 } from "../features"
+import AdminManagement from "../features/adminManagement/AdminManagement";
 
 function App() {
   return (

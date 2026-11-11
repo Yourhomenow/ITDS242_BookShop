@@ -30,18 +30,6 @@ function AdminManagement() {
 },[])
 
 
-  // const term = searchInput.trim().toLowerCase()
-  // const filteredData = adminsData.filter((admin) =>{
-  //   const matchesStatus = 
-  //     selectAdminsStatus === "ALL" || admin.Status === selectAdminsStatus;
-    
-  //   const matchesSearch = 
-  //     term === "" ||
-  //     admin.Username.toLowerCase().includes(searchInput)
-  //   return matchesStatus && matchesSearch
-  // });
-
-  // if (selectAdminsStatus === "ALL" && searchInput === "") return true;
   const filteredData = adminsData.filter((admin)=>{
     const matchesSearch = admin.Username
       .toLowerCase()
@@ -58,7 +46,7 @@ function AdminManagement() {
 
   return (
     <>
-      {/* Icon sprite */}
+      {/* Icon */}
       <svg className="absolute h-0 w-0 overflow-hidden" aria-hidden="true">
         <defs>
           <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" /></symbol>
@@ -96,9 +84,9 @@ function AdminManagement() {
                 <p className="mt-0.5 text-sm text-[#8a7a80]">ค้นหา อัปเดต และควบคุมสิทธิ์การเข้าใช้งานของทีมงานหลังบ้าน</p>
               </div>
             </div>
-            <button type="button" className="flex items-center gap-2 rounded-xl bg-plum px-5 py-2.5 text-sm font-medium bg-[#7a4f8f] text-white shadow-md shadow-plum/30 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum">
+            <Link to="/adminCreate" type="button" className="flex items-center gap-2 rounded-xl bg-plum px-5 py-2.5 text-sm font-medium bg-[#9e77b2] text-white shadow-md shadow-plum/30 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum">
               <svg className="size-4"><use href="#i-plus" /></svg>เพิ่มบัญชีใหม่
-            </button>
+            </Link>
           </div>
 
           {/* Search + filter */}
