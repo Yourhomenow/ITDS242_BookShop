@@ -4,7 +4,13 @@ import { hashPassword } from "../utils/hash/hashed.js";
 //Admin API
 export const getAdmins = async ()=> {
    const result = await query("SELECT AdminID,Username,Status FROM ADMIN;");
-   console.log(`GET All admins : `,result[0][0])
+   console.log(`GET All admins : `,result[0])
+   return result[0]
+}
+
+export const getAdminsExceptOne = async (id)=> {
+   const result = await query("SELECT AdminID,Username,Status FROM ADMIN WHERE AdminID != ?;",id)
+   console.log(`GET admins that don't have this ID (${id}): `,result[0])
    return result[0]
 }
 
@@ -13,6 +19,7 @@ export const getAdmin = async (id)=>{
    console.log(`GET A admin : `,result[0][0])
    return result[0][0]
 }
+
 
 export const addAdmin = async (data)=>{
    try{
@@ -32,6 +39,18 @@ export const addAdmin = async (data)=>{
    }
 }
 
+
+export const editAdmin = async (id,data)=>{
+   try{
+      const q = `UPDATE "ADMIN" SET "Username" = ?, "Status" = ?, "Password" = ? WHERE id = ?`
+
+      const values = [
+         
+      ]
+   }catch(err){
+
+   }
+}
 
 //Book API
 async function formatBooks(book){

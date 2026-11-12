@@ -5,8 +5,15 @@ import * as adminBookService from "../services/adminBookServices.js"
 export const getAdmin = async (req, res)=>{
   try{
     const id = req.params.id
+    const exceptId = req.query.e;
+    console.log(Boolean(exceptId))
+    console.log(typeof(exceptId))
+    if (Boolean(exceptId) === true){
+      const admins = await adminService.getAdminsExceptOne(id)
+      return res.status(200).json(admins)
+    }
     const admin = await adminService.getAdmin(id)
-    res.status(200).json(admin)
+    return res.status(200).json(admin)
   }catch(err){
     console.error(`Error Fetching admin`, err)
     res.status(500).json({message: "Internal server error, Can't get a admin"})
@@ -21,6 +28,22 @@ export const getAdmins = async (req, res)=>{
     console.error(`Error Fetching admins`, err)
     res.status(500).json({message: "Internal server error, Can't get admins"})
   }
+}
+
+// export const getAdminsExceptOne = async (req, res)=>{
+//   try{
+//     console.log(exceptId)
+//     console.log(typeof(exceptId))
+//     const admins = await adminService.getAdminsExceptOne();
+//     res.status(200).json(admins)
+//   }catch(err){
+//     console.error(`Error Fetching admins`, err)
+//     res.status(500).json({message: "Internal server error, Can't get admins"})
+//   }
+// }
+
+export const editAdmin = async (req, res) =>{
+  
 }
 
 export const createAdmin = async (req, res)=>{
