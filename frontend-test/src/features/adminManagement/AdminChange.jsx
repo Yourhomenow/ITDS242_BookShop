@@ -1,8 +1,88 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { SideBar } from "../../shared/components/SideBar"
 import { TopBar } from "../../shared/components/TopBar"
+import { useEffect } from "react"
+import { useState } from "react"
+import { verifyPassword } from "../../shared/utils/verifyPassword"
 
 function AdminChange() {
+  const navigate = useNavigate();
+  const [name, setName] = useState("")
+  const [password1, setPassword1] = useState("")
+  const [password2, setPassword2] = useState("")
+  const [haveSameName, setHaveSameName] = useState(false) 
+  const [adminsData , setAdminsData] = useState({
+    AdminID:'',
+    Username:'',
+    Status:''
+  })
+  const [status, setStatus] = useState(adminsData.Status)
+  const { id } = useParams()
+  // console.log("Updated adminsData:", adminsData)
+
+
+  const checkSameName = async (input)=>{
+    try{
+      // console.log(input)
+      const res = await fetch(`/api/admins/${id}?e=1`)
+      if (!res.ok) throw new Error(`Network error: ${res.status}`);
+      const result = await res.json()
+      // console.log(result)
+      const sameName = result.filter((admin)=> admin.Username === input)
+      // console.log(sameName)
+      if(sameName.length === 0) {
+        setHaveSameName(false)
+        // console.log(haveSameName)
+      }else{
+        setHaveSameName(true)
+        console.log('This name have been taken')
+      }
+
+    }catch(err){
+      console.error(err)
+    }
+  }
+
+    const handleSubmit = async (e)=>{
+      try{
+        e.preventDefault()
+        const response = await fetch(`http://localhost:3005/api/admins/${id}`,{
+          method: 'PUT',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            Username: name || adminsData.Username,
+            Password: password2,
+            Status: status || adminsData.Status
+          })
+        })
+        navigate('/adminManagement')
+        console.log('Edited Admin: ',response)
+      }catch(err){
+        console.error('HTTP error! Status: ',err)
+      }
+  }
+
+  useEffect(() =>{
+    const fetchedAdmin = async ()=>{
+      try{
+        const res = await fetch(`/api/admins/${id}`)
+        if (!res.ok) throw new Error(`Network error: ${res.status}`);
+        const result = await res.json()
+        // console.log(result)
+        setAdminsData({
+          AdminID:result.AdminID,
+          Username:result.Username,
+          Status:result.Status
+        })
+      }catch(err){
+        console.error(err)
+      }
+    }
+    fetchedAdmin()
+  },[id])
+  
   return (
     <>
       {/* Icon sprite */}
@@ -48,14 +128,14 @@ function AdminChange() {
           <div className="flex flex-col gap-4">
             <div className="flex gap-4 bg-[#EFF6FF] border-2 p-6 w-max rounded-lg border-[#BFDBFE]">
               <h3 className="font-black">
-                [ชื่อผู้ใช้งาน] : [ชื่อบัญชีผู้ดูแลระบบ]
+                {adminsData.AdminID} : {adminsData.Username}
               </h3>
-              <span className="bg-[#c8f1d8] text-[#1c7a4b] rounded-md px-2.5 py-1 text-xs font-semibold">
-                ใช้งานอยู่
+              <span className={`${adminsData.Status === "ACTIVE" ? "bg-[#c8f1d8] text-[#1c7a4b]" : 'bg-[#ffe98a] text-[#8a5b00]'} rounded-md px-2.5 py-1 text-xs font-semibold`}>
+                {adminsData.Status}
               </span>
             </div>
             <div className="flex">
-              <form action="">
+              <form onSubmit={handleSubmit}>
                 <section className="rounded-2xl border w-300 border-slate-200/80 bg-white p-4 shadow-sm">
                   <div className="flex">
                     <span className="grid size-12 shrink-0 place-items-center rounded-xl border border-[#e0e3e4] bg-[#e1f1f3] text-[#5d75f0]">
@@ -68,13 +148,31 @@ function AdminChange() {
                   <div className="flex flex-row mt-5">
                     <div className="flex grow flex-col mr-5">
                       <label htmlFor="adminName" className="text-md h-min font-bold text-[#684D4D]">ชื่อผู้ใช้งาน (Username)</label>
-                      <input id="adminName" type="text" placeholder="somsak_admin" className="p-2 mt-1 border border-gray-300 rounded-lg " />
+                      <input onChange={(e)=> {
+                      if(e.target.value.length >= 6) checkSameName(e.target.value);
+                      setName(e.target.value)
+                      }} id="Username" name="Username" type="text" placeholder={adminsData.Username} className="p-2 mt-1 border border-gray-300 rounded-lg " />
+                      {haveSameName && 
+                      <p className="ml-2 text-red-500 text-md">
+                        This name already taken.
+                      </p>}
                     </div>
                     <div className="flex grow flex-col">
                       <label htmlFor="adminName" className="text-md h-min font-bold text-[#684D4D]">แก้ไขสถานะผู้ใช้</label>
-                      <select name="" id="" className="p-2 mt-1 border border-gray-300 rounded-lg">
-                        <option value="">ใช้งานอยู่</option>
-                        <option value="">ระงับการใช้งาน</option>
+                      <select 
+                        defaultValue={adminsData.Status}
+                        onChange={(e)=>{
+                          setStatus(e.target.value)
+                          // console.log(e.target.value)
+                        }} 
+                        name="" 
+                        id="" 
+                        className="p-2 mt-1 border border-gray-300 rounded-lg"
+                        >
+                        <option value={adminsData.Status}>{adminsData.Status}</option>
+                        { adminsData.Status === "ACTIVE" 
+                          ? <option value="SUSPENDED">SUSPENDED</option>
+                          : <option value="ACTIVE">ACTIVE</option>}
                       </select>
                     </div>
                   </div>
@@ -82,16 +180,22 @@ function AdminChange() {
                   <div className="flex flex-row">
                     <div className="flex grow flex-col mr-5">
                       <label htmlFor="adminName" className="text-md h-min font-bold text-[#684D4D]">รหัสผ่าน (Password)</label>
-                      <input id="adminName" type="password" placeholder="Admin@2024Secure!" className="p-2 mt-1 border border-gray-300 rounded-lg " />
-                      <p className="text-sm pl-2 h-min font-bold text-[#938686]">เฉพาะภาษาอังกฤษและตัวเอง ความยาว 8 ตัวอักษร</p>
+                      <input onChange={(e)=> setPassword1(e.target.value)} id="Password" name="Password" type="password" placeholder="Admin@2024Secure!" className="p-2 mt-1 border border-gray-300 rounded-lg " />
+                      <p className="text-sm pl-2 h-min font-bold text-[#938686]">รหัสผ่านต้องมีตัวพิมพ์ใหญ่ พิมพ์เล็ก ตัวเลขและ สัญลักษณ์ เช่น @, #, %</p>
                     </div>
                     <div className="flex grow flex-col">
                       <label htmlFor="adminName" className="text-md h-min font-bold text-[#684D4D]">ยืนยันรหัสผ่านอีกครั้ง (Password)</label>
-                      <input id="adminName" type="password" placeholder="Admin@2024Secure!" className="p-2 mt-1 border border-gray-300 rounded-lg " />
+                      <input onChange={(e)=> setPassword2(e.target.value)} id="Password" name="Password" type="password" placeholder="Admin@2024Secure!" className="p-2 mt-1 border border-gray-300 rounded-lg " />
+                    </div>
+                  </div>
+                  <div className="col-span-2 mt-2">
+                    <div className={`${verifyPassword(password1) ? "text-[#10B981]" : "text-[#b91026]"} mb-1 text-sm font-medium text-fg-success`}>{verifyPassword(password1) ? 'Strong' : 'Weak'}</div>
+                    <div className="w-full bg-gray-300 rounded-full h-2">
+                      <div className={`${verifyPassword(password1) ? 'bg-[#10B981] w-full' :'bg-[#b91026] w-[10%]'} h-2 rounded-full transition`}></div>
                     </div>
                   </div>
                   <div className="mt-3 flex justify-end gap-2">
-                    <button type="button" className="bg-[#9A6EA5] p-2 rounded-xl text-white">
+                    <button type="submit" disabled={(password1 === '' && password2 === '') || !(password1 === password2) || (haveSameName)} className="bg-[#9A6EA5] p-2 rounded-xl text-white cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed disabled:pointer-events-none">
                       บันทึกการเปลี่ยนแปลงทั้งหมด
                     </button>
                     <Link to="/adminManagement" className="bg-white shadow-2xs border-2 border-gray-200 p-2 rounded-xl text-[#684D4D]">

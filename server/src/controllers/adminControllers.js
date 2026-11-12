@@ -30,20 +30,18 @@ export const getAdmins = async (req, res)=>{
   }
 }
 
-// export const getAdminsExceptOne = async (req, res)=>{
-//   try{
-//     console.log(exceptId)
-//     console.log(typeof(exceptId))
-//     const admins = await adminService.getAdminsExceptOne();
-//     res.status(200).json(admins)
-//   }catch(err){
-//     console.error(`Error Fetching admins`, err)
-//     res.status(500).json({message: "Internal server error, Can't get admins"})
-//   }
-// }
 
 export const editAdmin = async (req, res) =>{
-  
+  try{
+    const id = req.params.id
+    const data = req.body
+    const admin = await adminService.editAdmin(id,data);
+    res.status(200).json(admin);
+
+  }catch(err){
+    console.error(`Error Editing admins`, err)
+    res.status(500).json({message: "Internal server error, Can't edit admins"})
+  }
 }
 
 export const createAdmin = async (req, res)=>{

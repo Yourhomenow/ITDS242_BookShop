@@ -3,21 +3,35 @@ import { hashPassword } from "../utils/hash/hashed.js";
 
 //Admin API
 export const getAdmins = async ()=> {
-   const result = await query("SELECT AdminID,Username,Status FROM ADMIN;");
+   try{const result = await query("SELECT AdminID,Username,Status FROM ADMIN;");
    console.log(`GET All admins : `,result[0])
    return result[0]
+   }catch(err){
+      console.error(`DB error: ${err}`)
+      throw err
+   }
 }
 
 export const getAdminsExceptOne = async (id)=> {
-   const result = await query("SELECT AdminID,Username,Status FROM ADMIN WHERE AdminID != ?;",id)
-   console.log(`GET admins that don't have this ID (${id}): `,result[0])
-   return result[0]
+   try{
+      const result = await query("SELECT AdminID,Username,Status FROM ADMIN WHERE AdminID != ?;",id)
+      console.log(`GET admins that don't have this ID (${id}): `,result[0])
+      return result[0]
+   }catch(err){
+      console.error(`DB error: ${err}`)
+      throw err
+   }
 }
 
 export const getAdmin = async (id)=>{
-   const result = await query("SELECT AdminID,Username,Status FROM ADMIN WHERE AdminID = ?;",id)
-   console.log(`GET A admin : `,result[0][0])
-   return result[0][0]
+   try{
+      const result = await query("SELECT AdminID,Username,Status FROM ADMIN WHERE AdminID = ?;",id)
+      console.log(`GET A admin : `,result[0][0])
+      return result[0][0]
+   }catch(err){
+      console.error(`DB error: ${err}`)
+      throw err
+   }
 }
 
 
@@ -42,12 +56,18 @@ export const addAdmin = async (data)=>{
 
 export const editAdmin = async (id,data)=>{
    try{
-      const q = `UPDATE "ADMIN" SET "Username" = ?, "Status" = ?, "Password" = ? WHERE id = ?`
-
+      const q = "UPDATE `ADMIN` SET `Username` = ?, `Status` = ?, `Password` = ? WHERE AdminID = ?"
       const values = [
-         
+         data.Username,
+         data.Status,
+         hashPassword(data.Password),
+         id
       ]
+      const result = await query(q,values)
+      return result
    }catch(err){
+      console.error("DB Error: ", err)
+      throw err
 
    }
 }
