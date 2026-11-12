@@ -3,7 +3,7 @@ import { IconSprite } from "../shared/components/IconSprite"
 // import AdminManagement from "../features/adminManagement/AdminManagement"
 import AdminCreate from "../features/adminManagement/AdminCreate"
 import AdminChange from "../features/adminManagement/AdminChange"
-
+import Home from "../features/home/Home"
 import HeaderShop from "../shared/components/header_shop";
 import NavbarShop from "../shared/components//navbar_shop";
 import Search from "../features/product-catalog/Search";
@@ -22,7 +22,7 @@ function App() {
       <Routes>
         <Route path="/search/:keyword?"element={<><HeaderShop /><NavbarShop /><Search /></>}/>
         <Route path="/detail/:id" element={<><HeaderShop /><NavbarShop /><Detail /></>}/>
-      
+        <Route path="/home" element={<Home />} />
         <Route path="/adminManagement" element={<AdminManagement />}/>
         <Route path="/adminCreate" element={<AdminCreate />}/>
         <Route path="/adminChange/:id" element={<AdminChange />}/>
