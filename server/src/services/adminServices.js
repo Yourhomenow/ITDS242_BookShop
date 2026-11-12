@@ -4,8 +4,14 @@ import { hashPassword } from "../utils/hash/hashed.js";
 //Admin API
 export const getAdmins = async ()=> {
    const result = await query("SELECT AdminID,Username,Status FROM ADMIN;");
-   // console.log(result[0])
+   console.log(`GET All admins : `,result[0][0])
    return result[0]
+}
+
+export const getAdmin = async (id)=>{
+   const result = await query("SELECT AdminID,Username,Status FROM ADMIN WHERE AdminID = ?;",id)
+   console.log(`GET A admin : `,result[0][0])
+   return result[0][0]
 }
 
 export const addAdmin = async (data)=>{
@@ -25,6 +31,7 @@ export const addAdmin = async (data)=>{
       }
    }
 }
+
 
 //Book API
 async function formatBooks(book){

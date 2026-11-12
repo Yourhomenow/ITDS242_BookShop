@@ -3,7 +3,6 @@ import { SideBar } from "../../shared/components/SideBar"
 import { TopBar } from "../../shared/components/TopBar"
 
 function AdminChange() {
-  // Static dataset for admin accounts
   return (
     <>
       {/* Icon sprite */}
