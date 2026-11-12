@@ -2,15 +2,15 @@ import { Link, useNavigate } from "react-router-dom"
 import { SideBar } from "../../shared/components/SideBar"
 import { TopBar } from "../../shared/components/TopBar"
 import { useState } from "react"
+import { verifyPassword } from "../../shared/utils/verifyPassword";
 
 function AdminCreate() {
   const navigate = useNavigate();
   const [name, setName] = useState("")
   const [password, setPassword] = useState("")
   const [haveSameName, setHaveSameName] = useState(false) 
-  function verifyPassword(passwordInTxt){
-    return /[A-Z]/.test(passwordInTxt) && /[a-z]/.test(passwordInTxt) && /[0-9]/.test(passwordInTxt) && /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(passwordInTxt)
-  }
+  
+
 
   const handleSubmit = async (e)=>{
     e.preventDefault()
@@ -44,8 +44,8 @@ function AdminCreate() {
       if(sameName.length === 0) {
         setHaveSameName(false)
         // console.log(haveSameName)
-        console.log('This name have been taken')
       }else{
+        console.log('This name have been taken')
         setHaveSameName(true)
       }
 
@@ -53,6 +53,8 @@ function AdminCreate() {
       console.error(err)
     }
   }
+
+  
 
   return (
     <>

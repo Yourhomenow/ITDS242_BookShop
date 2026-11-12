@@ -25,7 +25,7 @@ function App() {
       
         <Route path="/adminManagement" element={<AdminManagement />}/>
         <Route path="/adminCreate" element={<AdminCreate />}/>
-        <Route path="/adminChange" element={<AdminChange />}/>
+        <Route path="/adminChange/:id" element={<AdminChange />}/>
         <Route path="/bookManagement" element={<BookManagement />} />
         <Route path="/bookCreate" element={<BookCreate />} />
         <Route path="/bookChange/:id" element={<BookChange />} />

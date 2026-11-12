@@ -2,13 +2,45 @@ import * as adminService from "../services/adminServices.js"
 import * as adminBookService from "../services/adminBookServices.js"
 
 //Admin Management
+export const getAdmin = async (req, res)=>{
+  try{
+    const id = req.params.id
+    const exceptId = req.query.e;
+    console.log(Boolean(exceptId))
+    console.log(typeof(exceptId))
+    if (Boolean(exceptId) === true){
+      const admins = await adminService.getAdminsExceptOne(id)
+      return res.status(200).json(admins)
+    }
+    const admin = await adminService.getAdmin(id)
+    return res.status(200).json(admin)
+  }catch(err){
+    console.error(`Error Fetching admin`, err)
+    res.status(500).json({message: "Internal server error, Can't get a admin"})
+  }
+}
+
 export const getAdmins = async (req, res)=>{
   try{
-    const user = await adminService.getAdmins();
-    res.status(200).json(user)
+    const admins = await adminService.getAdmins();
+    res.status(200).json(admins)
   }catch(err){
-    console.error(`Error Fetching users`, err)
-    res.status(500).json({message: "Internal server error, Can't get users"})
+    console.error(`Error Fetching admins`, err)
+    res.status(500).json({message: "Internal server error, Can't get admins"})
+  }
+}
+
+
+export const editAdmin = async (req, res) =>{
+  try{
+    const id = req.params.id
+    const data = req.body
+    const admin = await adminService.editAdmin(id,data);
+    res.status(200).json(admin);
+
+  }catch(err){
+    console.error(`Error Editing admins`, err)
+    res.status(500).json({message: "Internal server error, Can't edit admins"})
   }
 }
 

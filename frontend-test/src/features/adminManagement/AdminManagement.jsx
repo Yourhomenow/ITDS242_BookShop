@@ -7,7 +7,6 @@ import { useEffect } from "react";
 
 
 function AdminManagement() {
-  // Static dataset for admin accounts
   const [openDeleteModel, setOpenDeleteModel] = useState(false);
   const [adminsData , setAdminsData] = useState([])
   const [selectAdminsStatus , setSelectAdminStatus] = useState("ALL")
@@ -150,7 +149,7 @@ function AdminManagement() {
                         <td className="px-6 py-4">
                           <div className="flex justify-end gap-2">
                           
-                            <Link to="/AdminChange" type="button" aria-label="แก้ไข" className="grid size-8 place-items-center rounded-lg bg-[#e3effd] text-[#3b82c4] hover:bg-[#cfe3fa]">
+                            <Link to={`/AdminChange/${admin.AdminID}`} type="button" aria-label="แก้ไข" className="grid size-8 place-items-center rounded-lg bg-[#e3effd] text-[#3b82c4] hover:bg-[#cfe3fa]">
                               <svg className="size-4"><use href="#i-edit" /></svg>
                             </Link>
                             
