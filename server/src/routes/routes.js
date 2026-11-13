@@ -11,5 +11,6 @@ routes.delete(`/admins/books/:id`, adminControllers.deleteBooks)
 
 routes.get(`/admins/:id`, adminControllers.getAdmin)
 routes.put(`/admins/:id`, adminControllers.editAdmin)
+routes.delete(`/admins/:id`, adminControllers.deleteAdmin)
 routes.get(`/admins`, adminControllers.getAdmins)
 routes.post(`/admins`, adminControllers.createAdmin)

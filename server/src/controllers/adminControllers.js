@@ -15,7 +15,7 @@ export const getAdmin = async (req, res)=>{
     const admin = await adminService.getAdmin(id)
     return res.status(200).json(admin)
   }catch(err){
-    console.error(`Error Fetching admin`, err)
+    console.error(`Error Fetching a admin`, err)
     res.status(500).json({message: "Internal server error, Can't get a admin"})
   }
 }
@@ -41,6 +41,23 @@ export const editAdmin = async (req, res) =>{
   }catch(err){
     console.error(`Error Editing admins`, err)
     res.status(500).json({message: "Internal server error, Can't edit admins"})
+  }
+}
+
+export const deleteAdmin = async (req, res) =>{
+  try{
+    const id = Number(req.params.id)
+    console.log(id)
+    const admin = await adminService.deleteAdmin(id);
+    if(!admin){
+      res.status(404).json({message : "Admin not found"});
+    }
+
+    res.status(200).json({message : "deleted a admin"});
+
+  }catch(err){
+    console.error(`Error deleting admins`, err)
+    res.status(500).json({message: "Internal server error, Can't delete a admin"})
   }
 }
 
