@@ -53,10 +53,24 @@ export const addAdmin = async (data)=>{
    }
 }
 
+export const deleteAdmin = async (id)=>{
+   try{
+      // console.log(id)
+      const q = "DELETE FROM `ADMIN` WHERE AdminID = ?;"
+      // console.log(q)
+      const result = await query(q,[id])
+      // console.log(Boolean(result[0].affectedRows))
+      return Boolean(result[0].affectedRows)
+   }catch(err){
+      console.error("DB Error: ", err)
+      throw err
+   }
+}
+
 
 export const editAdmin = async (id,data)=>{
    try{
-      const q = "UPDATE `ADMIN` SET `Username` = ?, `Status` = ?, `Password` = ? WHERE AdminID = ?"
+      const q = "UPDATE `ADMIN` SET `Username` = ?, `Status` = ?, `Password` = ? WHERE AdminID = ?;"
       const values = [
          data.Username,
          data.Status,
@@ -68,7 +82,6 @@ export const editAdmin = async (id,data)=>{
    }catch(err){
       console.error("DB Error: ", err)
       throw err
-
    }
 }
 

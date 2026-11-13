@@ -2,15 +2,17 @@ import { useState } from "react";
 import { SideBar } from "../../shared/components/SideBar"
 import { TopBar } from "../../shared/components/TopBar"
 import AdminDeleteModel from "./AdminDeleteModel";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 
 function AdminManagement() {
-  const [openDeleteModel, setOpenDeleteModel] = useState(false);
+  // const [openDeleteModel, setOpenDeleteModel] = useState(false);
+  const navigate = useNavigate();
   const [adminsData , setAdminsData] = useState([])
   const [selectAdminsStatus , setSelectAdminStatus] = useState("ALL")
   const [searchInput, setSearchInput] = useState("")
+  const [selectedAdmin , setSelectedAdmin] = useState(null)
   
   useEffect(() =>{
     const fetchedAdmin = async ()=>{
@@ -40,6 +42,8 @@ function AdminManagement() {
 
     return matchesSearch && matchesStatus
   })
+
+
 
 
 
@@ -128,7 +132,7 @@ function AdminManagement() {
                   {filteredData.map((admin, index) => {
                     const isActive = admin.Status === 'ACTIVE'
                     return (
-                        <tr
+                      <tr
                         key={admin.AdminID}
                         className={`hover:bg-slate-50/70 ${index !== adminsData.length - 1 ? 'border-b border-slate-100' : ''}`}
                         data-status={admin.Status}
@@ -153,9 +157,10 @@ function AdminManagement() {
                               <svg className="size-4"><use href="#i-edit" /></svg>
                             </Link>
                             
-                            <button onClick={() => setOpenDeleteModel(!openDeleteModel)} type="button" aria-label="ลบ" className="grid size-8 place-items-center rounded-lg bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf]">
+                            <button onClick={() => setSelectedAdmin(admin)} type="button" aria-label="ลบ" className="grid size-8 place-items-center rounded-lg bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf]">
                               <svg className="size-4"><use href="#i-trash" /></svg>
                             </button>
+                            
                           </div>
                         </td>
                       </tr>
@@ -166,15 +171,15 @@ function AdminManagement() {
             </div>
             <p id="empty" hidden className="px-6 py-8 text-center text-sm text-[#8a7a80]">ไม่พบผู้ใช้งานที่ตรงกับการค้นหา ลองเปลี่ยนคำค้นหาหรือตัวกรองสถานะ</p>
           </section>
-
         </main>
       </div>
 
       <AdminDeleteModel
-        isOpen={openDeleteModel}
-        onClose={() => setOpenDeleteModel(false)}
+        isOpen={selectedAdmin !== null}
+        onClose={() => setSelectedAdmin(null)}
+        adminData={selectedAdmin}
+        nav={navigate}
       />
-
     </>
   )
 }

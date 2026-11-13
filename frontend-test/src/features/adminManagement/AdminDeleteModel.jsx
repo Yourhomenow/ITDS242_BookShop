@@ -1,7 +1,24 @@
+import { redirect } from "react-router-dom";
 
 
-function AdminDeleteModel({isOpen, onClose}) {
-  if (!isOpen) return null
+function AdminDeleteModel({isOpen, onClose, adminData,nav}) {
+  if (!isOpen || !adminData) return null
+  const handleDelete = async (admin)=>{
+    try{
+      const res = await fetch(`/api/admins/${admin.AdminID}`,{
+        method: "DELETE",
+      })
+      if (!res.ok) throw new Error(`Network error: ${res.status}`);
+      const result = await res.json()
+      console.log(result)
+      nav('/adminManagement')
+      onClose()
+      window.location.reload()
+    }catch(err){
+      console.error(err)
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-50 items-center flex bg-black/50 backdrop-blur-sm">
       <svg className="absolute h-0 w-0 overflow-hidden" aria-hidden="true">
@@ -33,16 +50,16 @@ function AdminDeleteModel({isOpen, onClose}) {
                 <p className="mt-0.5 text-md text-[#8a7a80]">การดำเนินการนี้ไม่สามารถย้อนกลับได้</p>
               </div>
             </div>
-            <div className="bg-gray-200 rounded-2xl mt-5 p-5">
-              <h4 className="text-xl font-bold text-[#684D4D]">บัญชีผู้ใช้ที่จะถูกลบ :</h4>
-              <br className="border-0 "/>
-              <h4 className="text-xl font-bold text-[#684D4D]">[บัญชีผู้ใช้ที่จะถูกลบ]</h4>
+            <div className="flex justify-center bg-gray-200 rounded-2xl mt-5 p-5">
+              <h4 className="text-xl font-bold text-[#684D4D]">{adminData.AdminID} :</h4>
+              <br className="border-0 px-3"/>
+              <h4 className="text-xl font-bold text-[#684D4D]">{adminData.Username}</h4>
             </div>
             <p className="text-red-500">
               * ข้อมูลการเข้าสู่ระบบ ล็อกและประวัติกิจกรรมทั้งหมดของบัญชีนี้จะถูกทำลายถาวรจากฐานข้อมูล
             </p>
             <div className="flex flex-row-reverse gap-2 mt-4">
-              <button className=" bg-[#ea6a6a] p-2 rounded-xl text-white hover:bg-[#d54343] active:scale-90 transition">
+              <button onClick={()=>handleDelete(adminData)} className=" bg-[#ea6a6a] p-2 rounded-xl text-white hover:bg-[#d54343] active:scale-90 transition">
                 ยืนยันลบถาวร
               </button>
               <button onClick={onClose} className="bg-white shadow-2xs border-2 border-gray-200 p-2 rounded-xl text-[#684D4D] hover:bg-[#eaeaea] active:scale-90 transition">
