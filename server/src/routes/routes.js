@@ -1,7 +1,12 @@
 import express from 'express'
 import * as adminControllers from "../controllers/adminControllers.js"
+import * as publicControllers from "../controllers/publicControllers.js"
 
 export const routes = express.Router()
+
+routes.get(`/books`, publicControllers.getBooks)
+routes.get(`/books/:id`, publicControllers.getBooksID)
+routes.get(`/books/:id/related`, publicControllers.getBookRelated)
 
 routes.get(`/admins/books`, adminControllers.getBooks)
 routes.get(`/admins/books/:id`, adminControllers.getBooksID)
