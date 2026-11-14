@@ -10,6 +10,7 @@ import NavbarShop from "../shared/components//navbar_shop";
 import Search from "../features/product-catalog/Search";
 import Detail from "../features/product-catalog/Detail";
 import Team from "../features/team/team";
+import Login from "../features/login/login"
 import {
   BookManagement,
   BookCreate,
@@ -22,6 +23,7 @@ function App() {
     <>
       <IconSprite/>
       <Routes>
+        <Route path="/login"element={<><HeaderShop /><NavbarShop /><Login /></>}/>
         <Route path="/team"element={<><HeaderShop /><Team /></>}/>
         <Route path="/search/:keyword?"element={<><HeaderShop /><NavbarShop /><Search /></>}/>
         <Route path="/detail/:id" element={<><HeaderShop /><NavbarShop /><Detail /></>}/>
