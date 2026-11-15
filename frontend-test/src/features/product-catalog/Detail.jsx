@@ -70,7 +70,7 @@ useEffect(() => {
 
   return (
     <div className="bg-[#FAF9F6]">
-    <main className="mx-auto max-w-[1180px] px-3 py-5 md:px-[18px] md:py-7 bg-white border-r border-l border-gray-200">
+    <main className="mx-auto min-h-screen max-w-[1180px] px-3 py-5 md:px-[18px] md:py-7 bg-white border-r border-l border-gray-200">
 
       <p className="mb-3 text-xs text-[#9a8589]">
         <Link to="/home">หน้าหลัก</Link>　›　
