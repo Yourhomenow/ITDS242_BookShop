@@ -27,7 +27,7 @@ function App() {
         <Route path="/team"element={<><HeaderShop /><Team /></>}/>
         <Route path="/search/:keyword?"element={<><HeaderShop /><NavbarShop /><Search /></>}/>
         <Route path="/detail/:id" element={<><HeaderShop /><NavbarShop /><Detail /></>}/>
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={<><HeaderShop /><NavbarShop /><Home /></>} />
         <Route path="/adminManagement" element={<AdminManagement />}/>
         <Route path="/adminCreate" element={<AdminCreate />}/>
         <Route path="/adminChange/:id" element={<AdminChange />}/>
