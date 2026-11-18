@@ -34,7 +34,7 @@ function App() {
         <Route path="/bookManagement" element={<BookManagement />} />
         <Route path="/bookCreate" element={<BookCreate />} />
         <Route path="/bookChange/:id" element={<BookChange />} />
-        <Route path="/" element={<AdminManagement />} />
+        <Route path="/" element={<><HeaderShop /><NavbarShop /><Home /></>} />
       </Routes>
     </>
 
