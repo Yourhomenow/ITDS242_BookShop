@@ -25,11 +25,9 @@ export function DeletePopUp({ onClick, id, books, onDelete}) {
     for (let i in id){
         detail.push(
             <Fragment key={id[i]}>
-                <span>
-                    {String(id[i]).padStart(4, "0")}
-                </span>
-                <span>
-                    {books.find((book) => book.id === id[i])?.name}
+                <span className="flex gap-8">
+                    <span>{String(id[i]).padStart(4, "0")}</span>
+                    <span>{books.find((book) => book.id === id[i])?.name}</span>
                 </span>
             </Fragment>
         )
@@ -57,7 +55,7 @@ export function DeletePopUp({ onClick, id, books, onDelete}) {
                 </div>
 
                 <div className="flex w-full min-h-[80px] max-h-[120px] gap-6 p-2 bg-[#F8FAFC] text-[#0F172A] rounded-xl font-light overflow-auto">
-                    <div className="flex flex-col p-4 gap-2">
+                    <div className="flex flex-col p-4 pl-6 gap-2 text-xl">
                         {detail}
                     </div>
                 </div>
