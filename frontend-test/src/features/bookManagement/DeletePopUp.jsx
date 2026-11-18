@@ -37,7 +37,7 @@ export function DeletePopUp({ onClick, id, books, onDelete}) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[#ac94949d]"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#ac94949d] backdrop-blur-sm"
         >
             <div
                 className="flex flex-col w-[40%] max-w-[600px] min-w-[300px]  min-h-[400px] max-h-[800px] rounded-2xl bg-white p-8 shadow-xl gap-4"
@@ -71,7 +71,7 @@ export function DeletePopUp({ onClick, id, books, onDelete}) {
                 <div className="mt-5 flex justify-end gap-4 min-h-[45px]">
                     <button
                         type="button"
-                        className="rounded-xl bg-[#E2E8F0] px-5 py-2 text-black cursor-pointer hover:bg-[#C3CBD7]"
+                        className="rounded-xl bg-[#E2E8F0] px-5 py-2 text-black cursor-pointer hover:bg-[#C3CBD7] active:scale-90 transition"
                         onClick={() => onClick(false)}
                     >
                         ยกเลิก
@@ -80,7 +80,7 @@ export function DeletePopUp({ onClick, id, books, onDelete}) {
                     <button
                         type="button"
                         onClick={() => deleteBook(id, onClick, onDelete)}
-                        className="rounded-xl bg-[#EF4444] px-5 py-2 text-white cursor-pointer hover:bg-[#E03B3B]"
+                        className="rounded-xl bg-[#EF4444] px-5 py-2 text-white cursor-pointer hover:bg-[#E03B3B] active:scale-90 transition"
                     >
                         ยืนยันลบถาวร
                     </button>

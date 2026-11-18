@@ -69,7 +69,7 @@ function AdminManagement() {
 
       <TopBar />
 
-      <div className="flex min-h-[calc(100vh-5rem)]">
+      <div className="flex min-h-[calc(100vh-5rem)] bg-[#F8FAFC]">
         {/* SideBar */}
         <SideBar activePage="admin"/>
 
@@ -96,7 +96,7 @@ function AdminManagement() {
           <section className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
             <label htmlFor="q" className="text-[11px] font-medium text-[#7a6a70]">คำค้นหา</label>
             <div className="mt-1 flex flex-wrap items-center gap-4">
-              <div className="relative min-w-55 flex-1 sm:max-w-3xl">
+              <div className="relative min-w-55 flex-1">
                 <svg className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500"><use href="#i-search" /></svg>
                 <input onChange={(e)=> {
                   console.log(e.target.value)
@@ -117,15 +117,15 @@ function AdminManagement() {
           </section>
 
           {/* Table */}
-          <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm">
+          <section className="overflow-hidden rounded-2xl border bg-white shadow-sm border-b-2 border-[#7E6666]">
             <div className="overflow-x-auto">
               <table className="w-full min-w-160 text-sm">
                 <thead>
-                  <tr className="border-b-2 border-[#8b5a62] bg-cream text-left text-xs font-semibold text-ink">
-                    <th scope="col" className="px-6 py-3">รหัสผู้ดูแลระบบ</th>
-                    <th scope="col" className="px-6 py-3">ชื่อผู้ใช้งาน</th>
-                    <th scope="col" className="px-6 py-3">สถานะ</th>
-                    <th scope="col" className="px-6 py-3 text-right">การจัดการ</th>
+                  <tr className="h-[41px] border-b-2 border-[#7E6666] bg-cream text-left text-xs bg-linear-to-b from-[#FFFAE9] from-50% to-[#ece3c3] to-100% text-[#737185]">
+                    <th scope="col" className="font-medium px-6 py-3">รหัสผู้ดูแลระบบ</th>
+                    <th scope="col" className="font-medium px-6 py-3">ชื่อผู้ใช้งาน</th>
+                    <th scope="col" className="font-medium px-6 py-3">สถานะ</th>
+                    <th scope="col" className="font-medium px-6 py-3 text-right">การจัดการ</th>
                   </tr>
                 </thead>
                 <tbody id="rows">
@@ -134,13 +134,13 @@ function AdminManagement() {
                     return (
                       <tr
                         key={admin.AdminID}
-                        className={`hover:bg-slate-50/70 ${index !== adminsData.length - 1 ? 'border-b border-slate-100' : ''}`}
+                        className={`hover:bg-slate-50/70 ${index !== adminsData.length - 1 ? 'border-b border-slate-100' : ''} text-[#545d6b]`}
                         data-status={admin.Status}
                         data-search={`${admin.AdminID} ${admin.Username}`}
                       >
                         <td className="px-6 py-4">
                           <span className="flex items-center gap-2.5 font-semibold text-[#5b4650]">
-                            <span className="size-2 rounded-full bg-plum"></span>{admin.AdminID}
+                            <span className="size-2 rounded-full bg-plum"></span>{String(admin.AdminID).padStart(4, "0")}
                           </span>
                         </td>
                         <td className="px-6 py-4 font-semibold">{admin.Username}</td>
@@ -153,11 +153,11 @@ function AdminManagement() {
                         <td className="px-6 py-4">
                           <div className="flex justify-end gap-2">
                           
-                            <Link to={`/AdminChange/${admin.AdminID}`} type="button" aria-label="แก้ไข" className="grid size-8 place-items-center rounded-lg bg-[#e3effd] text-[#3b82c4] hover:bg-[#cfe3fa]">
+                            <Link to={`/AdminChange/${admin.AdminID}`} type="button" aria-label="แก้ไข" className="grid size-8 place-items-center rounded-lg border border-[#D0DDF0] bg-[#e3effd] text-[#3b82c4] hover:bg-[#cfe3fa] cursor-pointer">
                               <svg className="size-4"><use href="#i-edit" /></svg>
                             </Link>
                             
-                            <button onClick={() => setSelectedAdmin(admin)} type="button" aria-label="ลบ" className="grid size-8 place-items-center rounded-lg bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf]">
+                            <button onClick={() => setSelectedAdmin(admin)} type="button" aria-label="ลบ" className="grid size-8 place-items-center rounded-lg border border-[#F0D0D0] bg-[#fde4e4] text-[#d24a4a] hover:bg-[#fbcfcf] cursor-pointer">
                               <svg className="size-4"><use href="#i-trash" /></svg>
                             </button>
                             
