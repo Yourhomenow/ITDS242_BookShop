@@ -54,7 +54,7 @@ function AdminDeleteModel({isOpen, onClose, adminData,nav}) {
                     </span>
                 </div>
             </div>
-            <div className="flex mt-5 pl-5 items-center w-full min-h-[80px] max-h-[120px] gap-6 p-2 bg-[#F8FAFC] text-[#0F172A] rounded-xl font-light overflow-auto">
+            <div className="flex mt-5 p-4 pl-9 items-center w-full min-h-[80px] max-h-[120px] gap-6 bg-[#F8FAFC] text-[#0F172A] rounded-xl font-light overflow-auto">
               <h4 className="text-xl font-bold">{String(adminData.AdminID).padStart(4, "0")}</h4>
               <br className="border-0 px-3"/>
               <h4 className="text-xl font-bold">{adminData.Username}</h4>
