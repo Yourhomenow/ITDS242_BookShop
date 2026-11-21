@@ -1,107 +1,97 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { SideBar } from "../../shared/components/SideBar"
+import { useEffect, useState } from "react";
+
+import logo from "../../assets/logo.png";
+
+import BookCard from "../../shared/components/BookCard";
+import banner from "../../assets/banner_shop.png";
 
 function Home() {
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // ดึงข้อมูลหนังสือจาก ITDS242_BookShop sql
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch(`/api/books/`);
+        if (!response.ok) throw new Error("โหลดข้อมูลไม่สำเร็จ");
+
+        const result = await response.json();
+        if (!result.success) throw new Error(result.message || "เกิดข้อผิดพลาด");
+
+        setBooks(result.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+
+  // แสดงรายการหนังสือ (ใช้ซ้ำทั้งส่วน BOOK และ NEW ARRIVAL)
+  const renderBooks = (list) => {
+    if (loading) return <p>กำลังโหลด...</p>;
+    if (error) return <p className="text-red-500">{error}</p>;
+    if (list.length === 0) return <p>ไม่พบหนังสือ</p>;
+
+    return list.map((book) => (
+      <div key={book.id} className="w-44 shrink-0">
+        <BookCard
+          id={book.id}
+          title={book.title}
+          author={book.author}
+          price={book.price}
+          image={book.image}
+        />
+      </div>
+    ));
+  };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FAF6EC]">
-      {/* Header */}
-      <header className="flex h-20 items-center gap-6 bg-[#8a5f66] bg-[repeating-linear-gradient(45deg,rgba(255,255,255,.05)_0_2px,transparent_2px_4px)] px-6">
-        <Link to="/home" className="flex items-center gap-3 text-white">
-          <span className="grid size-14 place-items-center rounded-full bg-[#f6e7c1] ring-2 ring-[#d9b66a]"></span>
-          <span className="hidden whitespace-nowrap text-lg font-bold sm:block">มหาสมุด</span>
-        </Link>
+    <div className="bg-[#FAF9F6]">
+      <main className="mx-auto min-h-screen max-w-[1180px] border-l border-r border-gray-200 bg-white px-3 py-4 md:px-[18px] md:py-5">
+        {/* Banner (เหมือน Search.jsx) */}
+        <section className="relative flex h-[230px] items-center justify-center overflow-hidden bg-gradient-to-b from-bookCream via-[#fff1ce] via-70% to-bookBlue text-center md:h-[250px]">
+          <div>
+            <img src={banner} alt="Mahasamut Banner" className="h-64 w-full object-cover" />
+          </div>
+        </section>
 
-        <div className="mx-auto flex h-10 w-full max-w-2xl items-center gap-2 rounded-full bg-white px-4">
-          <svg className="size-5 text-slate-500"><use href="#i-search" /></svg>
-          <input
-            type="text"
-            placeholder="ค้นหาจาก ชื่อสินค้า, ผู้แต่ง, สำนักพิมพ์"
-            className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-slate-400"
-          />
-        </div>
+        {/* BOOK */}
+        <h2 className="mt-8 mb-2 text-xl font-bold tracking-wide text-[#946D6D]">BOOK</h2>
+        <section className="flex items-center gap-4 border-y border-[#c9a0dc] px-2 py-6">
+          <button type="button" aria-label="ก่อนหน้า" className="shrink-0 text-[#946D6D]">
+            <svg className="size-6 rotate-90"><use href="#i-chev" /></svg>
+          </button>
 
-        <Link
-          to="/login"
-          className="shrink-0 rounded-full px-5 py-2 
-          text-sm hover:bg-white/20 bg-[#c9a0dc]"
-        > เข้าสู่ระบบ</Link>
-      </header>
+          <div className="flex min-w-0 flex-1 justify-around gap-4 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {renderBooks(books.slice(0, 4))}
+          </div>
 
-      {/* Category nav */}
-      <div className="relative flex flex-1 flex-col">
+          <button type="button" aria-label="ถัดไป" className="shrink-0 text-[#946D6D]">
+            <svg className="size-6 -rotate-90"><use href="#i-chev" /></svg>
+          </button>
+        </section>
 
-      {showSidebar && (
-        <div className="absolute left-0 top-0 z-50 h-full bg-[#fdf3c8] shadow-xl">
-          <SideBar activePage="home" />
-        </div>
-      )}
-
-      {/* Category nav */}
-      <nav className="flex items-center justify-evenly bg-[#F9F3DC] px-6 py-2 text-sm font-semibold">
-      <button type="button" aria-label="เปิดเมนู" onClick={() => setShowSidebar(!showSidebar)} className="cursor-pointer">
-        <svg className="size-6"><use href="#i-home" /></svg>
-      </button>
-        <span className="hover:underline">หนังสือทั่วไป</span>
-        <span className="hover:underline" >นวนิยาย</span>
-        <span className="hover:underline" >หนังสือการ์ตูน</span>
-        <span className="hover:underline" >ตำราเรียน</span>
-        <span className="hover:underline" >นิตยสาร</span>
-      </nav>
-   
-  <div className="min-w-0 flex-1">
-    {/* ว่าง*/}
-    <section className="mx-6 mt-4 h-56 rounded-2xl bg-[#F3EBD3]"></section>
-
-    {/* BOOK */}
-    <h2 className="mx-6 mt-8 mb-2 text-xl font-bold tracking-wide text-[#8a5f66]">BOOK</h2>
-    <section className="flex items-center gap-4 border-y border-[#c9a0dc] px-6 py-6">
-      <button type="button" aria-label="ก่อนหน้า" className="shrink-0 text-[#8a5f66]">
-        <svg className="size-6 rotate-90"><use href="#i-chev" /></svg>
-      </button>
-
-      <div className="flex min-w-0 flex-1 justify-around gap-4 overflow-x-auto">
-        <div className="flex h-56 w-44 shrink-0 flex-col justify-end rounded-2xl bg-linear-to-b from-[#FBEFC4] to-[#D9D3F2] p-3 shadow-md">
-          <p className="text-sm font-bold text-[#684D4D]">ชื่อหนังสือ</p>
-          <p className="text-xs text-[#8a7a80]">ผู้แต่ง</p>
-          <p className="mt-2 text-xs font-bold text-[#8a5f66]">00.0 ฿</p>
-        </div>
-
-        <div className="flex h-56 w-44 shrink-0 flex-col justify-end rounded-2xl bg-linear-to-b from-[#FBEFC4] to-[#D9D3F2] p-3 shadow-md">
-          <p className="text-sm font-bold text-[#684D4D]">ชื่อหนังสือ</p>
-          <p className="text-xs text-[#8a7a80]">ผู้แต่ง</p>
-          <p className="mt-2 text-xs font-bold text-[#8a5f66]">00.0 ฿</p>
-        </div>
-
-        <div className="flex h-56 w-44 shrink-0 flex-col justify-end rounded-2xl bg-linear-to-b from-[#FBEFC4] to-[#D9D3F2] p-3 shadow-md">
-          <p className="text-sm font-bold text-[#684D4D]">ชื่อหนังสือ</p>
-          <p className="text-xs text-[#8a7a80]">ผู้แต่ง</p>
-          <p className="mt-2 text-xs font-bold text-[#8a5f66]">00.0 ฿</p>
-        </div>
-
-        <div className="flex h-56 w-44 shrink-0 flex-col justify-end rounded-2xl bg-linear-to-b from-[#FBEFC4] to-[#D9D3F2] p-3 shadow-md">
-          <p className="text-sm font-bold text-[#684D4D]">ชื่อหนังสือ</p>
-          <p className="text-xs text-[#8a7a80]">ผู้แต่ง</p>
-          <p className="mt-2 text-xs font-bold text-[#8a5f66]">00.0 ฿</p>
-        </div>
-      </div>
-
-      <button type="button" aria-label="ถัดไป" className="shrink-0 text-[#8a5f66]">
-        <svg className="size-6 -rotate-90"><use href="#i-chev" /></svg>
-      </button>
-    </section>
-
-    {/* NEW ARRIVAL */}
-    <h2 className="mx-6 mt-8 mb-2 text-xl font-bold tracking-wide text-[#8a5f66]">NEW ARRIVAL</h2>
-  </div>
-</div>
+        {/* NEW ARRIVAL */}
+        <h2 className="mt-8 mb-2 text-xl font-bold tracking-wide text-[#946D6D]">NEW ARRIVAL</h2>
+        <section className="flex items-center gap-4 border-y border-[#c9a0dc] px-2 py-6">
+          <div className="flex min-w-0 flex-1 justify-around gap-4 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {renderBooks(books.slice(-4))}
+          </div>
+        </section>
+      </main>
 
       {/* Footer */}
-      <footer className=" flex flex-wrap items-start gap-16 bg-[#A9C9E3] px-10 py-8 text-sm text-[#3d3a4a]">
+      <footer className="flex flex-wrap items-start gap-16 bg-[#A9C9E3] px-10 py-8 text-sm text-[#3d3a4a]">
         <div className="space-y-2">
-          <span className="grid size-14 place-items-center rounded-full bg-[#f6e7c1] ring-2 ring-[#d9b66a]"></span>
+          <img src={logo} alt="Logo" className="h-12 w-12 shrink-0 object-contain"/>
           <p className="font-bold">ติดต่อเรา</p>
           <p>e-commerce@mashamud.com</p>
         </div>
@@ -109,11 +99,11 @@ function Home() {
         <div>
           <h3 className="mb-2 font-bold">หนังสือของเรา</h3>
           <ul className="space-y-1">
-              <li>หนังสือทั่วไป</li>
-              <li>นวนิยาย</li>
-              <li>หนังสือการ์ตูน</li>
-              <li>ตำราเรียน</li>
-              <li>นิตยสาร</li>
+            <li>หนังสือทั่วไป</li>
+            <li>นวนิยาย</li>
+            <li>หนังสือการ์ตูน</li>
+            <li>ตำราเรียน</li>
+            <li>นิตยสาร</li>
           </ul>
         </div>
 

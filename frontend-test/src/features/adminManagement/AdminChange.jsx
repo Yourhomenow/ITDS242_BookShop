@@ -108,7 +108,7 @@ function AdminChange() {
 
       <TopBar />
 
-      <div className="flex min-h-[calc(100vh-5rem)]">
+      <div className="flex min-h-[calc(100vh-5rem)] bg-[#F8FAFC]">
         {/* SideBar */}
         <SideBar activePage="admin"/>
 
@@ -118,9 +118,14 @@ function AdminChange() {
           {/* Page title */}
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex items-start gap-4">
-              <span className="grid size-12 shrink-0 place-items-center rounded-xl border border-[#dcd2ee] bg-[#ece6f5] text-[#7a4f8f]">
-                <svg className="size-6"><use href="#i-edit" /></svg>
-              </span>
+              <button 
+                  type="button" aria-label="สร้าง" 
+                  className="grid size-12 shrink-0 place-items-center rounded-xl border border-[#dcd2ee] bg-[#ece6f5] text-[#7a4f8f]
+                              hover:bg-[#e2dcea] cursor-pointer"
+                  onClick={() => navigate('/adminManagement')}
+              >
+                  <svg className="size-6"><use href="#i-corner-up-left"/></svg>
+              </button>
               <div>
                 <h1 className="text-2xl font-bold text-[#684D4D]">แก้ไขบัญชีผู้ใช้</h1>
                 <p className="mt-0.5 text-sm text-[#8a7a80]">อัปเดตชื่อ สถานะ หรือ รหัสผ่าน</p>
@@ -129,13 +134,13 @@ function AdminChange() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <div className="flex gap-4 bg-[#EFF6FF] border-2 p-6 w-max rounded-lg border-[#BFDBFE]">
-              <h3 className="font-black">
-                {adminsData.AdminID} : {adminsData.Username}
-              </h3>
-              <span className={`${adminsData.Status === "ACTIVE" ? "bg-[#c8f1d8] text-[#1c7a4b]" : 'bg-[#ffe98a] text-[#8a5b00]'} rounded-md px-2.5 py-1 text-xs font-semibold`}>
-                {adminsData.Status}
-              </span>
+            <div className="flex gap-4 bg-[#EFF6FF] border-2 p-6 w-300 rounded-lg border-[#BFDBFE]">
+                <h3 className="font-black">
+                  {adminsData.AdminID} : {adminsData.Username}
+                </h3>
+                <span className={`${adminsData.Status === "ACTIVE" ? "bg-[#c8f1d8] text-[#1c7a4b]" : 'bg-[#ffe98a] text-[#8a5b00]'} rounded-md px-2.5 py-1 text-xs font-semibold`}>
+                  {adminsData.Status}
+                </span>
             </div>
             <div className="flex">
               <form onSubmit={handleSubmit}>
@@ -184,27 +189,26 @@ function AdminChange() {
                     <div className="flex grow flex-col mr-5">
                       <label htmlFor="adminName" className="text-md h-min font-bold text-[#684D4D]">รหัสผ่าน (Password)</label>
                       <input onChange={(e)=> setPassword1(e.target.value)} id="Password" name="Password" type="password" placeholder="Admin@2024Secure!" className="p-2 mt-1 border border-gray-300 rounded-lg " />
-                      <p className="text-sm pl-2 h-min font-bold text-[#938686]">รหัสผ่านต้องมีตัวพิมพ์ใหญ่ พิมพ์เล็ก ตัวเลขและ สัญลักษณ์ เช่น @, #, %</p>
+                      <p className="text-sm pl-2 h-min font-medium text-[#938686] mt-1">รหัสผ่านต้องมีตัวพิมพ์ใหญ่ พิมพ์เล็ก ตัวเลขและ สัญลักษณ์ เช่น @, #, %</p>
                     </div>
                     <div className="flex grow flex-col">
                       <label htmlFor="adminName" className="text-md h-min font-bold text-[#684D4D]">ยืนยันรหัสผ่านอีกครั้ง (Password)</label>
                       <input onChange={(e)=> setPassword2(e.target.value)} id="Password" name="Password" type="password" placeholder="Admin@2024Secure!" className="p-2 mt-1 border border-gray-300 rounded-lg " />
                     </div>
                   </div>
-                  <div className="col-span-2 mt-2">
+                  <div className="col-span-2 mt-4">
                     <div className={`${verifyPassword(password1) ? "text-[#10B981]" : "text-[#b91026]"} mb-1 text-sm font-medium text-fg-success`}>{verifyPassword(password1) ? 'Strong' : 'Weak'}</div>
                     <div className="w-full bg-gray-300 rounded-full h-2">
                       <div className={`${verifyPassword(password1) ? 'bg-[#10B981] w-full' :'bg-[#b91026] w-[10%]'} h-2 rounded-full transition`}></div>
                     </div>
                   </div>
-                  <div className="mt-3 flex justify-end gap-2">
-                    <button type="submit" disabled={(password1 === '' && password2 === '') || !(password1 === password2) || (haveSameName)} className="bg-[#9A6EA5] p-2 rounded-xl text-white cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed disabled:pointer-events-none">
-                      บันทึกการเปลี่ยนแปลงทั้งหมด
-                    </button>
-                    <Link to="/adminManagement" className="bg-white shadow-2xs border-2 border-gray-200 p-2 rounded-xl text-[#684D4D]">
+                  <div className="mt-6 flex justify-end gap-4">
+                    <Link to="/adminManagement" className="bg-white shadow-2xs border-2 border-gray-200 pl-5 pr-5 p-3 rounded-xl text-[#684D4D]">
                       ย้อนกลับ
                     </Link>
-                
+                    <button type="submit" disabled={!(password1 === password2) || (haveSameName)} className="bg-[#9A6EA5] pl-5 pr-5 p-3 rounded-xl text-white cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed disabled:pointer-events-none">
+                      บันทึกการเปลี่ยนแปลงทั้งหมด
+                    </button>
                   </div>
                 </section>
               </form>

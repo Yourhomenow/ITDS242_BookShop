@@ -20,7 +20,7 @@ function AdminDeleteModel({isOpen, onClose, adminData,nav}) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 items-center flex bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 items-center flex bg-[#ac94949d] backdrop-blur-sm">
       <svg className="absolute h-0 w-0 overflow-hidden" aria-hidden="true">
         <defs>
           <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
@@ -41,29 +41,35 @@ function AdminDeleteModel({isOpen, onClose, adminData,nav}) {
 
       <dialog className="flex justify-self-center rounded-2xl" open={isOpen} >
           <div className="flex-row p-10 rounded-2xl border border-slate-200/80 bg-white shadow-sm">
-            <div className="flex gap-3">
-              <span className="grid size-15 shrink-0 place-items-center rounded-full border border-[#eed2d2] bg-[#ffd4d4] text-[#fb2525]">
-                <svg className="size-8"><use href="#i-minususer"/></svg>
-              </span>
-              <div>
-                <h1 className="text-2xl font-bold text-[#684D4D]">ยืนยันการลบข้อมูลถาวร ?</h1>
-                <p className="mt-0.5 text-md text-[#8a7a80]">การดำเนินการนี้ไม่สามารถย้อนกลับได้</p>
-              </div>
+            <div className="flex w-full gap-6 p-2">
+                <span className="grid size-15 shrink-0 place-items-center rounded-full bg-[#FEE2E2] text-[#EF4444]">
+                    <svg className="size-8"><use href="#i-minususer"/></svg>
+                </span>
+                <div className="flex flex-col self-center">
+                    <span className="text-[#0F172A] font-bold text-2xl">
+                        ยืนยันการลบข้อมูลถาวร?
+                    </span>
+                    <span className="text-[#64748B] font-light">
+                        การดำเนินการนี้ไม่สามารถย้อนกลับได้
+                    </span>
+                </div>
             </div>
-            <div className="flex justify-center bg-gray-200 rounded-2xl mt-5 p-5">
-              <h4 className="text-xl font-bold text-[#684D4D]">{adminData.AdminID} :</h4>
+            <div className="flex mt-5 p-4 pl-9 items-center w-full min-h-[80px] max-h-[120px] gap-6 bg-[#F8FAFC] text-[#0F172A] rounded-xl font-light overflow-auto">
+              <h4 className="text-xl font-bold">{String(adminData.AdminID).padStart(4, "0")}</h4>
               <br className="border-0 px-3"/>
-              <h4 className="text-xl font-bold text-[#684D4D]">{adminData.Username}</h4>
+              <h4 className="text-xl font-bold">{adminData.Username}</h4>
             </div>
-            <p className="text-red-500">
-              * ข้อมูลการเข้าสู่ระบบ ล็อกและประวัติกิจกรรมทั้งหมดของบัญชีนี้จะถูกทำลายถาวรจากฐานข้อมูล
-            </p>
-            <div className="flex flex-row-reverse gap-2 mt-4">
-              <button onClick={()=>handleDelete(adminData)} className=" bg-[#ea6a6a] p-2 rounded-xl text-white hover:bg-[#d54343] active:scale-90 transition">
-                ยืนยันลบถาวร
-              </button>
-              <button onClick={onClose} className="bg-white shadow-2xs border-2 border-gray-200 p-2 rounded-xl text-[#684D4D] hover:bg-[#eaeaea] active:scale-90 transition">
+            <div className="flex w-full gap-6 p-2 text-[#EF4444] rounded-xl font-light">
+              <span>
+                  * ข้อมูลการเข้าสู่ระบบ ล็อกและประวัติกิจกรรมทั้งหมดของบัญชีนี้จะถูกทำลายถาวรจากฐานข้อมูล
+              </span>
+            </div>
+            <div className="mt-5 flex justify-end gap-4 min-h-[45px]">
+              <button onClick={onClose} className="rounded-xl bg-[#E2E8F0] px-5 py-2 text-black cursor-pointer hover:bg-[#C3CBD7] active:scale-90 transition">
                 ยกเลิก
+              </button>
+              <button onClick={()=>handleDelete(adminData)} className="rounded-xl bg-[#EF4444] px-5 py-2 text-white cursor-pointer hover:bg-[#E03B3B] active:scale-90 transition">
+                ยืนยันลบถาวร
               </button>
             </div>
           </div>
