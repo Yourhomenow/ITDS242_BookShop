@@ -1,24 +1,26 @@
 import { useState } from "react";
 
 import logo from "../../assets/logo.png";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "./api";
 
 function Login() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState(""); // คุณใช้ชื่อ username เก็บค่าอีเมล
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-   
-    if (!emailPattern.test(username.trim())) {
-      alert("รูปแบบอีเมลไม่ถูกต้อง");
-      return;
+    try{
+      const response = await login(username,password);
+      navigate('/')
+      alert("เข้าสู่ระบบแล้ว");
+    }catch(err){
+      alert("Have a error!");
+      console.error(err)
     }
 
-    alert("กำลังเข้าสู่ระบบ");
   };
   return (
     <div className="min-h-screen">
@@ -49,7 +51,7 @@ function Login() {
             — ยินดีต้อนรับสู่มหาสมุด —
           </p>
 
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleLogin} className="mb-5">
 
             {/* Username */}
             <div className="relative mb-3">
@@ -102,6 +104,13 @@ function Login() {
             </button>
 
           </form>
+
+          <Link 
+            to="/adminCreate"
+            className="w-full px-22 py-3 bg-gradient-to-r  from-[#d2cddb] to-[#a995d0] text-white rounded-xl font-bold hover:bg-[#795b70] transition duration-300 cursor-pointer"
+          >
+            ลงทะเบียนเข้าใช้
+          </Link>
         </div>
 
       </main>
