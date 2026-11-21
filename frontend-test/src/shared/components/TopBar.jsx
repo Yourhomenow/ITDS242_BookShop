@@ -1,12 +1,15 @@
 import { useEffect } from "react";
 import logo from "../../assets/logo.png";
 import { getMe } from "../../features/login/api";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+
+const PUBLIC_PATHS = ["/login","/register"]
 
 export function TopBar() {
   const navigate = useNavigate();
   const [adminData, setAdminData] = useState()
+  const { pathname } = useLocation()
 
 
   useEffect(()=>{
@@ -18,15 +21,19 @@ export function TopBar() {
         setAdminData(resJson)
         // console.log(response)
         // console.log(adminData)
+
+        if(response.status === 401){
+          if(!PUBLIC_PATHS.includes(pathname)) navigate("/login");
+          return
+        }
       }catch(err){
-        navigate("/login")
         console.error(err)
       }
     }
 
     me()
 
-  },[navigate])
+  },[navigate,pathname])
 
   return (
     <header className="flex h-20 items-center justify-between bg-[#8a5f66] px-6">
