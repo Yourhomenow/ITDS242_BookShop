@@ -3,6 +3,7 @@ import { SideBar } from "../../shared/components/SideBar"
 import { TopBar } from "../../shared/components/TopBar"
 import { useState } from "react"
 import { verifyPassword } from "../../shared/utils/verifyPassword";
+import { register } from "../login/api";
 
 function AdminCreate() {
   const navigate = useNavigate();
@@ -15,17 +16,8 @@ function AdminCreate() {
   const handleSubmit = async (e)=>{
     e.preventDefault()
     try{
-      const response = await fetch('http://localhost:3005/api/admins',{
-        method: 'POST',
-        headers:{
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          Username: name,
-          Password: password
-        })
-      })
-      navigate('/adminManagement')
+      const response = await register(name,password)
+      navigate('/login')
       console.log('Created Admin: ',response)
     }catch(err){
       console.error('HTTP error! Status: ',err)
@@ -138,6 +130,9 @@ function AdminCreate() {
                   </button>}
                   <Link to="/adminManagement" className="bg-white shadow-2xs border-2 border-gray-200 p-2 rounded-xl text-[#684D4D]">
                     ยกเลิกขั้นตอน
+                  </Link>
+                  <Link to="/login" className="bg-white shadow-2xs border-2 border-gray-200 p-2 rounded-xl text-[#684D4D]">
+                    กลับไปหน้า เข้าสู่ระบบ
                   </Link>
                 </div>
               </section>

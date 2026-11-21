@@ -14,5 +14,7 @@ export const config ={
     name: process.env.DB_NAME || 'myapp',
     user: process.env.DB_USER || 'mysql',
     password: process.env.DB_PASSWORD,
-  }
+  },
+  // JWT
+  JWT_SECRET : process.env.JWT_SECRET
 }

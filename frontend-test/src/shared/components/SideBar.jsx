@@ -1,7 +1,12 @@
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../features/login/api";
+
 const based_className = "flex items-center gap-3 rounded-xl px-4 py-2.5 hover:bg-white/40 focus-visible:outline-2 focus-visible:outline-plum";
 const select_className = "flex items-center gap-3 rounded-xl bg-white/80 px-4 py-2.5 font-semibold text-[#3d3550] shadow-sm focus-visible:outline-2 focus-visible:outline-plum";
 
 export function SideBar ({ activePage }){
+    const navigate = useNavigate();
+
     let admin_className = based_className;
     let book_className = based_className ;
     let home_className = based_className;
@@ -13,6 +18,20 @@ export function SideBar ({ activePage }){
     }else if (activePage == "home"){
         home_className = select_className
     }
+
+    const handleLogout = async (e)=>{
+        e.preventDefault()
+        try{
+            const response = await logout()
+            navigate("/login")
+            alert("ออกจากระบบแล้ว")
+        }catch(err){
+            alert("Have a error!");
+            console.error(err)
+        }
+    }
+
+
     return (
         <>
             <svg className="absolute h-0 w-0 overflow-hidden" aria-hidden="true">
@@ -34,6 +53,13 @@ export function SideBar ({ activePage }){
                     <svg className="size-4"><use href="#i-users"/></svg>จัดการบัญชีผู้ใช้
                     </a>
                 </nav>
+                <button
+                    onClick={handleLogout}
+                    type="button"
+                    className="flex mt-4 items-center gap-2 rounded-xl bg-plum px-21 py-2.5 text-sm font-medium bg-[#9e77b2] text-white shadow-md shadow-plum/30 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum"
+                >
+                    Logout
+                </button>
             </aside>
         </>
     )
