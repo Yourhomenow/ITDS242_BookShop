@@ -1,4 +1,5 @@
 import { query } from "../config/db.js";
+import bcrypt from "bcrypt"
 
 //Admin API
 export const getAdmins = async ()=> {
@@ -88,7 +89,7 @@ export const editAdmin = async (id,data)=>{
       const values = [
          data.Username,
          data.Status,
-         data.Password,
+         await bcrypt.hash(data.Password,12),
          id
       ]
       const result = await query(q,values)
