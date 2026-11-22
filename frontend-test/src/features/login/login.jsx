@@ -21,7 +21,7 @@ function Login() {
     alert("กำลังเข้าสู่ระบบ");
   };
   return (
-    <div className="min-h-screen">
+    <div className="">
 
       {/* Main */}
       <main className="min-h-[calc(100vh-110px)] bg-gradient-to-br from-[#d9d4f5] via-[#c9d5f0] to-[#a9d0e8] flex flex-col items-center py-3">
