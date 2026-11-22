@@ -8,7 +8,7 @@ export default function BookCard({
   image
 }) {
   return (
-    <Link to={`/detail/${id}`} className="overflow-hidden rounded-lg border border-[#eadfd6] bg-linear-to-b from-[#fdf3c8] to-[#DAD8F7] text-[#684D4D] shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+    <Link to={`/detail/${id}`} className="block w-full overflow-hidden rounded-lg border border-[#eadfd6] bg-linear-to-b from-[#fdf3c8] to-[#DAD8F7] text-[#684D4D] shadow-sm transition hover:-translate-y-1 hover:shadow-md">
       <div className="relative rounded-t-lg flex h-40 items-center justify-center border border-stone-200 bg-white md:h-[190px]">
         {image ? (
           <img src={image} alt={title} className="h-full w-full object-contain"/>) : (
