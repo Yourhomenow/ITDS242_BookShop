@@ -77,7 +77,7 @@ export function BookCreate(){
             const formatData = (data, picture) => ({
                 book:{
                     name: data.name,
-                    quantity: 0,
+                    quantity: Math.floor(Number(data.quantity)),
                     price: Number(data.price),
                     size: data.size,
                     isbnCode: data.isbnCode || null,
@@ -150,17 +150,30 @@ export function BookCreate(){
                                 />
                             </div>
 
-                            {/* ISBN */}
-                            <div className="flex flex-col w-full gap-2">
-                                <label className="font-medium text-[#402E40] pb-1">รหัสISBN</label>
-                                <input 
-                                    id="ISBN" type="text" placeholder="999-999-99-99999-9 (เว้นว่างหากไม่มี)"
-                                    name="isbnCode"
-                                    className="h-11 w-full rounded-xl 
-                                        border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
+                            {/* ISBN/ Quantity */}
+                            <div className="flex flex-wrap w-full gap-[4%]">
+                                <div className="flex flex-col w-[48%] min-w-[150px] gap-2">
+                                    <label className="font-medium text-[#402E40] pb-1">รหัสISBN</label>
+                                    <input 
+                                        id="ISBN" type="text" placeholder="999-999-99-99999-9 (เว้นว่างหากไม่มี)"
+                                        name="isbnCode"
+                                        className="h-11 w-full rounded-xl 
+                                            border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
                                             placeholder:text-[#8B708B] focus:border-plum focus:ring-2 focus:ring-plum/20" 
-                                />
+                                    />
+                                </div>
+                                <div className="flex flex-col w-[48%] min-w-[150px] gap-2">
+                                    <label className="font-medium text-[#402E40] pb-1">จำนวนคงเหลือ</label>
+                                    <input 
+                                        id="quantity" type="number" step="1" placeholder="0"
+                                        name="quantity" required
+                                        className="h-11 w-full rounded-xl 
+                                            border border-[#F0E4CE] bg-[#FFFDF6] pl-4 text-sm outline-none
+                                            placeholder:text-[#8B708B] focus:border-plum focus:ring-2 focus:ring-plum/20" 
+                                    />
+                                </div>
                             </div>
+
 
                             {/* Category/ Price */}
                             <div className="flex flex-wrap w-full gap-[4%]">
