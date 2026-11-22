@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import logo from "../../assets/logo.png";
 
@@ -43,7 +44,7 @@ function Home() {
     return list.map((book) => (
       <div key={book.id} className="w-44 shrink-0">
         <BookCard
-          id={book.id}
+          id={book.id} 
           title={book.title}
           author={book.author}
           price={book.price}
@@ -57,7 +58,7 @@ function Home() {
     <div className="bg-[#FAF9F6]">
       <main className="mx-auto min-h-screen max-w-[1180px] border-l border-r border-gray-200 bg-white px-3 py-4 md:px-[18px] md:py-5">
         {/* Banner (เหมือน Search.jsx) */}
-        <section className="relative flex h-[230px] items-center justify-center overflow-hidden bg-gradient-to-b from-bookCream via-[#fff1ce] via-70% to-bookBlue text-center md:h-[250px]">
+        <section className="relative flex h-[230px] items-center justify-center overflow-hidden bg-linear-to-b from-bookCream via-[#fff1ce] via-70% to-bookBlue text-center md:h-[250px]">
           <div>
             <img src={banner} alt="Mahasamut Banner" className="h-64 w-full object-cover" />
           </div>
@@ -99,18 +100,20 @@ function Home() {
         <div>
           <h3 className="mb-2 font-bold">หนังสือของเรา</h3>
           <ul className="space-y-1">
-            <li>หนังสือทั่วไป</li>
-            <li>นวนิยาย</li>
-            <li>หนังสือการ์ตูน</li>
-            <li>ตำราเรียน</li>
-            <li>นิตยสาร</li>
+            <div className="flex flex-col gap-0.5">
+              <Link to="/search?category=General">หนังสือทั่วไป</Link>
+              <Link to="/search?category=Novel">นวนิยาย</Link>
+              <Link to="/search?category=Comic%26Manga">หนังสือการ์ตูน</Link>
+              <Link to="/search?category=Study">ตำราเรียน</Link>
+              <Link to="/search?category=Magazine">นิตยสาร</Link>
+            </div>
           </ul>
         </div>
 
         <div>
           <h3 className="mb-2 font-bold">ข้อมูล บมจ. มหาสมุด</h3>
           <ul className="space-y-1">
-            <li>ทีมพัฒนา</li>
+            <Link to="/team">ทีมพัฒนา</Link>
           </ul>
         </div>
       </footer>
