@@ -7,6 +7,7 @@ import BookCard from "../../shared/components/BookCard";
 import banner from "../../assets/banner_shop.png";
 
 function Home() {
+  const [cycleBooks, setCycleBooks] = useState([]);
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,6 +26,7 @@ function Home() {
         if (!result.success) throw new Error(result.message || "เกิดข้อผิดพลาด");
 
         setBooks(result.data);
+        setCycleBooks(result.data.slice(0,4));
       } catch (err) {
         setError(err.message);
       } finally {
@@ -35,6 +37,49 @@ function Home() {
     fetchBooks();
   }, []);
 
+  function cycleUp() {
+    let temp = [];
+    let flag = false;
+    for(let i in books){
+      if (temp.length == 4){ break }
+      if (flag){
+        temp.push(books[i]);
+      }
+      if (JSON.stringify(cycleBooks[0]) === JSON.stringify(books[i])){
+        flag = true;
+      }
+    }
+
+    let curr = 0;
+    while (temp.length != 4){
+      temp.push(books[curr]);
+      curr += 1;
+    }
+    
+    setCycleBooks(temp);
+  } 
+
+  function cycleDown() {
+    let temp = [];
+    let flag = false;
+    for(let i in books.toReversed()){
+      if (temp.length == 4){ break }
+      if (flag){
+        temp.push(books.toReversed()[i]);
+      }
+      if (JSON.stringify(cycleBooks[3]) === JSON.stringify(books.toReversed()[i])){
+        flag = true;
+      }
+    }
+
+    let curr = 0;
+    while (temp.length != 4){
+      temp.push(books.toReversed()[curr]);
+      curr += 1;
+    }
+    
+    setCycleBooks(temp.toReversed());
+  }
   // แสดงรายการหนังสือ (ใช้ซ้ำทั้งส่วน BOOK และ NEW ARRIVAL)
   const renderBooks = (list) => {
     if (loading) return <p>กำลังโหลด...</p>;
@@ -67,15 +112,15 @@ function Home() {
         {/* BOOK */}
         <h2 className="mt-8 mb-2 text-xl font-bold tracking-wide text-[#946D6D]">BOOK</h2>
         <section className="flex items-center gap-4 border-y border-[#c9a0dc] px-2 py-6">
-          <button type="button" aria-label="ก่อนหน้า" className="shrink-0 text-[#946D6D]">
+          <button type="button" onClick={cycleDown} aria-label="ก่อนหน้า" className="shrink-0 text-[#946D6D] cursor-pointer">
             <svg className="size-6 rotate-90"><use href="#i-chev" /></svg>
           </button>
 
           <div className="flex min-w-0 flex-1 justify-around gap-4 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {renderBooks(books.slice(0, 4))}
+            {renderBooks(cycleBooks)}
           </div>
 
-          <button type="button" aria-label="ถัดไป" className="shrink-0 text-[#946D6D]">
+          <button type="button" onClick={cycleUp} aria-label="ถัดไป" className="shrink-0 text-[#946D6D] cursor-pointer">
             <svg className="size-6 -rotate-90"><use href="#i-chev" /></svg>
           </button>
         </section>
@@ -83,8 +128,8 @@ function Home() {
         {/* NEW ARRIVAL */}
         <h2 className="mt-8 mb-2 text-xl font-bold tracking-wide text-[#946D6D]">NEW ARRIVAL</h2>
         <section className="flex items-center gap-4 border-y border-[#c9a0dc] px-2 py-6">
-          <div className="flex min-w-0 flex-1 justify-around gap-4 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {renderBooks(books.slice(-4))}
+          <div className="flex flex-wrap min-w-0 flex-1 justify-around gap-4 m-2 gap-y-8 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {renderBooks(books.toReversed())}
           </div>
         </section>
       </main>
