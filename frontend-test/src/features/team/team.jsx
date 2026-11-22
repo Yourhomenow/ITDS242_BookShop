@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
+import Footer from "../../shared/components/Footer"
+
 import team1 from "../../assets/member/team1.jpg";
 import team2 from "../../assets/member/team2.jpg";
 import team3 from "../../assets/member/team3.jpg";
@@ -93,6 +95,7 @@ function Team() {
           </div>
         </main>
       </div>
+      <Footer></Footer>
     </>
   );
 }

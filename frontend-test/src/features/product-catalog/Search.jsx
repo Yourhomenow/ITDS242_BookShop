@@ -3,6 +3,7 @@ import { useParams, useSearchParams  } from "react-router-dom";
 
 import BookCard from "../../shared/components/BookCard";
 import banner from "../../assets/banner_shop.png";
+import Footer from "../../shared/components/Footer"
 
 export default function Search() {
   const {keyword = ""} = useParams();
@@ -157,6 +158,7 @@ export default function Search() {
         </div>
       </section>
     </main>
+    <Footer></Footer>
     </div>
   );
 }

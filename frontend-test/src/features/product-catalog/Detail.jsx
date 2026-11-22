@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+
+import Footer from "../../shared/components/Footer"
 import BookCard from "../../shared/components/BookCard";
 
 export default function Detail() {
@@ -144,6 +146,7 @@ useEffect(() => {
         </div>
       </section>
     </main>
+    <Footer></Footer>
     </div>
   );
 }
