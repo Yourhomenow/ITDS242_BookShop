@@ -1,7 +1,7 @@
 INSERT INTO `ADMIN` (`Username`, `Password`, `Status`) VALUES
-("Kason_w", "11111111", "ACTIVE"),
-("Yoimiya", "Firework123", "ACTIVE"),
-("Ben Tennyson", "YOLO", "SUSPENDED");
+("Kason_w", "$2b$12$lP1gnCHmCdHxl6rm/ZvD/.t8OMQeM7CdY68abWMiC1K4uCIi1Tzqa", "ACTIVE"),
+("Yoimiya", "$2b$12$f6jwDo9wxL9mt7yAbCFtE.v8xNMxaE3IzOhZbStf/0xMQ9358W6K.", "ACTIVE"),
+("Ben Tennyson", "$2b$12$roho1xHLiCyqUoUW3ejXuuDBo8.RXKqJ7/QsrVWce2chRQVi0fdLi", "SUSPENDED");
 
 INSERT INTO `LOGINLOG` (`Timestamp`, `Status`, `AdminID`) VALUES
 ('2026-09-30 15:42:21', "SUCCESS", 1),
