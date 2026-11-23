@@ -57,13 +57,23 @@ function BookManagement(){
     const [books, setBook] = useState(null);
     useEffect(() => {
         async function getBooks() {
-            const response = await fetch('/api/admins/books');
-            const data = await response.json();
-            setBook(data);
+            try{
+                const response = await fetch('/api/admins/books');
+                
+                if(response.status === 401){
+                    navigate("/login")
+                    return
+                }
+                const data = await response.json();
+                setBook(data);
+            }catch(err){
+                console.error(err)
+            }
         }
+        
 
         getBooks();
-    }, [refresh]);
+    }, [refresh,navigate]);
     if (books === null) {
         return <p>Loading books...</p>;
     }

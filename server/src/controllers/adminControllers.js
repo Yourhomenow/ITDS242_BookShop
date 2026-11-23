@@ -6,8 +6,8 @@ export const getAdmin = async (req, res)=>{
   try{
     const id = req.params.id
     const exceptId = req.query.e;
-    console.log(Boolean(exceptId))
-    console.log(typeof(exceptId))
+    // console.log(Boolean(exceptId))
+    // console.log(typeof(exceptId))
     if (Boolean(exceptId) === true){
       const admins = await adminService.getAdminsExceptOne(id)
       return res.status(200).json(admins)

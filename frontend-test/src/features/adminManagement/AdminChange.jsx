@@ -46,19 +46,21 @@ function AdminChange() {
     const handleSubmit = async (e)=>{
       try{
         e.preventDefault()
+        console.log({name,password2,status})
         const response = await fetch(`http://localhost:3005/api/admins/${id}`,{
           method: 'PUT',
+          credentials: "include",
           headers:{
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            Username: name || adminsData.Username,
+            Username: name === "" ? adminsData.Username : name,
             Password: password2,
             Status: status || adminsData.Status
           })
         })
         navigate('/adminManagement')
-        console.log('Edited Admin: ',response)
+        console.log('Edited Admin: ',response.json())
       }catch(err){
         console.error('HTTP error! Status: ',err)
       }
@@ -76,6 +78,7 @@ function AdminChange() {
           Username:result.Username,
           Status:result.Status
         })
+
       }catch(err){
         console.error(err)
       }
