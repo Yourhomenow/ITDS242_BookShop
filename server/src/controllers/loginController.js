@@ -34,6 +34,9 @@ export const register = async (req, res)=>{
     })
   }catch(err){
     console.error(err)
+    return res.status(500).json({
+      message: "Internal error"
+    })
   }
 }
 
@@ -41,16 +44,18 @@ export const login = async (req,res, next)=>{
   try {
     const {Username, Password} = req.body;
     
-    if(
-      typeof Username !== "string" ||
-      typeof Password !== "string" 
-    ){
-      return res.status(400).json({
-        error: "Invalid credentials"
-      })
-    }
+    // if(
+    //   typeof Username !== "string" ||
+    //   typeof Password !== "string" 
+    // ){
+    //   return res.status(400).json({
+    //     error: "Invalid credentials"
+    //   })
+    // }
 
     const user = await adminService.getAdminByName(Username)
+    console.log('Have user: ', !user)
+    console.log('compare : ', !(await bcrypt.compare(Password, user.Password)))
 
     if(
       !user ||

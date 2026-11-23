@@ -15,7 +15,7 @@ function Login() {
     try{
       const response = await login(username,password);
       navigate('/adminManagement')
-      alert("เข้าสู่ระบบแล้ว");
+      // alert("เข้าสู่ระบบแล้ว");
     }catch(err){
       alert("Have a error!");
       console.error(err)
