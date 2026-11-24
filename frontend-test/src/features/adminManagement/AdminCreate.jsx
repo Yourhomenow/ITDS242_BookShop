@@ -17,7 +17,7 @@ function AdminCreate() {
     e.preventDefault()
     try{
       const response = await register(name,password)
-      navigate('/login')
+      navigate('/adminManagement')
       console.log('Created Admin: ',response)
     }catch(err){
       console.error('HTTP error! Status: ',err)
