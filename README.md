@@ -27,10 +27,9 @@ A book catalog and administrator management application for ITDS242, built with 
 
 ```text
 .
-├── database/
-│   ├── schema.sql                 # Recreates the database and its 11 tables
-│   └── seed.sql                   # Sample catalog, administrators, and log records
-├── frontend-test/
+├── sec1_gr2_database.sql
+│   
+├── sec1_gr2_fe_src/
 │   ├── public/                    # Favicon and SVG icons
 │   ├── src/
 │   │   ├── app/                   # React entry point, routes, and styles
@@ -44,7 +43,7 @@ A book catalog and administrator management application for ITDS242, built with 
 │   │   │   └── team/
 │   │   └── shared/                # Navigation, cards, icons, and utilities
 │   └── vite.config.js             # React/Tailwind plugins and /api proxy
-├── server/
+├── sec1_gr2_ws_src/
 │   └── src/
 │       ├── config/                # Environment configuration and MySQL pool
 │       ├── controllers/           # HTTP request/response handlers
@@ -57,7 +56,7 @@ A book catalog and administrator management application for ITDS242, built with 
 └── README.md
 ```
 
-The frontend and backend are separate npm packages. The root `package.json` has no scripts or workspace configuration; install and run each package from its own directory.
+The frontend (`sec1_gr2_fe_src`) and backend (`sec1_gr2_ws_src`) are separate npm packages. The root `package.json` has no scripts or workspace configuration; install and run each package from its own directory.
 
 ## Local setup
 
@@ -70,13 +69,12 @@ The frontend and backend are separate npm packages. The root `package.json` has 
 
 ### 2. Create the database
 
-**`schema.sql` drops `ITDS242_BookShop` if it already exists, deleting its data. Use a disposable development database or back up existing data first.**
+**drops `ITDS242_BookShop` if it already exists, deleting its data. Use a disposable development database or back up existing data first.**
 
 Run these commands from the repository root, replacing `your_mysql_user`:
 
 ```bash
-mysql -u your_mysql_user -p < database/schema.sql
-mysql -u your_mysql_user -p ITDS242_BookShop < database/seed.sql
+mysql -u your_mysql_user -p < sec1_gr2_database.sql
 ```
 
 Alternatively, execute the schema in a MySQL client, then select `ITDS242_BookShop` before running the seed. The seed does not contain a `USE` statement.
@@ -87,7 +85,7 @@ The seeded administrator passwords are bcrypt hashes; their plaintext passwords 
 
 ### 3. Configure the backend
 
-Create `server/.env`:
+Create `sec1_gr2_ws_src/.env`:
 
 ```dotenv
 PORT=3005
@@ -113,7 +111,7 @@ Startup requires a JWT secret of at least **32 bytes**. Set `DB_NAME` explicitly
 In one terminal, from the repository root:
 
 ```bash
-cd server
+cd sec1_gr2_ws_src
 npm ci
 npm run dev
 ```
@@ -123,20 +121,20 @@ The API defaults to `http://localhost:3005`. Nodemon restarts it when backend fi
 In a second terminal, from the repository root:
 
 ```bash
-cd frontend-test
+cd sec1_gr2_fe_src
 npm ci
 npm run dev -- --port 5173 --strictPort
 ```
 
 Open `http://localhost:5173`. Use `localhost` consistently for the frontend and API because the authentication helper calls `http://localhost:3005` directly.
 
-Most frontend requests use relative `/api` URLs, forwarded by Vite to `http://localhost:3005`. An optional `frontend-test/.env` can change that proxy target:
+Most frontend requests use relative `/api` URLs, forwarded by Vite to `http://localhost:3005`. An optional `sec1_gr2_fe_src/.env` can change that proxy target:
 
 ```dotenv
 API_PROXY_TARGET=http://localhost:3005
 ```
 
-Changing the proxy alone does **not** change every request: the login helper in `frontend-test/src/features/login/api.js` and the administrator update request in `AdminChange.jsx` hardcode `http://localhost:3005`. Custom hosts/ports require updating those locations too. Backend CORS currently allows credentialed requests from `http://localhost:5173` and `http://127.0.0.1:5173`.
+Changing the proxy alone does **not** change every request: the login helper in `sec1_gr2_fe_src/src/features/login/api.js` and the administrator update request in `AdminChange.jsx` hardcode `http://localhost:3005`. Custom hosts/ports require updating those locations too. Backend CORS currently allows credentialed requests from `http://localhost:5173` and `http://127.0.0.1:5173`.
 
 ### 5. Test (For ITDS242)
 after start frontend and backend from topic 4.
@@ -225,8 +223,8 @@ you can also delete each admin account.
 
 Both book forms use Cloudinary cloud name `itds242-bookshop` and upload preset `itds242-bookshop`, hardcoded in:
 
-- `frontend-test/src/features/bookManagement/bookCreate.jsx`
-- `frontend-test/src/features/bookManagement/bookChange.jsx`
+- `sec1_gr2_fe_src/src/features/bookManagement/bookCreate.jsx`
+- `sec1_gr2_fe_src/src/features/bookManagement/bookChange.jsx`
 
 Uploads require that cloud and its unsigned upload preset to accept requests. To use your own Cloudinary account, update the upload URL and preset in both files. There are no Cloudinary environment variables or backend upload routes in this implementation. Books can also be created without images.
 
@@ -239,7 +237,7 @@ curl http://localhost:3005/api/books
 
 The first should return `status: "ok"` and a timestamp; the second should return `success: true` and the catalog. `/api/test` does not check the database. Startup can print `DB status: not set!!!!!!!` for either an empty `BOOK` table or a connection failure; inspect preceding errors and check `/api/books` to distinguish them.
 
-Routes are defined in [App.jsx](frontend-test/src/app/App.jsx).
+Routes are defined in [App.jsx](sec1_gr2_fe_src/src/app/App.jsx).
 
 | Path | Page |
 | --- | --- |
@@ -257,7 +255,7 @@ Routes are defined in [App.jsx](frontend-test/src/app/App.jsx).
 
 ## API reference
 
-The base URL for local development is `http://localhost:3005/api`. Definitions are in [routes.js](server/src/routes/routes.js) and [routes/index.js](server/src/routes/index.js).
+The base URL for local development is `http://localhost:3005/api`. Definitions are in [routes.js](sec1_gr2_ws_src/src/routes/routes.js) and [routes/index.js](sec1_gr2_ws_src/src/routes/index.js).
 
 “Required” means the endpoint uses `requireAuth` and expects a valid `access_token` cookie. A Bearer authorization header is not used by this middleware.
 
@@ -302,12 +300,12 @@ The schema defines 11 tables:
 
 | Directory | Command | Purpose |
 | --- | --- | --- |
-| `server/` | `npm run dev` | API with Nodemon |
-| `server/` | `node src/server.js` | API without automatic restart |
-| `frontend-test/` | `npm run dev` | Vite development server |
-| `frontend-test/` | `npm run build` | Build frontend into `dist/` |
-| `frontend-test/` | `npm run preview` | Preview the frontend build |
-| `frontend-test/` | `npm run lint` | Run ESLint |
+| `sec1_gr2_ws_src/` | `npm run dev` | API with Nodemon |
+| `sec1_gr2_ws_src/` | `node src/server.js` | API without automatic restart |
+| `sec1_gr2_fe_src/` | `npm run dev` | Vite development server |
+| `sec1_gr2_fe_src/` | `npm run build` | Build frontend into `dist/` |
+| `sec1_gr2_fe_src/` | `npm run preview` | Preview the frontend build |
+| `sec1_gr2_fe_src/` | `npm run lint` | Run ESLint |
 
 The backend `npm test` is a placeholder that exits with an error. There is no configured frontend test script or checked-in automated test suite.
 
