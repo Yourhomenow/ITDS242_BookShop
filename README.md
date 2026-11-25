@@ -205,7 +205,7 @@ you can also delete each admin account.
 
 ![alt text](./readmeImg/image-9.png)
 
-10. You,as a admin, can also add new book when click "เพิ่มหนังสือใหม่" and fill the form and click "บันทึกสินค้าใหม่".
+10. You,as a admin, can also add new book when click "เพิ่มหนังสือใหม่" and fill the form and click "บันทึกสินค้าใหม่".(ปีที่ตีพิมพ์ใช้ format นี้ 2026-09-30)
 
 ![alt text](./readmeImg/image-10.png)
 
