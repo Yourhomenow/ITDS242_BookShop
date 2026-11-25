@@ -21,7 +21,7 @@ routes.put(`/admins/:id`, requireAuth,adminControllers.editAdmin)
 routes.delete(`/admins/:id`, requireAuth,adminControllers.deleteAdmin)
 routes.get(`/admins`,adminControllers.getAdmins)
 
-routes.post("/register", loginControllers.register)
+routes.post("/register", requireAuth,loginControllers.register)
 routes.post("/login", loginControllers.login)
 routes.get("/me", requireAuth, loginControllers.me)
 routes.post("/logout",loginControllers.logout)
