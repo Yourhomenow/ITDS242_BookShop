@@ -190,7 +190,7 @@ And after edit you can click บันทึกการเปลี่ยนแ
 
 ![alt text](./readmeImg/image-6.png)
 
-7. you can also delete each admin account.
+you can also delete each admin account.
 
 ![alt text](./readmeImg/image-7.png)
 
