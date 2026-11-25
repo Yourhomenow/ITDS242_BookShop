@@ -230,7 +230,14 @@ Both book forms use Cloudinary cloud name `itds242-bookshop` and upload preset `
 
 Uploads require that cloud and its unsigned upload preset to accept requests. To use your own Cloudinary account, update the upload URL and preset in both files. There are no Cloudinary environment variables or backend upload routes in this implementation. Books can also be created without images.
 
-## Frontend routes
+After starting the API, basic read-only checks are:
+
+```bash
+curl http://localhost:3005/api/test
+curl http://localhost:3005/api/books
+```
+
+The first should return `status: "ok"` and a timestamp; the second should return `success: true` and the catalog. `/api/test` does not check the database. Startup can print `DB status: not set!!!!!!!` for either an empty `BOOK` table or a connection failure; inspect preceding errors and check `/api/books` to distinguish them.
 
 Routes are defined in [App.jsx](frontend-test/src/app/App.jsx).
 
