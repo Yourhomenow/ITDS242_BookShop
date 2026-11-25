@@ -81,7 +81,12 @@ Alternatively, execute the schema in a MySQL client, then select `ITDS242_BookSh
 
 Seeding is optional but useful for the demo: it adds 9 books, 3 administrators, 3 publishers, 3 authors, 5 categories, 11 image references, and sample log records. Run it once against a fresh schema; it assumes generated IDs start at 1 and is not designed for repeated imports.
 
-The seeded administrator passwords are bcrypt hashes; their plaintext passwords are not documented in the seed. Create your own account using the steps below.
+The seeded administrator passwords are bcrypt hashes;
+| Admin Name | Password |
+| --- | --- |
+| Kason_w | 11111111 |
+| Yoimiya | Firework123 |
+| Ben Tennyson | Yolo()1234 |
 
 ### 3. Configure the backend
 
