@@ -1,4 +1,4 @@
-# ITDS242 BookShop — มหาสมุด
+# ITDS242 BookShop — มหาสมุด 
 
 A book catalog and administrator management application for ITDS242, built with React, Express, and MySQL. The Thai-language frontend displays prices in Thai baht (THB) and provides public browsing pages alongside tools for maintaining books and administrator accounts.
 
@@ -138,16 +138,90 @@ API_PROXY_TARGET=http://localhost:3005
 
 Changing the proxy alone does **not** change every request: the login helper in `frontend-test/src/features/login/api.js` and the administrator update request in `AdminChange.jsx` hardcode `http://localhost:3005`. Custom hosts/ports require updating those locations too. Backend CORS currently allows credentialed requests from `http://localhost:5173` and `http://127.0.0.1:5173`.
 
-### 5. Create an administrator and sign in
+### 5. Test (For ITDS242)
+after start frontend and backend from topic 4.
+1. Open  http://localhost:5173/. As you can see user without login can navigate to our main page.
 
-1. Open `http://localhost:5173/adminCreate`.
-2. Enter a unique username with at least six English letters/digits and a password. The form displays a password-strength indicator.
-3. Submit the form, then open `/login` and sign in with those credentials.
-4. Use `/adminManagement` or `/bookManagement` to maintain records. The sidebar provides logout.
+![alt text](./readmeImg/image-14.png)
 
-Registration currently accepts unauthenticated requests and creates an `ACTIVE` administrator. Creating an account does not automatically sign it in.
+You can also click each book to see more detail.
 
-### 6. Image uploads
+![alt text](./readmeImg/image-15.png)
+
+You can use search bar to search book name.
+
+![alt text](./readmeImg/image-16.png)
+
+You can use navbar to filter popular category of books.
+
+![alt text](./readmeImg/image-17.png)
+
+You can also use sidebar to filter books in more detail.
+
+![alt text](./readmeImg/image-18.png)
+
+At the bottom, you can see "ทีมพัฒนา" in footer click it and you'll see us.
+
+![alt text](./readmeImg/image-20.png)
+
+![alt text](./readmeImg/image-21.png)
+
+3. Click "เข้าสู่ระบบ" button.
+
+![alt text](./readmeImg/image-1.png)
+
+4. Login as one of our admin, using Username = Kason_w , Password = 11111111. then click "เข้าสู่ระบบ" button.(Note that session are 15 minutes long.)
+
+![alt text](./readmeImg/image-2.png)
+
+5. After login, website will navigate you to adminManagement page. try to use search bar and filter status.
+
+![alt text](./readmeImg/image-3.png)
+
+6. In the same page, try to create new admin by click into "เพิ่มบัญชีใหม่" button. and write username and password then click "บันทึกบัญชีผู้ใช้"
+
+![alt text](./readmeImg/image-4.png)
+
+7. From page /adminManagement you also can edit admin account by click into this button.
+
+![alt text](./readmeImg/image-5.png)
+
+And after edit you can click บันทึกการเปลี่ยนแปลงทั้งหมด for save.
+
+![alt text](./readmeImg/image-6.png)
+
+you can also delete each admin account.
+
+![alt text](./readmeImg/image-7.png)
+
+8. Navigate to BookManagement using sidebar.
+
+![alt text](./readmeImg/image-8.png)
+
+9. You can search book stock using search bar.
+
+![alt text](./readmeImg/image-9.png)
+
+10. You,as a admin, can also add new book when click "เพิ่มหนังสือใหม่" and fill the form and click "บันทึกสินค้าใหม่".
+
+![alt text](./readmeImg/image-10.png)
+
+11. You can also delete books from stock by click to check each book and click "ลบสินค้า".
+
+![alt text](./readmeImg/image-11.png)
+
+12. You can edit each book by click edit button and fill the form and click "บันทึกสินค้า" to save.
+
+![alt text](./readmeImg/image-12.png)
+
+![alt text](./readmeImg/image-13.png)
+
+13. Lastly, after login you can logout using "logout" button.
+
+![alt text](./readmeImg/image-19.png)
+
+
+### 6. Image uploads(External API)
 
 Both book forms use Cloudinary cloud name `itds242-bookshop` and upload preset `itds242-bookshop`, hardcoded in:
 
@@ -156,7 +230,14 @@ Both book forms use Cloudinary cloud name `itds242-bookshop` and upload preset `
 
 Uploads require that cloud and its unsigned upload preset to accept requests. To use your own Cloudinary account, update the upload URL and preset in both files. There are no Cloudinary environment variables or backend upload routes in this implementation. Books can also be created without images.
 
-## Frontend routes
+After starting the API, basic read-only checks are:
+
+```bash
+curl http://localhost:3005/api/test
+curl http://localhost:3005/api/books
+```
+
+The first should return `status: "ok"` and a timestamp; the second should return `success: true` and the catalog. `/api/test` does not check the database. Startup can print `DB status: not set!!!!!!!` for either an empty `BOOK` table or a connection failure; inspect preceding errors and check `/api/books` to distinguish them.
 
 Routes are defined in [App.jsx](frontend-test/src/app/App.jsx).
 
@@ -195,56 +276,10 @@ The base URL for local development is `http://localhost:3005/api`. Definitions a
 | GET | `/api/admins/:id` | Required | One administrator; `?e=1` lists all except this ID |
 | PUT | `/api/admins/:id` | Required | Update username, status, and password |
 | DELETE | `/api/admins/:id` | Required | Delete an administrator |
-| POST | `/api/register` | None | Create an active administrator |
+| POST | `/api/register` | Required | Create an active administrator |
 | POST | `/api/login` | None | Verify credentials and set the authentication cookie |
 | GET | `/api/me` | Required | Return `AdminID` from the verified JWT |
 | POST | `/api/logout` | None | Clear the browser's authentication cookie |
-
-### Authentication and request bodies
-
-Registration and login accept JSON with case-sensitive field names:
-
-```json
-{
-  "Username": "youradmin",
-  "Password": "your-password"
-}
-```
-
-Registration returns HTTP 201 with `{"message":"Register successfully"}`. Login returns a message and an `admin` object containing `AdminID` and `Username`. The JWT and cookie expire after 15 minutes; the cookie is HTTP-only, uses `SameSite=Lax`, and is marked `Secure` when `NODE_ENV=production`. Cross-origin browser requests must include credentials. Postman can retain the login cookie in its cookie jar for subsequent protected requests.
-
-Administrator updates accept `Username`, `Status` (`ACTIVE` or `SUSPENDED`), and `Password`. **Always supply the intended password when editing:** the service hashes and replaces it on every update, including when the form sends an empty string.
-
-Example book creation body:
-
-```json
-{
-  "book": {
-    "name": "Example Book",
-    "quantity": 10,
-    "price": 299,
-    "size": "14x21 cm",
-    "isbnCode": null,
-    "publishDate": "2026-11-25",
-    "description": "An example catalog entry."
-  },
-  "publisher": "Example Publisher",
-  "author": "Author One, Author Two",
-  "category": "Novel, General",
-  "pictures": []
-}
-```
-
-Authors and categories are comma-separated strings. The service reuses matching publisher/author/category names or inserts new ones. Each picture is an object with `name` and `url`. Use a full `YYYY-MM-DD` date for `publishDate`; the database column is a `DATE` despite the form's year-oriented label.
-
-Book updates use the same structure, skip null/omitted book fields, append entries from `pictures`, and can remove existing image references with `deletePicID: [1, 2]`. Non-null author/category values replace the corresponding relationships. Deleting a picture reference does not delete its Cloudinary asset.
-
-### Response formats
-
-- Public book endpoints wrap results in `{ "success": true, "data": ... }`. The list uses `title`, a cover `image`, and comma-separated author/category names; detail adds an `images` array.
-- Administrator book reads return arrays directly, using `name` and `author`, `category`, and `picture` arrays. Book write endpoints return a JSON boolean.
-- Administrator reads return objects/arrays directly. Response envelopes are not uniform across the API.
-- Catalog filtering and management pagination run in the browser; the list endpoints fetch all records.
 
 ## Database model
 
@@ -261,9 +296,7 @@ The schema defines 11 tables:
 | `USERTRANSACTION` | Administrator-change log structure and seeded examples |
 | `BOOKTRANSACTION` | Book-change records |
 
-Stock and price have nonnegative check constraints. Deleting a book cascades to its pictures, author/category links, and book transaction records. Deleting an administrator cascades to login logs and sets administrator references in transaction tables to null.
 
-The current backend writes some book creation/update logs, but does not pass the authenticated administrator ID to those writes. Login and administrator-change logs are seeded examples; the current authentication/account services do not populate them automatically.
 
 ## Commands and verification
 
@@ -288,12 +321,3 @@ curl http://localhost:3005/api/books
 The first should return `status: "ok"` and a timestamp; the second should return `success: true` and the catalog. `/api/test` does not check the database. Startup can print `DB status: not set!!!!!!!` for either an empty `BOOK` table or a connection failure; inspect preceding errors and check `/api/books` to distinguish them.
 
 For a manual feature check, browse a seeded book, try catalog filters, register and log in, then create/edit/delete a disposable book and log out. The behavior described here is based on source inspection; these steps are instructions, not a record of completed runtime tests.
-
-## Current limitations
-
-- Registration and the administrator list are public. Login and JWT middleware do not enforce `SUSPENDED` status, and JWT verification does not recheck whether the account still exists. Logout clears the local cookie without revoking an issued token.
-- Several error paths need fixes: invalid/expired JWT handling references an undefined `err`; unknown usernames can fail before the intended credentials response; invalid/missing public book IDs reference an unavailable `res` in the service; deleting a nonexistent administrator can attempt two responses.
-- Password strength is displayed in the UI but is not enforced by the registration API. Some authentication debug logs include credentials or stored hashes.
-- Public category filtering compares the complete category string, so books with multiple categories can be excluded from a single-category filter.
-- Book creation/update performs multiple SQL statements without a database transaction, so a failed request can leave partial changes.
-- Hosting requires explicit API routing, frontend history fallback for `BrowserRouter`, and updates to hardcoded localhost URLs/CORS. The development proxy is not a production deployment configuration.
