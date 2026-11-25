@@ -15,7 +15,7 @@ function Login() {
     try{
       const response = await login(username,password);
       navigate('/adminManagement')
-      alert("เข้าสู่ระบบแล้ว");
+      // alert("เข้าสู่ระบบแล้ว");
     }catch(err){
       alert("Have a error!");
       console.error(err)
@@ -40,7 +40,7 @@ function Login() {
         {/* Login Card */}
         <div
           id="login-card"
-          className="bg-[#fffdfa] w-[340px] min-h-[380px] rounded-2xl shadow-lg px-7 py-6"
+          className="bg-[#fffdfa] w-[340px] rounded-2xl shadow-lg px-7 py-6"
         >
 
           <h2 className="text-2xl font-bold text-center text-[#795b70]">
@@ -51,7 +51,7 @@ function Login() {
             — ยินดีต้อนรับสู่มหาสมุด —
           </p>
 
-          <form onSubmit={handleLogin} className="mb-5">
+          <form onSubmit={handleLogin} className="">
 
             {/* Username */}
             <div className="relative mb-3">
@@ -105,12 +105,7 @@ function Login() {
 
           </form>
 
-          <Link 
-            to="/adminCreate"
-            className="w-full px-22 py-3 bg-gradient-to-r  from-[#d2cddb] to-[#a995d0] text-white rounded-xl font-bold hover:bg-[#795b70] transition duration-300 cursor-pointer"
-          >
-            ลงทะเบียนเข้าใช้
-          </Link>
+
         </div>
 
       </main>
