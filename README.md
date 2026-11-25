@@ -141,63 +141,85 @@ Changing the proxy alone does **not** change every request: the login helper in 
 ### 5. Test (For ITDS242)
 after start frontend and backend from topic 4.
 1. Open  http://localhost:5173/. As you can see user without login can navigate to our main page.
+
 ![alt text](./readmeImg/image-14.png)
 
 You can also click each book to see more detail.
+
 ![alt text](./readmeImg/image-15.png)
 
 You can use search bar to search book name.
+
 ![alt text](./readmeImg/image-16.png)
 
 You can use navbar to filter popular category of books.
+
 ![alt text](./readmeImg/image-17.png)
 
 You can also use sidebar to filter books in more detail.
+
 ![alt text](./readmeImg/image-18.png)
 
 At the bottom, you can see "ทีมพัฒนา" in footer click it and you'll see us.
+
 ![alt text](./readmeImg/image-20.png)
+
 ![alt text](./readmeImg/image-21.png)
 
 3. Click "เข้าสู่ระบบ" button.
+
 ![alt text](./readmeImg/image-1.png)
 
 4. Login as one of our admin, using Username = Kason_w , Password = 11111111. then click "เข้าสู่ระบบ" button.(Note that session are 15 minutes long.)
+
 ![alt text](./readmeImg/image-2.png)
 
 5. After login, website will navigate you to adminManagement page. try to use search bar and filter status.
+
 ![alt text](./readmeImg/image-3.png)
 
 6. In the same page, try to create new admin by click into "เพิ่มบัญชีใหม่" button. and write username and password then click "บันทึกบัญชีผู้ใช้"
+
 ![alt text](./readmeImg/image-4.png)
 
 7. From page /adminManagement you also can edit admin account by click into this button.
+
 ![alt text](./readmeImg/image-5.png)
 
 And after edit you can click บันทึกการเปลี่ยนแปลงทั้งหมด for save.
+
 ![alt text](./readmeImg/image-6.png)
 
 7. you can also delete each admin account.
+
 ![alt text](./readmeImg/image-7.png)
 
 8. Navigate to BookManagement using sidebar.
+
 ![alt text](./readmeImg/image-8.png)
 
 9. You can search book stock using search bar.
+
 ![alt text](./readmeImg/image-9.png)
 
 10. You,as a admin, can also add new book when click "เพิ่มหนังสือใหม่" and fill the form and click "บันทึกสินค้าใหม่".
+
 ![alt text](./readmeImg/image-10.png)
 
 11. You can also delete books from stock by click to check each book and click "ลบสินค้า".
+
 ![alt text](./readmeImg/image-11.png)
 
 12. You can edit each book by click edit button and fill the form and click "บันทึกสินค้า" to save.
+
 ![alt text](./readmeImg/image-12.png)
+
 ![alt text](./readmeImg/image-13.png)
 
 13. Lastly, after login you can logout using "logout" button.
+
 ![alt text](./readmeImg/image-19.png)
+
 
 ### 6. Image uploads(External API)
 
