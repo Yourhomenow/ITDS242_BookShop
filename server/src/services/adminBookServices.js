@@ -91,6 +91,15 @@ async function bookTransaction(name, operation, oldvalue, newvalue, BookID, Admi
    )
 }
 
+// Testing Get All Books - Example 1
+// method: GET
+// URL: http://localhost:3005/api/admins/books
+// body: None
+
+// Testing Get All Books - Example 2
+// method: GET
+// URL: http://localhost:3005/api/admins/books
+// body: None
 export const getBooks = async () => {
    const [book] = await query("SELECT * FROM `BOOK`");
 
@@ -100,6 +109,15 @@ export const getBooks = async () => {
    return formatBook
 }
 
+// Testing Get Book by ID - Example 1
+// method: GET
+// URL: http://localhost:3005/api/admins/books/2
+// body: None
+
+// Testing Get Book by ID - Example 2
+// method: GET
+// URL: http://localhost:3005/api/admins/books/3
+// body: None
 export const getBooksID = async (id) => {
    const [book] = await query("SELECT * FROM `BOOK` WHERE BookID=?", [id]);
 
@@ -109,6 +127,55 @@ export const getBooksID = async (id) => {
    return formatBook
 }
 
+// Testing Insert a Book - Example 1
+// method: POST
+// URL: http://localhost:3005/api/admins/books
+// body: raw JSON
+// {
+//   "book": {
+//     "name": "NewBook1",
+//     "quantity": 0,
+//     "price": 20.5,
+//     "size": "10 x 80",
+//     "isbnCode": null,
+//     "publishDate": null,
+//     "description": null
+//   },
+//   "publisher": "NewPublisher",
+//   "author": "NewAuthor",
+//   "category": "Comic&Manga",
+//   "pictures": [
+//     {
+//       "name": "sky_striker_ace___hayate__2nd___artwork__by_nhociory_divvgwu-pre.png",
+//       "url": "https://res.cloudinary.com/itds242-bookshop/image/upload/v1795438407/sky_striker_ace___hayate__2nd___artwork__by_nhociory_divvgwu-pre_pmyr8p.png"
+//     }
+//   ]
+// }
+
+// Testing Insert a Book - Example 2
+// method: POST
+// URL: http://localhost:3005/api/admins/books
+// body: raw JSON
+// {
+//   "book": {
+//     "name": "Testing 2",
+//     "quantity": 50,
+//     "price": 1000,
+//     "size": "10 x 30",
+//     "isbnCode": null,
+//     "publishDate": null,
+//     "description": null
+//   },
+//   "publisher": "HappyPrinter",
+//   "author": "SuperCool PenName",
+//   "category": "general",
+//   "pictures": [
+//     {
+//       "name": "240_F_598107175_hIYhgCnsZGHoipDhkafiyv77l0IZB8f4.jpg",
+//       "url": "https://res.cloudinary.com/itds242-bookshop/image/upload/v1795611977/240_F_598107175_hIYhgCnsZGHoipDhkafiyv77l0IZB8f4_pt0ntl.jpg"
+//     }
+//   ]
+// }
 export const postBooks = async (data) => {
    const formattedData = data;
 
@@ -207,6 +274,52 @@ export const postBooks = async (data) => {
    }
 }
 
+// Testing Edit a Book - Example 1
+// method: PUT
+// URL: http://localhost:3005/api/admins/books
+// body: raw JSON
+// {
+//   "book": {
+//     "name": null,
+//     "quantity": 0,
+//     "price": null,
+//     "size": null,
+//     "isbnCode": null,
+//     "publishDate": null,
+//     "description": "This book is so good"
+//   },
+//   "publisher": null,
+//   "author": null,
+//   "category": null,
+//   "pictures": [
+//     {
+//       "name": "240_F_298370736_rPsYC77CnwkeYtxh5G8SvbqnPR56cHFK.jpg",
+//       "url": "https://res.cloudinary.com/itds242-bookshop/image/upload/v1795442180/240_F_298370736_rPsYC77CnwkeYtxh5G8SvbqnPR56cHFK_div2i3.jpg"
+//     }
+//   ],
+//   "deletePicID": [ 3 ]
+// }
+
+// Testing Edit a Book - Example 2
+// method: PUT
+// URL: http://localhost:3005/api/admins/books
+// body: raw JSON
+// {
+//   "book": {
+//     "name": "Unfunny Animals",
+//     "quantity": "0",
+//     "price": null,
+//     "size": null,
+//     "isbnCode": null,
+//     "publishDate": null,
+//     "description": "This Book is not that good"
+//   },
+//   "publisher": null,
+//   "author": null,
+//   "category": "General",
+//   "pictures": null,
+//   "deletePicID": null
+// }
 export const putBooks = async (id, data) => {
    async function updateBook(col, data, old, id){
       await query("UPDATE `BOOK` SET ??=? WHERE BookID=?", [col, data, id]);
@@ -340,6 +453,15 @@ export const putBooks = async (id, data) => {
    return true
 }
 
+// Testing Delete Book - Example 1
+// method: DELETE
+// URL: http://localhost:3005/api/admins/books/1
+// body: None
+
+// Testing Delete Book - Example 2
+// method: DELETE
+// URL: http://localhost:3005/api/admins/books/7
+// body: None
 export const deleteBooks = async (id) => {
    const [result] = await query("DELETE FROM `BOOK` WHERE BookID=?", [id]);
    return result.affectedRows > 0
