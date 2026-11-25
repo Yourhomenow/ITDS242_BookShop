@@ -1,4 +1,4 @@
-# ITDS242 BookShop — มหาสมุด (Readme สำหรับ test เพื่ออาจารย์ อยู่หัวข้อล่างสุด)
+# ITDS242 BookShop — มหาสมุด 
 
 A book catalog and administrator management application for ITDS242, built with React, Express, and MySQL. The Thai-language frontend displays prices in Thai baht (THB) and provides public browsing pages alongside tools for maintaining books and administrator accounts.
 
