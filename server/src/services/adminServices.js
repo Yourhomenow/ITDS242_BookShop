@@ -2,6 +2,15 @@ import { query } from "../config/db.js";
 import bcrypt from "bcrypt"
 
 //Admin API
+// Testing Get All Admin - Example 1
+// method: GET
+// URL: http://localhost:3005/api/admins
+// body: None
+
+// Testing Get All Admin - Example 2
+// method: GET
+// URL: http://localhost:3005/api/admins
+// body: None
 export const getAdmins = async ()=> {
    try{
    const result = await query("SELECT AdminID,Username,Status FROM ADMIN;");
@@ -13,6 +22,15 @@ export const getAdmins = async ()=> {
    }
 }
 
+// Testing Get All Admin Except One - Example 1
+// method: GET
+// URL: http://localhost:3005/api/admins/1?e=true
+// body: None
+
+// Testing Get All Admin Except One - Example 2
+// method: GET
+// URL: http://localhost:3005/api/admins/2?e=true
+// body: None
 export const getAdminsExceptOne = async (id)=> {
    try{
       const result = await query("SELECT AdminID,Username,Status FROM ADMIN WHERE AdminID != ?;",id)
@@ -24,6 +42,15 @@ export const getAdminsExceptOne = async (id)=> {
    }
 }
 
+// Testing Get Admin By ID - Example 1
+// method: GET
+// URL: http://localhost:3005/api/admins/1
+// body: None
+
+// Testing Get Admin By ID - Example 1
+// method: GET
+// URL: http://localhost:3005/api/admins/2
+// body: None
 export const getAdmin = async (id)=>{
    try{
       const result = await query("SELECT AdminID,Username,Status FROM ADMIN WHERE AdminID = ?;",id)
@@ -35,6 +62,24 @@ export const getAdmin = async (id)=>{
    }
 }
 
+// Testing Get Admin By Name - Example 1
+// method: POST
+// URL: http://localhost:3005/api/login
+// body: JSON
+// {
+//   "Username": "Yoimiya",
+//   "Password": "WrongPassword"
+// }
+
+
+// Testing Get Admin By Name - Example 2
+// method: POST
+// URL: http://localhost:3005/api/login
+// body: JSON
+// {
+//   "Username": "NoBodyInDatabase",
+//   "Password": "random"
+// }
 export const getAdminByName = async (Username)=>{
    try{
       const result = await query("SELECT * FROM ADMIN WHERE Username = ?;",Username)
@@ -46,7 +91,23 @@ export const getAdminByName = async (Username)=>{
    }
 }
 
+// Testing Insert a new Admin - Example 1
+// method: POST
+// URL: http://localhost:3005/api/register
+// body: raw JSON
+// {
+//    "Username": "New_Admin1",
+//    "Password": "SuperStrongPassword"
+// }
 
+// Testing Insert a new Admin - Example 2
+// method: POST
+// URL: http://localhost:3005/api/register
+// body: raw JSON
+// {
+//    "Username": "New_Admin2",
+//    "Password": "(WeLoveWebAPP1111)"
+// }
 export const addAdmin = async (data)=>{
    try{
       const q = 'INSERT INTO `ADMIN` (`Username`, `Password`, `Status`) VALUES (?)'
@@ -68,6 +129,15 @@ export const addAdmin = async (data)=>{
    }
 }
 
+// Testing Delete Admin - Example 1
+// method: DELETE
+// URL: http://localhost:3005/api/admins/1
+// body: None
+
+// Testing Delete Admin - Example 2
+// method: DELETE
+// URL: http://localhost:3005/api/admins/2
+// body: None
 export const deleteAdmin = async (id)=>{
    try{
       // console.log(id)
@@ -82,7 +152,25 @@ export const deleteAdmin = async (id)=>{
    }
 }
 
+// Testing Edit Admin - Example 1
+// method: PUT
+// URL: http://localhost:3005/api/admins/2
+// body: raw JSON
+// {
+//    "Username": "New_AdminName",
+//    "Status": "SUSPENDED",
+//    "Password": "ChangePassword"
+// }
 
+// Testing Edit Admin - Example 2
+// method: PUT
+// URL: http://localhost:3005/api/admins/3
+// body: raw JSON
+// {
+//    "Username": "SuperCool123",
+//    "Status": "ACTIVE",
+//    "Password": "WEareBACK"
+// }
 export const editAdmin = async (id,data)=>{
    try{
       const q = "UPDATE `ADMIN` SET `Username` = ?, `Status` = ?, `Password` = ? WHERE AdminID = ?;"

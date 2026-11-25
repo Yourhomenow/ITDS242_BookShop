@@ -2,6 +2,15 @@ import { query } from "../config/db.js";
 
 
 // GET /api/books ดึงข้อมูลหนังสือทั้งหมด
+// Testing Get All Books - Example 1
+// method: GET
+// URL: http://localhost:3005/api/books
+// body: None
+
+// Testing Get All Books - Example 2
+// method: GET
+// URL: http://localhost:3005/api/books
+// body: None
 export async function getBooks(){
     const [books] = await query(`
             SELECT
@@ -44,6 +53,15 @@ export async function getBooks(){
 }
 
 // GET /api/books/:id ดึงรายละเอียดหนังสือตาม ID
+// Testing Get Book By ID - Example 1
+// method: GET
+// URL: http://localhost:3005/api/books/2
+// body: None
+
+// Testing Get Book By ID - Example 2
+// method: GET
+// URL: http://localhost:3005/api/books/6
+// body: None
 export async function getBooksID(id) {
     if (!Number.isInteger(Number(id)) || Number(id) <= 0) {
             return res.status(400).json({
@@ -103,6 +121,15 @@ export async function getBooksID(id) {
 }
 
 // GET /api/books/:id/related ดึงหนังสือหมวดหมู่เดียวกัน
+// Testing Get Related Books - Example 1
+// method: GET
+// URL: http://localhost:3005/api/books/1/related
+// body: None
+
+// Testing Get Related Books - Example 2
+// method: GET
+// URL: http://localhost:3005/api/books/3/related
+// body: None
 export async function getBookRelated(id){
     if (!Number.isInteger(Number(id)) || Number(id) <= 0) {
         return res.status(400).json({

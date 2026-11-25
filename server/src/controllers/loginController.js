@@ -40,6 +40,23 @@ export const register = async (req, res)=>{
   }
 }
 
+// Testing Login - Example 1
+// method: POST
+// URL: http://localhost:3005/api/login
+// body: JSON
+// {
+//   "Username": "Kason_w",
+//   "Password": "11111111"
+// }
+
+// Testing Login - Example 2
+// method: POST
+// URL: http://localhost:3005/api/login
+// body: JSON
+// {
+//   "Username": "Kason_w",
+//   "Password": "WrongPassword"
+// }
 export const login = async (req,res, next)=>{
   try {
     const {Username, Password} = req.body;
@@ -52,7 +69,7 @@ export const login = async (req,res, next)=>{
     //     error: "Invalid credentials"
     //   })
     // }
-
+    console.log(Username);
     const user = await adminService.getAdminByName(Username)
     console.log('Have user: ', !user)
     console.log('compare : ', !(await bcrypt.compare(Password, user.Password)))
@@ -86,12 +103,30 @@ export const login = async (req,res, next)=>{
   }
 }
 
+// Testing Get Current Admin - Example 1
+// method: GET
+// URL: http://localhost:3005/api/me
+// body: None
+
+// Testing Get Current Admin - Example 2
+// method: GET
+// URL: http://localhost:3005/api/me
+// body: None
 export const me = async (req,res)=>{
   res.json({
     AdminID: req.auth.AdminID
   })
 }
 
+// Testing Logout - Example 1
+// method: POST
+// URL: http://localhost:3005/api/logout
+// body: None
+
+// Testing Logout - Example 2
+// method: POST
+// URL: http://localhost:3005/api/logout
+// body: None
 export const logout = (req,res)=>{
   res.clearCookie(COOKIE_NAME, cookieOptions)
 
